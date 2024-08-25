@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 697167518}
   - component: {fileID: 697167520}
   - component: {fileID: 697167519}
+  - component: {fileID: 697167521}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -324,12 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b974c72bf77699543b709433b3c5f4c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _agent: {fileID: 697167520}
-  _playerData:
-    WalkSpeed: 5
-    RunSpeed: 10
-    RotateSpeed: 360
-  _animator: {fileID: 2138677639}
+  _characterFSM: {fileID: 697167521}
 --- !u!195 &697167520
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -352,6 +348,24 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &697167521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697167517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfcd1ac2137b754c8469896b823e03d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agent: {fileID: 697167520}
+  _animator: {fileID: 2138677639}
+  _playerData:
+    WalkSpeed: 5
+    RunSpeed: 10
+    RotateSpeed: 360
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
