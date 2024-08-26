@@ -55,6 +55,15 @@ namespace Project.Systems.ControlsSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Position"",
+                    ""type"": ""Value"",
+                    ""id"": ""68a0b80a-1ade-4c5c-9188-f3c2e484fdab"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -90,6 +99,17 @@ namespace Project.Systems.ControlsSystem
                     ""action"": ""Fight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4916c2f3-4915-4959-8e65-7cfc1f14e43b"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Position"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -101,6 +121,7 @@ namespace Project.Systems.ControlsSystem
             m_PlayerController_Movement = m_PlayerController.FindAction("Movement", throwIfNotFound: true);
             m_PlayerController_Run = m_PlayerController.FindAction("Run", throwIfNotFound: true);
             m_PlayerController_Fight = m_PlayerController.FindAction("Fight", throwIfNotFound: true);
+            m_PlayerController_Position = m_PlayerController.FindAction("Position", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -165,6 +186,7 @@ namespace Project.Systems.ControlsSystem
         private readonly InputAction m_PlayerController_Movement;
         private readonly InputAction m_PlayerController_Run;
         private readonly InputAction m_PlayerController_Fight;
+        private readonly InputAction m_PlayerController_Position;
         public struct PlayerControllerActions
         {
             private @ControlsSystem m_Wrapper;
@@ -172,6 +194,7 @@ namespace Project.Systems.ControlsSystem
             public InputAction @Movement => m_Wrapper.m_PlayerController_Movement;
             public InputAction @Run => m_Wrapper.m_PlayerController_Run;
             public InputAction @Fight => m_Wrapper.m_PlayerController_Fight;
+            public InputAction @Position => m_Wrapper.m_PlayerController_Position;
             public InputActionMap Get() { return m_Wrapper.m_PlayerController; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -190,6 +213,9 @@ namespace Project.Systems.ControlsSystem
                 @Fight.started += instance.OnFight;
                 @Fight.performed += instance.OnFight;
                 @Fight.canceled += instance.OnFight;
+                @Position.started += instance.OnPosition;
+                @Position.performed += instance.OnPosition;
+                @Position.canceled += instance.OnPosition;
             }
 
             private void UnregisterCallbacks(IPlayerControllerActions instance)
@@ -203,6 +229,9 @@ namespace Project.Systems.ControlsSystem
                 @Fight.started -= instance.OnFight;
                 @Fight.performed -= instance.OnFight;
                 @Fight.canceled -= instance.OnFight;
+                @Position.started -= instance.OnPosition;
+                @Position.performed -= instance.OnPosition;
+                @Position.canceled -= instance.OnPosition;
             }
 
             public void RemoveCallbacks(IPlayerControllerActions instance)
@@ -225,6 +254,7 @@ namespace Project.Systems.ControlsSystem
             void OnMovement(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnFight(InputAction.CallbackContext context);
+            void OnPosition(InputAction.CallbackContext context);
         }
     }
 }

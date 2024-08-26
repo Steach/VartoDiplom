@@ -10,6 +10,7 @@ namespace Project.Controllers.Player
         [SerializeField] private FSMPlayer _characterFSM;
         private ControlsSystem _controlsSystem;
         private Camera _camera;
+        [SerializeField] private bool _isFollowPlayer = false;
         [SerializeField] private bool _isFighting = false;
         [SerializeField] private bool _isRunning = false;
 
@@ -19,10 +20,18 @@ namespace Project.Controllers.Player
             _camera = Camera.main;
         }
 
+        private void Update()
+        {
+            TurnToMouse();
+            FollowPlayer();
+        }
+
         private void OnEnable()
         {
             _controlsSystem.PlayerController.Enable();
             _controlsSystem.PlayerController.Movement.performed += OnMouseClick;
+            _controlsSystem.PlayerController.Movement.started += StartFollowPlayer;
+            _controlsSystem.PlayerController.Movement.canceled += StopFollowPlayer;
             _controlsSystem.PlayerController.Fight.started += StartFight;
             _controlsSystem.PlayerController.Fight.canceled += StopFight;
             _controlsSystem.PlayerController.Run.started += StartRun;
@@ -33,6 +42,35 @@ namespace Project.Controllers.Player
         {
             _controlsSystem.PlayerController.Disable();
             _controlsSystem.PlayerController.Movement.performed -= OnMouseClick;
+            _controlsSystem.PlayerController.Movement.started -= StartFollowPlayer;
+            _controlsSystem.PlayerController.Movement.canceled -= StopFollowPlayer;
+            _controlsSystem.PlayerController.Fight.started -= StartFight;
+            _controlsSystem.PlayerController.Fight.canceled -= StopFight;
+            _controlsSystem.PlayerController.Run.started -= StartRun;
+            _controlsSystem.PlayerController.Run.canceled -= StopRun;
+        }
+
+        private void TurnToMouse()
+        {
+            if (!_isFighting && !_isRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0)
+            {
+                var mousePosition = Input.mousePosition;
+                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+                Plane playerPlane = new Plane(Vector3.up, transform.position);
+                float hitDist = 0.0f;
+
+                if (playerPlane.Raycast(ray, out hitDist))
+                {
+                    Vector3 targetPoint = ray.GetPoint(hitDist);
+                    Vector3 direction = targetPoint - transform.position;
+
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    targetRotation.x = 0;
+                    targetRotation.z = 0;
+
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime + 10f);
+                }
+            }
         }
 
         private void StartFight(InputAction.CallbackContext context) => _isFighting = true;
@@ -40,6 +78,9 @@ namespace Project.Controllers.Player
 
         private void StartRun(InputAction.CallbackContext context) => _isRunning = true;
         private void StopRun(InputAction.CallbackContext context) => _isRunning = false;
+
+        private void StartFollowPlayer(InputAction.CallbackContext context) => _isFollowPlayer = true;
+        private void StopFollowPlayer(InputAction.CallbackContext context) => _isFollowPlayer = false;
 
         private void OnMouseClick(InputAction.CallbackContext context)
         {
@@ -51,17 +92,31 @@ namespace Project.Controllers.Player
                 _characterFSM.Agent.speed = _characterFSM.PlayerData.WalkSpeed;
                 _characterFSM.Agent.SetDestination(hit.point);
             }
-
-            if (Physics.Raycast(ray, out hit) && _isFighting && (!_isRunning || _isRunning))
+            else if (_isFighting && (!_isRunning || _isRunning))
             {
+                _characterFSM.Agent.isStopped = true;
                 _characterFSM.FSM.ChangeState(_characterFSM.StateAttack);
             }
-
-            if (Physics.Raycast(ray, out hit) && !_isFighting && _isRunning)
+            else if (Physics.Raycast(ray, out hit) && !_isFighting && _isRunning)
             {
                 _characterFSM.Agent.isStopped = false;
                 _characterFSM.Agent.speed = _characterFSM.PlayerData.RunSpeed;
                 _characterFSM.Agent.SetDestination(hit.point);
+            }
+        }
+
+        private void FollowPlayer()
+        {
+            if (_isFollowPlayer && !_isFighting)
+            {
+                Vector2 mousePostion = _controlsSystem.PlayerController.Position.ReadValue<Vector2>();
+                Ray ray = Camera.main.ScreenPointToRay(mousePostion);
+                RaycastHit hit;
+                
+                if (Physics.Raycast(ray, out hit))
+                {
+                    _characterFSM.Agent.SetDestination(hit.point);
+                }
             }
         }
     }
