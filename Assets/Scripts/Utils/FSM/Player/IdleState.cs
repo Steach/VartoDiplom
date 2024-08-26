@@ -12,6 +12,7 @@ namespace Project.Systems.StateMachine
         {
             base.Enter();
 
+            Character.Agent.isStopped = true;
             Character.Animator.SetTrigger(GameData.PlayerIdleSword);
         }
 
@@ -19,8 +20,11 @@ namespace Project.Systems.StateMachine
         {
             base.LogicUpdate();
 
-            if (Character.Agent.velocity.sqrMagnitude > 0)
+            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.WalkSpeed)
                 FSM.ChangeState(Character.StateWalk);
+
+            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.RunSpeed)
+                FSM.ChangeState(Character.StateRun);
         }
     }
 }

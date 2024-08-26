@@ -37,6 +37,24 @@ namespace Project.Systems.ControlsSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1c71c67-620f-4235-8d4d-677116f75587"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fight"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ba4d2c0-557f-4eba-854e-3678e79ce376"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -50,6 +68,28 @@ namespace Project.Systems.ControlsSystem
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5a61132-ba15-4dcd-a5ea-a92a13574e7c"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94cf02ed-1296-4431-9cb7-5e94380f7d20"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -59,6 +99,8 @@ namespace Project.Systems.ControlsSystem
             // PlayerController
             m_PlayerController = asset.FindActionMap("PlayerController", throwIfNotFound: true);
             m_PlayerController_Movement = m_PlayerController.FindAction("Movement", throwIfNotFound: true);
+            m_PlayerController_Run = m_PlayerController.FindAction("Run", throwIfNotFound: true);
+            m_PlayerController_Fight = m_PlayerController.FindAction("Fight", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -121,11 +163,15 @@ namespace Project.Systems.ControlsSystem
         private readonly InputActionMap m_PlayerController;
         private List<IPlayerControllerActions> m_PlayerControllerActionsCallbackInterfaces = new List<IPlayerControllerActions>();
         private readonly InputAction m_PlayerController_Movement;
+        private readonly InputAction m_PlayerController_Run;
+        private readonly InputAction m_PlayerController_Fight;
         public struct PlayerControllerActions
         {
             private @ControlsSystem m_Wrapper;
             public PlayerControllerActions(@ControlsSystem wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_PlayerController_Movement;
+            public InputAction @Run => m_Wrapper.m_PlayerController_Run;
+            public InputAction @Fight => m_Wrapper.m_PlayerController_Fight;
             public InputActionMap Get() { return m_Wrapper.m_PlayerController; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -138,6 +184,12 @@ namespace Project.Systems.ControlsSystem
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Run.started += instance.OnRun;
+                @Run.performed += instance.OnRun;
+                @Run.canceled += instance.OnRun;
+                @Fight.started += instance.OnFight;
+                @Fight.performed += instance.OnFight;
+                @Fight.canceled += instance.OnFight;
             }
 
             private void UnregisterCallbacks(IPlayerControllerActions instance)
@@ -145,6 +197,12 @@ namespace Project.Systems.ControlsSystem
                 @Movement.started -= instance.OnMovement;
                 @Movement.performed -= instance.OnMovement;
                 @Movement.canceled -= instance.OnMovement;
+                @Run.started -= instance.OnRun;
+                @Run.performed -= instance.OnRun;
+                @Run.canceled -= instance.OnRun;
+                @Fight.started -= instance.OnFight;
+                @Fight.performed -= instance.OnFight;
+                @Fight.canceled -= instance.OnFight;
             }
 
             public void RemoveCallbacks(IPlayerControllerActions instance)
@@ -165,6 +223,8 @@ namespace Project.Systems.ControlsSystem
         public interface IPlayerControllerActions
         {
             void OnMovement(InputAction.CallbackContext context);
+            void OnRun(InputAction.CallbackContext context);
+            void OnFight(InputAction.CallbackContext context);
         }
     }
 }

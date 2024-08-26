@@ -1,19 +1,21 @@
 using Project.Data;
+using UnityEngine;
 
 namespace Project.Systems.StateMachine
 {
-    public class WalkState : State
+    public class RunState : State
     {
-        public WalkState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
+        public RunState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
 
         public override void Enter()
         {
             base.Enter();
+
             Character.Agent.isStopped = false;
-            Character.Agent.speed = Character.PlayerData.WalkSpeed;
-            Character.Animator.SetTrigger(GameData.PlayerWalkFrontPlaceSword);
+            Character.Agent.speed = Character.PlayerData.RunSpeed;
+            Character.Animator.SetTrigger(GameData.PlayerRunFrontPlaceSword);
         }
 
         public override void LogicUpdate()
@@ -25,3 +27,4 @@ namespace Project.Systems.StateMachine
         }
     }
 }
+
