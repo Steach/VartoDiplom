@@ -11,12 +11,12 @@ namespace Project.Systems.StateMachine
             this.FSM = FSM;
         }
 
-        public virtual void Enter() { }
+        public virtual void Enter(object data = null) { }
 
         public virtual void LogicUpdate() { }
 
         public virtual void PhysicsUpdate() { }
 
-        public virtual void Exit() { }
+        public virtual void Exit(object data = null) { }
     }
 }

@@ -1,4 +1,5 @@
 using Project.Data;
+using static Project.Data.GameData;
 
 namespace Project.Systems.StateMachine
 {
@@ -8,7 +9,7 @@ namespace Project.Systems.StateMachine
         {
         }
 
-        public override void Enter()
+        public override void Enter(object data = null)
         {
             base.Enter();
 

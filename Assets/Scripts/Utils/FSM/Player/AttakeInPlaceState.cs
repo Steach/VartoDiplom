@@ -1,15 +1,14 @@
 using Project.Data;
-using UnityEngine;
 
 namespace Project.Systems.StateMachine
 {
-    public class AttakeState : State
+    public class AttakeInPlaceState : State
     {
-        public AttakeState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
+        public AttakeInPlaceState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
 
-        public override void Enter()
+        public override void Enter(object data = null)
         {
             base.Enter();
 
@@ -26,7 +25,7 @@ namespace Project.Systems.StateMachine
 
         }
 
-        public override void Exit() 
+        public override void Exit(object data = null) 
         {
             base.Exit();
         }

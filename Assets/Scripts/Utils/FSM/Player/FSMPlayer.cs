@@ -17,18 +17,21 @@ namespace Project.Systems.StateMachine
         public StateMachine FSM;
         public IdleState StateIdle;
         public WalkState StateWalk;
-        public AttakeState StateAttack;
+        public AttakeInPlaceState StateAttackInPlace;
         public RunState StateRun;
+        public RunToEnemyAndAttakeState StateRunToEnemyAndAttake;
 
         private void Awake()
         {
             FSM = new StateMachine();
             StateIdle = new IdleState(this, FSM);
             StateWalk = new WalkState(this, FSM);
-            StateAttack = new AttakeState(this, FSM);
+            StateAttackInPlace = new AttakeInPlaceState(this, FSM);
             StateRun = new RunState(this, FSM);
+            StateRunToEnemyAndAttake = new RunToEnemyAndAttakeState(this, FSM);
 
             FSM.Init(StateIdle);
+
             _agent.speed = _playerData.WalkSpeed;
             _agent.angularSpeed = _playerData.RotateSpeed;
         }

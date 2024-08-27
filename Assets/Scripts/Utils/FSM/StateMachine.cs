@@ -4,18 +4,18 @@ namespace Project.Systems.StateMachine
     {
         public State CurrentState { get; private set; }
 
-        public void Init(State startingState)
+        public void Init(State startingState, object data = null)
         {
             CurrentState = startingState;
-            startingState.Enter();
+            startingState.Enter(data);
         }
 
-        public void ChangeState(State newState) 
+        public void ChangeState(State newState, object data = null) 
         {
-            CurrentState.Exit();
+            CurrentState.Exit(data);
 
             CurrentState = newState;
-            newState.Enter();
+            newState.Enter(data);
         }
     }
 }

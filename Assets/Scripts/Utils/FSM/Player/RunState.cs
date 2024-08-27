@@ -9,7 +9,7 @@ namespace Project.Systems.StateMachine
         {
         }
 
-        public override void Enter()
+        public override void Enter(object data = null)
         {
             base.Enter();
 
@@ -24,6 +24,8 @@ namespace Project.Systems.StateMachine
 
             if (Character.Agent.velocity.sqrMagnitude <= 0)
                 FSM.ChangeState(Character.StateIdle);
+            if (Character.Agent.speed <= Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
+                FSM.ChangeState(Character.StateWalk);
         }
     }
 }

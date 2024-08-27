@@ -8,7 +8,7 @@ namespace Project.Systems.StateMachine
         {
         }
 
-        public override void Enter()
+        public override void Enter(object data = null)
         {
             base.Enter();
             Character.Agent.isStopped = false;
@@ -22,6 +22,13 @@ namespace Project.Systems.StateMachine
 
             if (Character.Agent.velocity.sqrMagnitude <= 0)
                 FSM.ChangeState(Character.StateIdle);
+            if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
+                FSM.ChangeState(Character.StateRun);
+        }
+
+        public override void Exit(object data = null) 
+        {
+            base.Exit();
         }
     }
 }
