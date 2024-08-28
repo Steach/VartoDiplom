@@ -6,7 +6,12 @@ public class SwordAttake : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            Debug.Log("HIT");
+            ChangeScore(1);
         }
+    }
+
+    private void ChangeScore(int score)
+    {
+        EventBus.Publish(new IncreasingScoreEvent(score));
     }
 }

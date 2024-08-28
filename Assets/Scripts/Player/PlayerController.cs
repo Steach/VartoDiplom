@@ -89,7 +89,7 @@ namespace Project.Controllers.Player
         {
             Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            if (Physics.Raycast(ray, out RaycastHit hit) && !_isFightingInPlace && !_isRunning)
+            if (Physics.Raycast(ray, out RaycastHit hit) && !_isFightingInPlace && !_isRunning && !hit.collider.CompareTag("Enemy"))
             {
                 _characterFSM.Agent.speed = _characterFSM.PlayerData.WalkSpeed;
                 _characterFSM.FSM.ChangeState(_characterFSM.StateWalk);
@@ -109,9 +109,11 @@ namespace Project.Controllers.Player
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)
             {
                 Debug.Log("FIND_ENEMY");
-                _characterFSM.Agent.speed = _characterFSM.PlayerData.RunSpeed;
-                _characterFSM.Agent.SetDestination(hit.point);
-                StartCoroutine(AttakeEnemy(2));
+                _characterFSM.SetTarget(hit.collider.gameObject);
+                _characterFSM.FSM.ChangeState(_characterFSM.StateRunToEnemyAndAttake);
+                //_characterFSM.Agent.speed = _characterFSM.PlayerData.RunSpeed;
+                //_characterFSM.Agent.SetDestination(hit.point);
+                //StartCoroutine(AttakeEnemy(2));
             }
         }
 
@@ -130,14 +132,14 @@ namespace Project.Controllers.Player
             }
         }
 
-        private IEnumerator AttakeEnemy(float minDistance)
-        {
-            while (_characterFSM.Agent.remainingDistance >= minDistance)
-            {
-                yield return null;
-            }
-            _characterFSM.Agent.ResetPath();
-            _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
-        }
+        //private IEnumerator AttakeEnemy(float minDistance)
+        //{
+        //    while (_characterFSM.Agent.remainingDistance >= minDistance)
+        //    {
+        //        yield return null;
+        //    }
+        //    _characterFSM.Agent.ResetPath();
+        //    _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
+        //}
     }
 }

@@ -23,7 +23,7 @@ namespace Project.Systems.StateMachine
 
             if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.WalkSpeed)
                 FSM.ChangeState(Character.StateWalk);
-
+            
             if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.RunSpeed)
                 FSM.ChangeState(Character.StateRun);
         }

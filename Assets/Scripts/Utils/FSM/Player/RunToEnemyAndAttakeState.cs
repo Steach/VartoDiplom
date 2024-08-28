@@ -1,3 +1,4 @@
+using Project.Data;
 using System.Collections;
 using UnityEngine;
 
@@ -13,10 +14,30 @@ namespace Project.Systems.StateMachine
         {
             base.Enter(data);
 
-            if (data != null && data is float)
-            {
+            //StartRunToTarget();
+        }
 
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+            if (Character.PlayerData.Target && Vector3.Distance(Character.Agent.transform.position, Character.Agent.destination) >= 3)
+            {
+                Debug.Log(Vector3.Distance(Character.Agent.transform.position, Character.Agent.destination));
+                StartRunToTarget();
             }
+            else
+            {
+                Character.Agent.ResetPath();
+                FSM.ChangeState(Character.StateAttackInPlace);
+            }
+        }
+
+        private void StartRunToTarget()
+        {
+            Character.Agent.speed = Character.PlayerData.RunSpeed;
+            Character.Agent.isStopped = false;
+            Character.Animator.SetTrigger(GameData.PlayerRunFrontPlaceSword);
+            Character.Agent.SetDestination(Character.PlayerData.Target.transform.position);
         }
     }
 }

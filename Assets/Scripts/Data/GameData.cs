@@ -15,6 +15,7 @@ namespace Project.Data
             public float WalkSpeed;
             public float RunSpeed;
             public float RotateSpeed;
+            public GameObject Target;
         }
     }
 }

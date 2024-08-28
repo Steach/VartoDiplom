@@ -20,10 +20,10 @@ namespace Project.Systems.StateMachine
         {
             base.LogicUpdate();
 
-            if (Character.Agent.velocity.sqrMagnitude <= 0)
-                FSM.ChangeState(Character.StateIdle);
-            if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
-                FSM.ChangeState(Character.StateRun);
+           if (Character.Agent.velocity.sqrMagnitude <= 0)
+               FSM.ChangeState(Character.StateIdle);
+           if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
+               FSM.ChangeState(Character.StateRun);
         }
 
         public override void Exit(object data = null) 

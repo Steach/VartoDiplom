@@ -36,6 +36,11 @@ namespace Project.Systems.StateMachine
             _agent.angularSpeed = _playerData.RotateSpeed;
         }
 
+        public void SetTarget(GameObject newTarget)
+        {
+            _playerData.Target = newTarget;
+        }
+
         private void Update()
         {
             FSM.CurrentState.LogicUpdate();
