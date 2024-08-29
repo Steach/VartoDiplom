@@ -1,3 +1,4 @@
+using Project.Data;
 using Project.Systems.ControlsSystem;
 using Project.Systems.StateMachine;
 using System.Collections;
@@ -16,11 +17,17 @@ namespace Project.Controllers.Player
         [SerializeField] private bool _isFollowPlayer = false;
         [SerializeField] private bool _isFightingInPlace = false;
         [SerializeField] private bool _isRunning = false;
+        private int _currentExp = 0;
 
         private void Awake()
         {
             _controlsSystem = new ControlsSystem();
             _camera = Camera.main;
+        }
+
+        private void Start()
+        {
+            EventBus.Publish(new ChangePlayerExperienceEvent(GameData.LevelOneExperience, _currentExp));
         }
 
         private void Update()
@@ -39,6 +46,7 @@ namespace Project.Controllers.Player
             _controlsSystem.PlayerController.Fight.canceled += StopFight;
             _controlsSystem.PlayerController.Run.started += StartRun;
             _controlsSystem.PlayerController.Run.canceled += StopRun;
+            EventBus.Subscribe<EnemyDieEvent>(EnemyDie);
         }
 
         private void OnDisable()
@@ -51,6 +59,7 @@ namespace Project.Controllers.Player
             _controlsSystem.PlayerController.Fight.canceled -= StopFight;
             _controlsSystem.PlayerController.Run.started -= StartRun;
             _controlsSystem.PlayerController.Run.canceled -= StopRun;
+            EventBus.Unsubscribe<EnemyDieEvent>(EnemyDie);
         }
 
         private void TurnToMouse()
@@ -111,9 +120,6 @@ namespace Project.Controllers.Player
                 Debug.Log("FIND_ENEMY");
                 _characterFSM.SetTarget(hit.collider.gameObject);
                 _characterFSM.FSM.ChangeState(_characterFSM.StateRunToEnemyAndAttake);
-                //_characterFSM.Agent.speed = _characterFSM.PlayerData.RunSpeed;
-                //_characterFSM.Agent.SetDestination(hit.point);
-                //StartCoroutine(AttakeEnemy(2));
             }
         }
 
@@ -132,14 +138,10 @@ namespace Project.Controllers.Player
             }
         }
 
-        //private IEnumerator AttakeEnemy(float minDistance)
-        //{
-        //    while (_characterFSM.Agent.remainingDistance >= minDistance)
-        //    {
-        //        yield return null;
-        //    }
-        //    _characterFSM.Agent.ResetPath();
-        //    _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
-        //}
+        private void EnemyDie(EnemyDieEvent enemyDieEvent)
+        {
+            _currentExp = enemyDieEvent.Exp;
+            EventBus.Publish(new ChangePlayerExperienceEvent(GameData.LevelOneExperience, _currentExp));
+        }
     }
 }

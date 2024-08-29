@@ -20,10 +20,15 @@ namespace Project.Systems.StateMachine
         {
             base.LogicUpdate();
 
-           if (Character.Agent.velocity.sqrMagnitude <= 0)
-               FSM.ChangeState(Character.StateIdle);
-           if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
-               FSM.ChangeState(Character.StateRun);
+            if (Character.Agent.velocity.sqrMagnitude <= 0 && !Character.Agent.hasPath)
+                FSM.ChangeState(Character.StateIdle);
+            else if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
+                FSM.ChangeState(Character.StateRun);
+            else if (Character.Agent.speed < Character.PlayerData.RunSpeed &&
+                 Character.Agent.velocity.sqrMagnitude > 0 &&
+                 !Character.Animator.IsInTransition(0) &&
+                 Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                Character.Animator.SetTrigger(GameData.PlayerWalkFrontPlaceSword);
         }
 
         public override void Exit(object data = null) 

@@ -4,10 +4,15 @@ namespace Project.Data
 {
     public class GameData : MonoBehaviour
     {
-        public static readonly string PlayerWalkFrontPlaceSword = "OHU_WALK_F_P";
-        public static readonly string PlayerIdleSword = "OHU_IDLE";
-        public static readonly string PlayerAttakeB1P = "OHU_ATTAKE_B1_P";
-        public static readonly string PlayerRunFrontPlaceSword = "OHU_RUN_F_P";
+        public static readonly string PlayerWalkFrontPlaceSword = "OneHand_Up_Walk_F_InPlace";
+        public static readonly string PlayerIdleSword = "OneHand_Up_Idle";
+        public static readonly string PlayerAttakeB1P = "OneHand_Up_Attack_B_1_InPlace";
+        public static readonly string PlayerRunFrontPlaceSword = "OneHand_Up_Run_F_InPlace";
+
+        public static readonly int LevelOneExperience = 100;
+        public static readonly int LevelTwoExperience = 200;
+        public static readonly int LevelThreeExperience = 300;
+        public static readonly int LevelFourExperience = 400;
 
         [System.Serializable]
         public struct PlayerData

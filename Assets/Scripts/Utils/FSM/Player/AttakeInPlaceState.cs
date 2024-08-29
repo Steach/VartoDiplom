@@ -14,8 +14,6 @@ namespace Project.Systems.StateMachine
             base.Enter();
 
             Character.Agent.isStopped = true;
-            //Character.Animator.Rebind();
-            Character.Animator.SetTrigger(GameData.PlayerIdleSword);
             Character.Animator.SetTrigger(GameData.PlayerAttakeB1P);
         }
 
@@ -25,14 +23,7 @@ namespace Project.Systems.StateMachine
 
             if (!Character.Animator.IsInTransition(0) && Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                if (Random.Range(0, 5) == 0)
-                {
-                    Character.FSM.ChangeState(Character.StateIdle);
-                }
-                else
-                {
-                    Character.FSM.ChangeState(Character.StateAttackInPlace);
-                } 
+                Character.FSM.ChangeState(Character.StateIdle);
             }    
         }
 

@@ -14,7 +14,9 @@ namespace Project.Systems.StateMachine
             base.Enter();
 
             Character.Agent.isStopped = true;
+            Character.Agent.speed = 0;
             Character.Animator.SetTrigger(GameData.PlayerIdleSword);
+            Character.SetTarget(null);
         }
 
         public override void LogicUpdate()
@@ -23,9 +25,10 @@ namespace Project.Systems.StateMachine
 
             if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.WalkSpeed)
                 FSM.ChangeState(Character.StateWalk);
-            
-            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.RunSpeed)
+            else if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.RunSpeed)
                 FSM.ChangeState(Character.StateRun);
+            else if (Character.Agent.velocity.sqrMagnitude == 0 && Character.Agent.speed == 0)
+                Character.Animator.SetTrigger(GameData.PlayerIdleSword);
         }
     }
 }

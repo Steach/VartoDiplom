@@ -6,6 +6,10 @@ public class SwordAttake : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
+            if (other.TryGetComponent<EnemySimple>(out EnemySimple enemy))
+            {
+                enemy.HP = 10;
+            }
             ChangeScore(1);
         }
     }

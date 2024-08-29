@@ -1,4 +1,5 @@
 using Project.Data;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,7 @@ namespace Project.Systems.StateMachine
         [SerializeField] private NavMeshAgent _agent;
         [SerializeField] private Animator _animator;
         [SerializeField] private GameData.PlayerData _playerData;
+        [SerializeField] private TextMeshProUGUI _debug;
 
         public NavMeshAgent Agent { get { return _agent; } }
         public Animator Animator { get { return _animator; } }
@@ -30,16 +32,13 @@ namespace Project.Systems.StateMachine
             StateRun = new RunState(this, FSM);
             StateRunToEnemyAndAttake = new RunToEnemyAndAttakeState(this, FSM);
 
-            FSM.Init(StateIdle);
+            FSM.Init(StateIdle, _debug);
 
             _agent.speed = _playerData.WalkSpeed;
             _agent.angularSpeed = _playerData.RotateSpeed;
         }
 
-        public void SetTarget(GameObject newTarget)
-        {
-            _playerData.Target = newTarget;
-        }
+        public void SetTarget(GameObject newTarget) => _playerData.Target = newTarget;
 
         private void Update()
         {

@@ -529,7 +529,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: OHU_WALK_F_P
+    m_ConditionEvent: OneHand_Up_Walk_F_InPlace
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3240921291199795737}
@@ -918,25 +918,25 @@ AnimatorController:
   m_Name: PlayerAnimatorController
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: OHU_WALK_F_P
+  - m_Name: OneHand_Up_Walk_F_InPlace
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: OHU_IDLE
+  - m_Name: OneHand_Up_Idle
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: OHU_ATTAKE_B1_P
+  - m_Name: OneHand_Up_Attack_B_1_InPlace
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: OHU_RUN_F_P
+  - m_Name: OneHand_Up_Run_F_InPlace
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -990,7 +990,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: OHU_IDLE
+    m_ConditionEvent: OneHand_Up_Idle
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1171604521554565386}
@@ -1145,7 +1145,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: OHU_RUN_F_P
+    m_ConditionEvent: OneHand_Up_Run_F_InPlace
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8294680286460735018}
@@ -1326,7 +1326,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: OHU_ATTAKE_B1_P
+    m_ConditionEvent: OneHand_Up_Attack_B_1_InPlace
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2156012736024377128}
