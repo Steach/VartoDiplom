@@ -88,6 +88,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UIController",
+            "id": "9dfd5e1a-5180-4c7f-88c2-96622499f045",
+            "actions": [
+                {
+                    "name": "Characteristics",
+                    "type": "Button",
+                    "id": "d96c7571-7463-43e2-aa9b-8efaef8fd422",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a0669016-b170-432d-a48a-e1f3e386c431",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Characteristics",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

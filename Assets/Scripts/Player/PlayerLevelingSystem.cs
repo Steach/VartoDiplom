@@ -1,50 +1,60 @@
 using Project.Data;
-using UnityEngine;
+using System.Xml.Serialization;
 
 namespace Project.Systems.LevelingSystem
 {
-    public class PlayerLevelingSystem : MonoBehaviour
+    public class PlayerLevelingSystem
     {
         private int _playerLevel;
-        [SerializeField] private int _expToNextLevel;
-        [SerializeField] private int _currentExp;
-        [SerializeField] private int _str;
-        [SerializeField] private int _int;
-        [SerializeField] private int _agl;
-        [SerializeField] private int _freeStatsPoints;
-        [SerializeField] private int _freeSkillPoints;
+        private int _expToNextLevel;
+        private int _currentExp;
+        private int _str;
+        private int _int;
+        private int _agl;
+        private int _freeStatsPoints;
+        private int _freeSkillPoints;
 
-        private void Awake()
+        private bool _isInittedOnce = true;
+        private int _countOfInit = 0;
+
+        public int STR { get { return _str; } }
+        public int INT { get { return _int; } }
+        public int AGL { get { return _agl; } }
+        public int FreeStatsPoints { get { return _freeStatsPoints; } }
+        public int FreeSkillPoints {  get { return _freeSkillPoints; } }
+
+        public void Init()
         {
-            Init();
-            EventBus.Subscribe<EnemyDieEvent>(GetExpirience);
+            if (_isInittedOnce && _countOfInit == 0)
+            {
+                _str = GameData.StartedStr;
+                _int = GameData.StartedInt;
+                _agl = GameData.StartedAgl;
+                _expToNextLevel = GameData.LevelOneExperience;
+                _freeSkillPoints = 0;
+                _freeStatsPoints = 0;
+                _playerLevel = 1;
+                _currentExp = 0;
+                _countOfInit++;
+            }
         }
 
-        private void Start()
+        public void OnEnableEvents()
         {
+            EventBus.Subscribe<EnemyDieEvent>(GetExpirience);
+            EventBus.Subscribe<AddStatsEvent>(AddNewStats);
             EventBus.Publish(new LevelUpEvent(_currentExp, _expToNextLevel, _playerLevel));
         }
 
-        private void Update()
-        {
-            CheckLevelUp();
-        }
-
-        private void OnDestroy()
+        public void OnDisableEvents()
         {
             EventBus.Unsubscribe<EnemyDieEvent>(GetExpirience);
+            EventBus.Unsubscribe<AddStatsEvent>(AddNewStats);
         }
 
-        private void Init()
+        public void RunInUpdate()
         {
-            _str = GameData.StartedStr;
-            _int = GameData.StartedInt;
-            _agl = GameData.StartedAgl;
-            _expToNextLevel = GameData.LevelOneExperience;
-            _freeSkillPoints = 0;
-            _freeStatsPoints = 0;
-            _playerLevel = 1;
-            _currentExp = 0;
+            CheckLevelUp();
         }
 
         private void CheckLevelUp()
@@ -114,6 +124,14 @@ namespace Project.Systems.LevelingSystem
         {
             _currentExp += enemyDieEvent.Exp;
             EventBus.Publish(new LevelUpEvent(_currentExp, _expToNextLevel, _playerLevel));
+        }
+
+        private void AddNewStats(AddStatsEvent addStatsEvent)
+        {
+            _str = addStatsEvent.NewSTR;
+            _int = addStatsEvent.NewINT;
+            _agl = addStatsEvent.NewAGL;
+            _freeStatsPoints = addStatsEvent.NewFreeStatPoints;
         }
     }
 }

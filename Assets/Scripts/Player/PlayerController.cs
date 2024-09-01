@@ -1,32 +1,31 @@
 using Project.Systems.ControlsSystem;
 using Project.Systems.StateMachine;
-using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine;
 
 namespace Project.Controllers.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController
     {
-        [SerializeField] private FSMPlayer _characterFSM;
+        private FSMPlayer _characterFSM;
         private ControlsSystem _controlsSystem;
         private Camera _camera;
-        [SerializeField] private bool _isFollowPlayer = false;
-        [SerializeField] private bool _isFightingInPlace = false;
-        [SerializeField] private bool _isRunning = false;
+        private Transform _targetTransform;
+        private bool _isFollowPlayer = false;
+        private bool _isFightingInPlace = false;
+        private bool _isRunning = false;
 
-        private void Awake()
+        public ControlsSystem ControlSystem { get { return _controlsSystem; } }
+
+        public void Init(FSMPlayer fsmPlayer, Camera camera, Transform targetTransform)
         {
             _controlsSystem = new ControlsSystem();
-            _camera = Camera.main;
+            _characterFSM = fsmPlayer;
+            _camera = camera;
+            _targetTransform = targetTransform;
         }
 
-        private void Update()
-        {
-            TurnToMouse();
-            FollowPlayer();
-        }
-
-        private void OnEnable()
+        public void OnEnableEvents()
         {
             _controlsSystem.PlayerController.Enable();
             _controlsSystem.PlayerController.Movement.performed += OnMouseClick;
@@ -38,7 +37,13 @@ namespace Project.Controllers.Player
             _controlsSystem.PlayerController.Run.canceled += StopRun;
         }
 
-        private void OnDisable()
+        public void RunOnUpdate()
+        {
+            TurnToMouse();
+            FollowPlayer();
+        }
+
+        public void OnDisableEvents() 
         {
             _controlsSystem.PlayerController.Disable();
             _controlsSystem.PlayerController.Movement.performed -= OnMouseClick;
@@ -55,20 +60,20 @@ namespace Project.Controllers.Player
             if (!_isFightingInPlace && !_isRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0)
             {
                 var mousePosition = Input.mousePosition;
-                Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-                Plane playerPlane = new Plane(Vector3.up, transform.position);
+                Ray ray = _camera.ScreenPointToRay(mousePosition);
+                Plane playerPlane = new Plane(Vector3.up, _targetTransform.position);
                 float hitDist = 0.0f;
 
                 if (playerPlane.Raycast(ray, out hitDist))
                 {
                     Vector3 targetPoint = ray.GetPoint(hitDist);
-                    Vector3 direction = targetPoint - transform.position;
+                    Vector3 direction = targetPoint - _targetTransform.position;
 
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
                     targetRotation.x = 0;
                     targetRotation.z = 0;
 
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime + 10f);
+                    _targetTransform.rotation = Quaternion.Slerp(_targetTransform.rotation, targetRotation, Time.deltaTime + 10f);
                 }
             }
         }
@@ -116,7 +121,7 @@ namespace Project.Controllers.Player
             if (_isFollowPlayer && !_isFightingInPlace)
             {
                 Vector2 mousePostion = _controlsSystem.PlayerController.Position.ReadValue<Vector2>();
-                Ray ray = Camera.main.ScreenPointToRay(mousePostion);
+                Ray ray = _camera.ScreenPointToRay(mousePostion);
                 RaycastHit hit;
                 
                 if (Physics.Raycast(ray, out hit))

@@ -112,6 +112,34 @@ namespace Project.Systems.ControlsSystem
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIController"",
+            ""id"": ""9dfd5e1a-5180-4c7f-88c2-96622499f045"",
+            ""actions"": [
+                {
+                    ""name"": ""Characteristics"",
+                    ""type"": ""Button"",
+                    ""id"": ""d96c7571-7463-43e2-aa9b-8efaef8fd422"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a0669016-b170-432d-a48a-e1f3e386c431"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Characteristics"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -122,6 +150,9 @@ namespace Project.Systems.ControlsSystem
             m_PlayerController_Run = m_PlayerController.FindAction("Run", throwIfNotFound: true);
             m_PlayerController_Fight = m_PlayerController.FindAction("Fight", throwIfNotFound: true);
             m_PlayerController_Position = m_PlayerController.FindAction("Position", throwIfNotFound: true);
+            // UIController
+            m_UIController = asset.FindActionMap("UIController", throwIfNotFound: true);
+            m_UIController_Characteristics = m_UIController.FindAction("Characteristics", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -249,12 +280,62 @@ namespace Project.Systems.ControlsSystem
             }
         }
         public PlayerControllerActions @PlayerController => new PlayerControllerActions(this);
+
+        // UIController
+        private readonly InputActionMap m_UIController;
+        private List<IUIControllerActions> m_UIControllerActionsCallbackInterfaces = new List<IUIControllerActions>();
+        private readonly InputAction m_UIController_Characteristics;
+        public struct UIControllerActions
+        {
+            private @ControlsSystem m_Wrapper;
+            public UIControllerActions(@ControlsSystem wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Characteristics => m_Wrapper.m_UIController_Characteristics;
+            public InputActionMap Get() { return m_Wrapper.m_UIController; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIControllerActions set) { return set.Get(); }
+            public void AddCallbacks(IUIControllerActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIControllerActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIControllerActionsCallbackInterfaces.Add(instance);
+                @Characteristics.started += instance.OnCharacteristics;
+                @Characteristics.performed += instance.OnCharacteristics;
+                @Characteristics.canceled += instance.OnCharacteristics;
+            }
+
+            private void UnregisterCallbacks(IUIControllerActions instance)
+            {
+                @Characteristics.started -= instance.OnCharacteristics;
+                @Characteristics.performed -= instance.OnCharacteristics;
+                @Characteristics.canceled -= instance.OnCharacteristics;
+            }
+
+            public void RemoveCallbacks(IUIControllerActions instance)
+            {
+                if (m_Wrapper.m_UIControllerActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIControllerActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIControllerActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIControllerActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIControllerActions @UIController => new UIControllerActions(this);
         public interface IPlayerControllerActions
         {
             void OnMovement(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnFight(InputAction.CallbackContext context);
             void OnPosition(InputAction.CallbackContext context);
+        }
+        public interface IUIControllerActions
+        {
+            void OnCharacteristics(InputAction.CallbackContext context);
         }
     }
 }
