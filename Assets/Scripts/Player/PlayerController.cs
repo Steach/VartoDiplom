@@ -1,11 +1,7 @@
-using Project.Data;
 using Project.Systems.ControlsSystem;
 using Project.Systems.StateMachine;
-using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.TextCore.Text;
 
 namespace Project.Controllers.Player
 {
@@ -17,17 +13,11 @@ namespace Project.Controllers.Player
         [SerializeField] private bool _isFollowPlayer = false;
         [SerializeField] private bool _isFightingInPlace = false;
         [SerializeField] private bool _isRunning = false;
-        private int _currentExp = 0;
 
         private void Awake()
         {
             _controlsSystem = new ControlsSystem();
             _camera = Camera.main;
-        }
-
-        private void Start()
-        {
-            EventBus.Publish(new ChangePlayerExperienceEvent(GameData.LevelOneExperience, _currentExp));
         }
 
         private void Update()
@@ -46,7 +36,6 @@ namespace Project.Controllers.Player
             _controlsSystem.PlayerController.Fight.canceled += StopFight;
             _controlsSystem.PlayerController.Run.started += StartRun;
             _controlsSystem.PlayerController.Run.canceled += StopRun;
-            EventBus.Subscribe<EnemyDieEvent>(EnemyDie);
         }
 
         private void OnDisable()
@@ -59,7 +48,6 @@ namespace Project.Controllers.Player
             _controlsSystem.PlayerController.Fight.canceled -= StopFight;
             _controlsSystem.PlayerController.Run.started -= StartRun;
             _controlsSystem.PlayerController.Run.canceled -= StopRun;
-            EventBus.Unsubscribe<EnemyDieEvent>(EnemyDie);
         }
 
         private void TurnToMouse()
@@ -136,12 +124,6 @@ namespace Project.Controllers.Player
                     _characterFSM.Agent.SetDestination(hit.point);
                 }
             }
-        }
-
-        private void EnemyDie(EnemyDieEvent enemyDieEvent)
-        {
-            _currentExp = enemyDieEvent.Exp;
-            EventBus.Publish(new ChangePlayerExperienceEvent(GameData.LevelOneExperience, _currentExp));
         }
     }
 }

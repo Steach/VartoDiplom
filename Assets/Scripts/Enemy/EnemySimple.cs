@@ -4,7 +4,9 @@ public class EnemySimple : MonoBehaviour
 {
     private int _maxHp = 100;
     private int _currentHp;
-    private int _exp = 10;
+    [SerializeField] private int _exp;
+    [SerializeField] private GameObject _parent;
+
     public int HP 
     {
         get 
@@ -35,6 +37,7 @@ public class EnemySimple : MonoBehaviour
     private void EnemyDie()
     {
         EventBus.Publish(new EnemyDieEvent(_exp));
+        _parent.SetActive(false);
     }
 
     private void WhenHpChanged()

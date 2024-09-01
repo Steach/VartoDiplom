@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Slider _enemySlider;
     [SerializeField] private Slider _playerExp;
+    [SerializeField] private TextMeshProUGUI _playerLevelDebug;
     private int _score = 0;
 
     private void OnEnable()
@@ -14,6 +15,7 @@ public class UIManager : MonoBehaviour
         EventBus.Subscribe<IncreasingScoreEvent>(IncreasScore);
         EventBus.Subscribe<HpChangedEvent>(ChangeEnemyHP);
         EventBus.Subscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
+        EventBus.Subscribe<LevelUpEvent>(PlayerLevelUp);
     }
 
     private void OnDisable()
@@ -21,6 +23,7 @@ public class UIManager : MonoBehaviour
         EventBus.Unsubscribe<IncreasingScoreEvent>(IncreasScore);
         EventBus.Unsubscribe<HpChangedEvent>(ChangeEnemyHP);
         EventBus.Unsubscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
+        EventBus.Unsubscribe<LevelUpEvent>(PlayerLevelUp);
     }
 
     private void IncreasScore(IncreasingScoreEvent increasingScoreEvent)
@@ -39,5 +42,12 @@ public class UIManager : MonoBehaviour
     {
         _playerExp.maxValue = changePlayerExperienceEvent.MaxLevelExp;
         _playerExp.value = changePlayerExperienceEvent.CurrentExp;
+    }
+
+    private void PlayerLevelUp(LevelUpEvent levelUpEvent)
+    {
+        _playerExp.maxValue = levelUpEvent.NextLevelExp;
+        _playerExp.value = levelUpEvent.CurrentExp;
+        _playerLevelDebug.text = levelUpEvent.NewLevel.ToString();
     }
 }

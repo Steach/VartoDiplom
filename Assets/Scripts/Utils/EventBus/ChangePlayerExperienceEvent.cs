@@ -3,9 +3,9 @@ public class ChangePlayerExperienceEvent
     public int MaxLevelExp { get; }
     public int CurrentExp { get; }
 
-    public ChangePlayerExperienceEvent(int maxLevelExp, int currentExp)
+    public ChangePlayerExperienceEvent(int expToNextLevel, int currentExp)
     {
-        MaxLevelExp = maxLevelExp;
+        MaxLevelExp = expToNextLevel;
         CurrentExp = currentExp;
     }
 }

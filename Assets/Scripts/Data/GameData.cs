@@ -9,10 +9,20 @@ namespace Project.Data
         public static readonly string PlayerAttakeB1P = "OneHand_Up_Attack_B_1_InPlace";
         public static readonly string PlayerRunFrontPlaceSword = "OneHand_Up_Run_F_InPlace";
 
-        public static readonly int LevelOneExperience = 100;
-        public static readonly int LevelTwoExperience = 200;
-        public static readonly int LevelThreeExperience = 300;
-        public static readonly int LevelFourExperience = 400;
+        public const int LevelOneExperience = 100;
+        public const int LevelTwoExperience = 120;
+        public const int LevelThreeExperience = 150;
+        public const int LevelFourExperience = 190;
+        public const int LevelFiveExperience = 240;
+        public const int LevelSixExperience = 290;
+        public const int LevelSevenExperience = 350;
+        public const int LevelEightExperience = 410;
+        public const int LevelNineExperience = 480;
+        public const int LevelTenExperience = 100000;
+
+        public const int StartedStr = 3;
+        public const int StartedInt = 3;
+        public const int StartedAgl = 3;
 
         [System.Serializable]
         public struct PlayerData
