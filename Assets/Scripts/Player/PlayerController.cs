@@ -93,7 +93,7 @@ namespace Project.Controllers.Player
 
             if (Physics.Raycast(ray, out RaycastHit hit) && !_isFightingInPlace && !_isRunning && !hit.collider.CompareTag("Enemy"))
             {
-                _characterFSM.Agent.speed = _characterFSM.PlayerData.WalkSpeed;
+                _characterFSM.Agent.speed = _characterFSM.CurrentWalkSpeed;
                 _characterFSM.FSM.ChangeState(_characterFSM.StateWalk);
                 _characterFSM.Agent.SetDestination(hit.point);
             }
@@ -103,14 +103,13 @@ namespace Project.Controllers.Player
             }
             else if (Physics.Raycast(ray, out hit) && !_isFightingInPlace && _isRunning)
             {
-                _characterFSM.Agent.speed = _characterFSM.PlayerData.RunSpeed;
+                _characterFSM.Agent.speed = _characterFSM.CurrentRunSpeed;
                 _characterFSM.FSM.ChangeState(_characterFSM.StateRun);
                 _characterFSM.Agent.SetDestination(hit.point);
             }
 
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)
             {
-                Debug.Log("FIND_ENEMY");
                 _characterFSM.SetTarget(hit.collider.gameObject);
                 _characterFSM.FSM.ChangeState(_characterFSM.StateRunToEnemyAndAttake);
             }

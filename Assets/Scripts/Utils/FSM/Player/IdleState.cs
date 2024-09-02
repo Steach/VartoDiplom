@@ -23,9 +23,9 @@ namespace Project.Systems.StateMachine
         {
             base.LogicUpdate();
 
-            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.WalkSpeed)
+            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.CurrentWalkSpeed)
                 FSM.ChangeState(Character.StateWalk);
-            else if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.PlayerData.RunSpeed)
+            else if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.CurrentRunSpeed)
                 FSM.ChangeState(Character.StateRun);
             else if (Character.Agent.velocity.sqrMagnitude == 0 && Character.Agent.speed == 0)
                 Character.Animator.SetTrigger(GameData.PlayerIdleSword);

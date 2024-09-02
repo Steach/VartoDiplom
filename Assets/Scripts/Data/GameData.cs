@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 namespace Project.Data
@@ -27,9 +28,12 @@ namespace Project.Data
         [System.Serializable]
         public struct PlayerData
         {
-            public float WalkSpeed;
-            public float RunSpeed;
+            public float BaseWalkSpeed;
+            public float BaseRunSpeed;
             public float RotateSpeed;
+            public float BaseHp;
+            public float BaseEndurance;
+            public float BaseMana;
             public GameObject Target;
         }
     }

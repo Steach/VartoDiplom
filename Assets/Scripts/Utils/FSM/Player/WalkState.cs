@@ -12,7 +12,7 @@ namespace Project.Systems.StateMachine
         {
             base.Enter();
             Character.Agent.isStopped = false;
-            Character.Agent.speed = Character.PlayerData.WalkSpeed;
+            Character.Agent.speed = Character.CurrentWalkSpeed;
             Character.Animator.SetTrigger(GameData.PlayerWalkFrontPlaceSword);
         }
 
@@ -22,9 +22,9 @@ namespace Project.Systems.StateMachine
 
             if (Character.Agent.velocity.sqrMagnitude <= 0 && !Character.Agent.hasPath)
                 FSM.ChangeState(Character.StateIdle);
-            else if (Character.Agent.speed > Character.PlayerData.WalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
+            else if (Character.Agent.speed > Character.CurrentWalkSpeed && Character.Agent.velocity.sqrMagnitude > 0)
                 FSM.ChangeState(Character.StateRun);
-            else if (Character.Agent.speed < Character.PlayerData.RunSpeed &&
+            else if (Character.Agent.speed < Character.CurrentRunSpeed &&
                  Character.Agent.velocity.sqrMagnitude > 0 &&
                  !Character.Animator.IsInTransition(0) &&
                  Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)

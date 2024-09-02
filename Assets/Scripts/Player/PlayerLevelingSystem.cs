@@ -43,6 +43,11 @@ namespace Project.Systems.LevelingSystem
         {
             EventBus.Subscribe<EnemyDieEvent>(GetExpirience);
             EventBus.Subscribe<AddStatsEvent>(AddNewStats);
+        }
+
+        public void RunOnStart()
+        {
+            EventBus.Publish(new AddStatsEvent(_str, _int, _agl, _freeSkillPoints));
             EventBus.Publish(new LevelUpEvent(_currentExp, _expToNextLevel, _playerLevel));
         }
 

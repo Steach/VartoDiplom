@@ -13,7 +13,7 @@ namespace Project.Systems.StateMachine
         {
             base.Enter(data);
             
-            Character.Agent.speed = Character.PlayerData.RunSpeed;
+            Character.Agent.speed = Character.CurrentRunSpeed;
             Character.Agent.isStopped = false;
             Character.Agent.SetDestination(Character.PlayerData.Target.transform.position);
 
@@ -28,11 +28,9 @@ namespace Project.Systems.StateMachine
 
         private void StartRunToTarget()
         {
-            //Debug.Log(Vector3.Distance(Character.Agent.transform.position, Character.Agent.destination));
-
             if (Character.PlayerData.Target && Vector3.Distance(Character.Agent.transform.position, Character.Agent.destination) >= 3)
             {
-                Character.Agent.speed = Character.PlayerData.RunSpeed;
+                Character.Agent.speed = Character.CurrentRunSpeed;
                 Character.Agent.isStopped = false;
                 Character.Animator.SetTrigger(GameData.PlayerRunFrontPlaceSword);
                 Character.Agent.SetDestination(Character.PlayerData.Target.transform.position);
@@ -42,10 +40,10 @@ namespace Project.Systems.StateMachine
                 Character.Agent.ResetPath();
                 Character.Agent.speed = 0;
 
-                Vector3 direction = (Character.PlayerData.Target.transform.position - Character.transform.position).normalized;
+                Vector3 direction = (Character.PlayerData.Target.transform.position - Character.PlayerTransform.position).normalized;
                 direction.y = 0;
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
-                Character.transform.rotation = Quaternion.Slerp(Character.transform.rotation, lookRotation, Time.deltaTime * 5f);
+                Character.PlayerTransform.rotation = Quaternion.Slerp(Character.PlayerTransform.rotation, lookRotation, Time.deltaTime * 5f);
                 Character.Animator.SetTrigger(GameData.PlayerAttakeB1P);
 
                 if (Character.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == GameData.PlayerAttakeB1P && 

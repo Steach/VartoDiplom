@@ -77,7 +77,12 @@ public class UIManager : MonoBehaviour
         _characteristicsContainer.gameObject.SetActive(!_characteristicsContainer.gameObject.active);
         if (_characteristicsContainer.active)
         {
+            _inputActions.PlayerController.Disable();
             _characterContainerController.CheckStats();
+        }
+        else if (!_characteristicsContainer.active)
+        {
+            _inputActions.PlayerController.Enable();
         }
     }
 }

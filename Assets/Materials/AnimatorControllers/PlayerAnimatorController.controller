@@ -1529,10 +1529,10 @@ AnimatorStateMachine:
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 1210, y: 710, z: 0}
-  m_EntryPosition: {x: 1010, y: 780, z: 0}
+  m_EntryPosition: {x: 1020, y: 700, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 6291803214366191646}
+  m_DefaultState: {fileID: -1171604521554565386}
 --- !u!1102 &3907410909413677247
 AnimatorState:
   serializedVersion: 6
