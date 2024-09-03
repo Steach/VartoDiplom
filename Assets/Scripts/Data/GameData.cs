@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Data;
 using UnityEngine;
 
@@ -5,10 +6,20 @@ namespace Project.Data
 {
     public class GameData : MonoBehaviour
     {
+        //Animarot Trigger
         public static readonly string PlayerWalkFrontPlaceSword = "OneHand_Up_Walk_F_InPlace";
         public static readonly string PlayerIdleSword = "OneHand_Up_Idle";
         public static readonly string PlayerAttakeB1P = "OneHand_Up_Attack_B_1_InPlace";
         public static readonly string PlayerRunFrontPlaceSword = "OneHand_Up_Run_F_InPlace";
+        public static readonly string PlayerRunTargetAndAttake = "RunToTargetAndAttakeState";
+
+        //Animator Integer
+
+        //Animator Bool
+        public static readonly string PlayerHasTarget = "IsTarget";
+
+        //Animator Float
+        public static readonly string PlayerDistanceToTarget = "DistanceToTarget";
 
         public const int LevelOneExperience = 100;
         public const int LevelTwoExperience = 120;
