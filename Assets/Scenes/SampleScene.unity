@@ -1735,12 +1735,12 @@ MonoBehaviour:
   Gauntlets_C: {fileID: 1542343432}
   Helmet_C: {fileID: 1155485894}
   Legs_C: {fileID: 1523666156}
-  Body_C_Enable: 0
-  Boot_C_Enable: 0
-  Cape_C_Enable: 0
-  Gauntlets_C_Enable: 0
-  Helmet_C_Enable: 0
-  Legs_C_Enable: 0
+  Body_C_Enable: 1
+  Boot_C_Enable: 1
+  Cape_C_Enable: 1
+  Gauntlets_C_Enable: 1
+  Helmet_C_Enable: 1
+  Legs_C_Enable: 1
   Body_A: {fileID: 847845640}
   Boot_A: {fileID: 581948728}
   Cape_A: {fileID: 103466531}
@@ -1771,15 +1771,15 @@ MonoBehaviour:
   Legs_Naked_Enable: 0
   Head_1: {fileID: 1567337105}
   Head_2: {fileID: 1772526354}
-  Head_1_Enable: 0
+  Head_1_Enable: 1
   Head_2_Enable: 0
   Hair_1: {fileID: 438664620}
   Hair_2: {fileID: 1295979581}
-  Hair_1_Enable: 0
+  Hair_1_Enable: 1
   Hair_2_Enable: 0
   Beard_1: {fileID: 998681052}
   Beard_2: {fileID: 885357928}
-  Beard_1_Enable: 0
+  Beard_1_Enable: 1
   Beard_2_Enable: 0
 --- !u!1 &199329970
 GameObject:

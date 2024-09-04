@@ -28,8 +28,12 @@ namespace Project.Systems.StateMachine
 
         private void StartRunToTarget()
         {
-            Character.Agent.speed = Character.CurrentRunSpeed;
-            Character.Animator.SetFloat(GameData.PlayerDistanceToTarget, Character.Agent.remainingDistance);
+            if (Character.Agent.remainingDistance < 3)
+                Character.Agent.speed = 0;
+            else
+                Character.Agent.speed = Character.CurrentRunSpeed;
+
+            Character.Animator.SetBool(GameData.PlayerDistanceForAttake, Character.Agent.remainingDistance < 3);
             Character.Animator.SetBool(GameData.PlayerHasTarget, Character.PlayerData.Target != null);
             Character.Animator.SetTrigger(GameData.PlayerRunTargetAndAttake);
 

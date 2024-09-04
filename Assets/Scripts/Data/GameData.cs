@@ -12,14 +12,16 @@ namespace Project.Data
         public static readonly string PlayerAttakeB1P = "OneHand_Up_Attack_B_1_InPlace";
         public static readonly string PlayerRunFrontPlaceSword = "OneHand_Up_Run_F_InPlace";
         public static readonly string PlayerRunTargetAndAttake = "RunToTargetAndAttakeState";
+        public static readonly string PlayerMovingTrigger = "MovingTrigger";
 
         //Animator Integer
 
         //Animator Bool
         public static readonly string PlayerHasTarget = "IsTarget";
+        public static readonly string PlayerDistanceForAttake = "DistanceForAttake";
 
         //Animator Float
-        public static readonly string PlayerDistanceToTarget = "DistanceToTarget";
+        public static readonly string PlayerSpeed = "CurrentSpeed";
 
         public const int LevelOneExperience = 100;
         public const int LevelTwoExperience = 120;
