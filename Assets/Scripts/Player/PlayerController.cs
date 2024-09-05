@@ -13,7 +13,7 @@ namespace Project.Controllers.Player
         private Transform _targetTransform;
         private bool _isFollowPlayer = false;
         private bool _isFightingInPlace = false;
-        private bool _isRunning = false;
+        public bool IsRunning { get; private set; }
 
         public ControlsSystem ControlSystem { get { return _controlsSystem; } }
 
@@ -57,7 +57,7 @@ namespace Project.Controllers.Player
 
         private void TurnToMouse()
         {
-            if (!_isFightingInPlace && !_isRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0)
+            if (!_isFightingInPlace && !IsRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0)
             {
                 var mousePosition = Input.mousePosition;
                 Ray ray = _camera.ScreenPointToRay(mousePosition);
@@ -81,8 +81,8 @@ namespace Project.Controllers.Player
         private void StartFight(InputAction.CallbackContext context) => _isFightingInPlace = true;
         private void StopFight(InputAction.CallbackContext context) => _isFightingInPlace = false;
 
-        private void StartRun(InputAction.CallbackContext context) => _isRunning = true;
-        private void StopRun(InputAction.CallbackContext context) => _isRunning = false;
+        private void StartRun(InputAction.CallbackContext context) => _characterFSM.PlayerIsRunning(true); //IsRunning = true;
+        private void StopRun(InputAction.CallbackContext context) => _characterFSM.PlayerIsRunning(false); //IsRunning = false;
 
         private void StartFollowPlayer(InputAction.CallbackContext context) => _isFollowPlayer = true;
         private void StopFollowPlayer(InputAction.CallbackContext context) => _isFollowPlayer = false;
@@ -91,21 +91,14 @@ namespace Project.Controllers.Player
         {
             Ray ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-            if (Physics.Raycast(ray, out RaycastHit hit) && !_isFightingInPlace && !_isRunning && !hit.collider.CompareTag("Enemy"))
+            if (Physics.Raycast(ray, out RaycastHit hit) && !_isFightingInPlace && !hit.collider.CompareTag("Enemy"))
             {
-                _characterFSM.Agent.speed = _characterFSM.CurrentWalkSpeed;
-                _characterFSM.FSM.ChangeState(_characterFSM.StateWalk);
+                _characterFSM.FSM.ChangeState(_characterFSM.MovingState);
                 _characterFSM.Agent.SetDestination(hit.point);
             }
-            else if (_isFightingInPlace && (!_isRunning || _isRunning))
+            else if (_isFightingInPlace && (!_characterFSM.PlayerData.IsRunning || _characterFSM.PlayerData.IsRunning))
             {
                 _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
-            }
-            else if (Physics.Raycast(ray, out hit) && !_isFightingInPlace && _isRunning)
-            {
-                _characterFSM.Agent.speed = _characterFSM.CurrentRunSpeed;
-                _characterFSM.FSM.ChangeState(_characterFSM.StateRun);
-                _characterFSM.Agent.SetDestination(hit.point);
             }
 
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)

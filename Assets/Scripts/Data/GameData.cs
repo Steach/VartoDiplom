@@ -19,6 +19,8 @@ namespace Project.Data
         //Animator Bool
         public static readonly string PlayerHasTarget = "IsTarget";
         public static readonly string PlayerDistanceForAttake = "DistanceForAttake";
+        public static readonly string PlayerSpeedIsWalk = "SpeedIsWalk";
+        public static readonly string PlayerSpeedIsRun = "SpeedIsRun";
 
         //Animator Float
         public static readonly string PlayerSpeed = "CurrentSpeed";
@@ -44,6 +46,7 @@ namespace Project.Data
             public float BaseWalkSpeed;
             public float BaseRunSpeed;
             public float RotateSpeed;
+            public bool IsRunning;
             public float BaseHp;
             public float BaseEndurance;
             public float BaseMana;

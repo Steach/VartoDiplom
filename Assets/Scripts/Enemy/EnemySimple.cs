@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySimple : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class EnemySimple : MonoBehaviour
     private int _currentHp;
     [SerializeField] private int _exp;
     [SerializeField] private GameObject _parent;
+    [SerializeField] private Slider _hpSlider;
 
     public int HP 
     {
@@ -25,6 +27,13 @@ public class EnemySimple : MonoBehaviour
     private void Start()
     {
         _currentHp = _maxHp;
+
+        if (_hpSlider != null)
+        {
+            _hpSlider.maxValue = _maxHp;
+            _hpSlider.value = _currentHp;
+        }
+        
         EventBus.Publish(new HpChangedEvent(_currentHp, _maxHp));
     }
 
@@ -38,6 +47,11 @@ public class EnemySimple : MonoBehaviour
     {
         EventBus.Publish(new EnemyDieEvent(_exp));
         _parent.SetActive(false);
+    }
+
+    public void GetDamage() 
+    {
+        _hpSlider.value = _currentHp;
     }
 
     private void WhenHpChanged()

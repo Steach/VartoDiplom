@@ -26,9 +26,18 @@ namespace Project.Managers.Player
         [SerializeField] private GameData.PlayerData _playerData;
         [SerializeField] private TextMeshProUGUI _debug;
 
+        [Space]
+        [Header("Equipment")]
+        [SerializeField] private GameObject _mainWeaponPlace;
+
         private PlayerLevelingSystem _playerLevelingSystem;
         private PlayerController _playerController;
         private FSMPlayer _playerFSM;
+
+        
+
+        private PlayerCharacteristics _playerCharacteristicsData;
+        public PlayerCharacteristics PlayerCharacteristicsData { get { return _playerCharacteristicsData; } }
 
         public PlayerLevelingSystem PlayerLevelingSystem { get { return _playerLevelingSystem; } }
         public PlayerController PlayerController { get { return _playerController; } }
@@ -40,7 +49,7 @@ namespace Project.Managers.Player
             _playerFSM = new FSMPlayer();
             _playerLevelingSystem.Init();
             _playerController.Init(_playerFSM, _camera, _playerTransform);
-            _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform);
+            _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
         }
 
         private void OnEnable()
@@ -48,6 +57,7 @@ namespace Project.Managers.Player
             _playerLevelingSystem.OnEnableEvents();
             _playerController.OnEnableEvents();
             _playerFSM.OnEnableEvents();
+            EventBus.Subscribe<AddStatsEvent>(SetCharacteristicsFromStats);
         }
 
         private void Start()
@@ -72,6 +82,27 @@ namespace Project.Managers.Player
             _playerLevelingSystem.OnDisableEvents();
             _playerController.OnDisableEvents();
             _playerFSM.OnDisableEvents();
+            EventBus.Unsubscribe<AddStatsEvent>(SetCharacteristicsFromStats);
+        }
+
+
+        private void SetCharacteristicsFromStats(AddStatsEvent addStatsEvent)
+        {
+            _playerCharacteristicsData.CurrentMaxMP = _playerData.BaseHp + (addStatsEvent.NewSTR / 5);
+            _playerCharacteristicsData.CurrentMaxMP = _playerData.BaseMana + (addStatsEvent.NewINT / 5);
+            _playerCharacteristicsData.CurrentMaxST = _playerData.BaseEndurance + (addStatsEvent.NewSTR + addStatsEvent.NewAGL) / 7;
+            _playerCharacteristicsData.CurrentWalkSpeed = _playerData.BaseWalkSpeed + (addStatsEvent.NewAGL / 5);
+            _playerCharacteristicsData.CurrentRunSpeed = _playerData.BaseRunSpeed + (addStatsEvent.NewAGL / 5);
+        }
+
+        [System.Serializable]
+        public struct PlayerCharacteristics
+        {
+            public float CurrentMaxHP;
+            public float CurrentMaxMP;
+            public float CurrentMaxST;
+            public float CurrentWalkSpeed;
+            public float CurrentRunSpeed;
         }
     }
 }
