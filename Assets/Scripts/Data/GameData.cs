@@ -1,10 +1,9 @@
-using System.Collections.Specialized;
-using System.Data;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Data
 {
-    public class GameData : MonoBehaviour
+    public static class GameData
     {
         //Animarot Trigger
         public static readonly string PlayerWalkFrontPlaceSword = "OneHand_Up_Walk_F_InPlace";
@@ -25,6 +24,7 @@ namespace Project.Data
         //Animator Float
         public static readonly string PlayerSpeed = "CurrentSpeed";
 
+        //LevelsExpirience
         public const int LevelOneExperience = 100;
         public const int LevelTwoExperience = 120;
         public const int LevelThreeExperience = 150;
@@ -36,9 +36,18 @@ namespace Project.Data
         public const int LevelNineExperience = 480;
         public const int LevelTenExperience = 100000;
 
+        //StartedStats
         public const int StartedStr = 3;
         public const int StartedInt = 3;
         public const int StartedAgl = 3;
+
+        //Tags
+        public static readonly string WeaponTag = "Weapon";
+        public static readonly string ShieldTag = "Shield";
+        public static readonly string ArmorTag = "Armor";
+        public static readonly string PotionTag = "Potion";
+        public static readonly string EnemyTag = "Enemy";
+        public static readonly string PlayerTag = "Player";
 
         [System.Serializable]
         public struct PlayerData
@@ -51,6 +60,11 @@ namespace Project.Data
             public float BaseEndurance;
             public float BaseMana;
             public GameObject Target;
+        }
+
+        public struct TagsData
+        {
+            public static readonly Dictionary<string, string> GameTags;
         }
     }
 }

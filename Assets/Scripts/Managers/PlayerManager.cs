@@ -1,5 +1,6 @@
 using Project.Controllers.Player;
 using Project.Data;
+using Project.Systems.ItemSystem;
 using Project.Systems.LevelingSystem;
 using Project.Systems.StateMachine;
 using TMPro;
@@ -33,6 +34,7 @@ namespace Project.Managers.Player
         private PlayerLevelingSystem _playerLevelingSystem;
         private PlayerController _playerController;
         private FSMPlayer _playerFSM;
+        private PlayerInventory _playerInventory;
 
         
 
@@ -47,6 +49,7 @@ namespace Project.Managers.Player
             _playerController = new PlayerController();
             _playerLevelingSystem = new PlayerLevelingSystem();
             _playerFSM = new FSMPlayer();
+            _playerInventory = new PlayerInventory();
             _playerLevelingSystem.Init();
             _playerController.Init(_playerFSM, _camera, _playerTransform);
             _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
@@ -57,6 +60,7 @@ namespace Project.Managers.Player
             _playerLevelingSystem.OnEnableEvents();
             _playerController.OnEnableEvents();
             _playerFSM.OnEnableEvents();
+            _playerInventory.OnEnableEvents();
             EventBus.Subscribe<AddStatsEvent>(SetCharacteristicsFromStats);
         }
 
@@ -82,6 +86,7 @@ namespace Project.Managers.Player
             _playerLevelingSystem.OnDisableEvents();
             _playerController.OnDisableEvents();
             _playerFSM.OnDisableEvents();
+            _playerInventory.OnDisableEvents();
             EventBus.Unsubscribe<AddStatsEvent>(SetCharacteristicsFromStats);
         }
 

@@ -1,3 +1,4 @@
+using Project.Data;
 using UnityEngine;
 
 namespace Project.Systems.EquipmentSystem
@@ -17,7 +18,7 @@ namespace Project.Systems.EquipmentSystem
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.CompareTag("Sword"))
+            if (other.gameObject.CompareTag(GameData.WeaponTag))
             {
                 var rb = other.GetComponent<Rigidbody>();
                 rb.isKinematic = true;
@@ -27,7 +28,7 @@ namespace Project.Systems.EquipmentSystem
                 _mainWeapon = other.gameObject;
             }
 
-            if (other.gameObject.CompareTag("Shield"))
+            if (other.gameObject.CompareTag(GameData.ShieldTag))
             {
                 var rb = other.GetComponent<Rigidbody>();
                 rb.isKinematic = true;
@@ -35,6 +36,20 @@ namespace Project.Systems.EquipmentSystem
                 other.transform.localPosition = new Vector3(0, 0, 0);
                 other.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 _shield = other.gameObject;
+            }
+
+            if (other.gameObject.CompareTag(GameData.ArmorTag))
+            {
+                Debug.Log(other.gameObject.name);
+
+                if (other.gameObject.TryGetComponent<ItemCharacteristics>(out ItemCharacteristics itemCharacteristics))
+                {
+                    ItemsID enumId = itemCharacteristics.ItemID;
+                    var intId = (int)enumId;
+                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(intId));
+                }
+
+                other.gameObject.SetActive(false);
             }
         }
     }

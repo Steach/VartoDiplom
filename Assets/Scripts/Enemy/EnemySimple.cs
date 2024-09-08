@@ -1,3 +1,4 @@
+using Project.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,7 +46,7 @@ public class EnemySimple : MonoBehaviour
 
     private void EnemyDie()
     {
-        EventBus.Publish(new EnemyDieEvent(_exp));
+        EventBus.Publish(new EnemyDieEvent(_exp, transform.position));
         _parent.SetActive(false);
     }
 
@@ -61,7 +62,7 @@ public class EnemySimple : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Sword"))
+        if (other.CompareTag(GameData.WeaponTag))
         {
             WhenHpChanged();
         }

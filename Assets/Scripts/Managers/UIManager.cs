@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
 
     [SerializeField] private TextMeshProUGUI _scoreText;
-    [SerializeField] private Slider _enemySlider;
     [SerializeField] private Slider _playerExp;
     [SerializeField] private TextMeshProUGUI _playerLevelDebug;
     [SerializeField] private CharacteristicContainerController _characterContainerController;
@@ -29,7 +28,6 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Characteristics.performed += EnableDisableCharacteristicsContainer;
 
         EventBus.Subscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Subscribe<HpChangedEvent>(ChangeEnemyHP);
         EventBus.Subscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
         EventBus.Subscribe<LevelUpEvent>(PlayerLevelUp);
 
@@ -42,7 +40,6 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Characteristics.performed -= EnableDisableCharacteristicsContainer;
 
         EventBus.Unsubscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Unsubscribe<HpChangedEvent>(ChangeEnemyHP);
         EventBus.Unsubscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
         EventBus.Unsubscribe<LevelUpEvent>(PlayerLevelUp);
     }
@@ -51,12 +48,6 @@ public class UIManager : MonoBehaviour
     {
         _score += increasingScoreEvent.Score;
         _scoreText.text = _score.ToString();
-    }
-
-    private void ChangeEnemyHP(HpChangedEvent hpChangedEvent)
-    {
-        _enemySlider.maxValue = hpChangedEvent.MaxHp;
-        _enemySlider.value = hpChangedEvent.Hp;
     }
 
     private void ChangePlayerExpSlider(ChangePlayerExperienceEvent changePlayerExperienceEvent)
