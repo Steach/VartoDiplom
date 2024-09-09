@@ -9,25 +9,31 @@ namespace Project.Controllers.UI
     public class CharacteristicContainerController : MonoBehaviour
     {
         [SerializeField] private UIManager _uiManager;
+
         [Space]
         [Header("STR")]
-        private int _currentSTRPoints;
         [SerializeField] private TextMeshProUGUI _strText;
         [SerializeField] private Button _addSTRPointsButton;
+
+        private int _currentSTRPoints;
+
         [Space]
         [Header("INT")]
-        private int _currentINTPoints;
         [SerializeField] private TextMeshProUGUI _intText;
         [SerializeField] private Button _addINTPointsButton;
+        private int _currentINTPoints;
+
         [Space]
         [Header("AGL")]
-        private int _currentAGLPoints;
         [SerializeField] private TextMeshProUGUI _aglText;
         [SerializeField] private Button _addAGLPointsButton;
+        private int _currentAGLPoints;
+
         [Space]
-        private int _freeStatsPoints;
+        [Space]
         [SerializeField] private TextMeshProUGUI _freePointsText;
         [SerializeField] private Button _saveStatsButton;
+        private int _freeStatsPoints;
 
         private GameManager _gameManager;
 

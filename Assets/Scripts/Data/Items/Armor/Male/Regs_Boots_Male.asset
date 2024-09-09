@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _itemType: 1
   _prefab: {fileID: 8329367445451104273, guid: 8c296d5a69966f14ca1475052cc82ed8, type: 3}
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 0dfbcfbcd2b9c2a43a53ff9e180f29ea, type: 3}
   _requaredSTR: 3
   _requaredINT: 3
   _requaredAGL: 3

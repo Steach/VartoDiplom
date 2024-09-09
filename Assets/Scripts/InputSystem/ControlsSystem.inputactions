@@ -80,7 +80,7 @@
                     "name": "",
                     "id": "4916c2f3-4915-4959-8e65-7cfc1f14e43b",
                     "path": "<Pointer>/position",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "Position",
@@ -101,6 +101,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "51cbbb22-ef9a-43a8-bd9b-e9ffcf191819",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MousePointer",
+                    "type": "Button",
+                    "id": "008d1f16-3edd-487f-9b30-908a73ec9fda",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -112,6 +130,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Characteristics",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ef4337f-3899-4320-870b-62897b7b0a9f",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21f05161-053a-4328-a1af-60ff370db3ec",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MousePointer",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "84262623-fbb2-435b-b7df-7ad9990e17e0",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MousePointer",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

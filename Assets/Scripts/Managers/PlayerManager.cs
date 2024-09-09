@@ -43,6 +43,7 @@ namespace Project.Managers.Player
 
         public PlayerLevelingSystem PlayerLevelingSystem { get { return _playerLevelingSystem; } }
         public PlayerController PlayerController { get { return _playerController; } }
+        public PlayerInventory PlayerInventory { get { return _playerInventory; } }
 
         private void Awake()
         {

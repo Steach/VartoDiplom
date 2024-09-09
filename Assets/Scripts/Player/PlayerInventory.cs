@@ -6,8 +6,9 @@ namespace Project.Systems.ItemSystem
     public class PlayerInventory
     {
         private GameObject _player;
-        private int _maxInvectoryKey = 30;
+        private int _maxInvectoryKey = 100;
         private Dictionary<int, int> _inventory = new Dictionary<int, int>();
+        public Dictionary<int, int> Inventory { get {  return _inventory; } }
 
         public void OnEnableEvents()
         {
@@ -25,7 +26,7 @@ namespace Project.Systems.ItemSystem
 
         private void AddItemToInventory(GrabItemEvent grabItemEvent)
         {
-            if (_inventory.Count < 30)
+            if (_inventory.Count < _maxInvectoryKey)
             {
                 _inventory.Add(_inventory.Count, grabItemEvent.ItemID);
 

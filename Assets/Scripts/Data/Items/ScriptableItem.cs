@@ -7,12 +7,13 @@ namespace Project.Systems.ItemSystem
     {
         [SerializeField] protected ItemType _itemType;
         [SerializeField] protected GameObject _prefab;
-        [SerializeField] protected Image _icon;
+        [SerializeField] protected Sprite _icon;
         [SerializeField] protected int _requaredSTR;
         [SerializeField] protected int _requaredINT;
         [SerializeField] protected int _requaredAGL;
         [SerializeField] private ItemsID _itemID;
         public ItemsID ItemID { get { return _itemID;} }
+        public Sprite Icon { get { return _icon; } }
 
         public virtual void Spawn(Vector3 position)
         {

@@ -104,7 +104,7 @@ namespace Project.Systems.ControlsSystem
                     ""name"": """",
                     ""id"": ""4916c2f3-4915-4959-8e65-7cfc1f14e43b"",
                     ""path"": ""<Pointer>/position"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Position"",
@@ -125,6 +125,24 @@ namespace Project.Systems.ControlsSystem
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""51cbbb22-ef9a-43a8-bd9b-e9ffcf191819"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePointer"",
+                    ""type"": ""Button"",
+                    ""id"": ""008d1f16-3edd-487f-9b30-908a73ec9fda"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -136,6 +154,39 @@ namespace Project.Systems.ControlsSystem
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Characteristics"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ef4337f-3899-4320-870b-62897b7b0a9f"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21f05161-053a-4328-a1af-60ff370db3ec"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84262623-fbb2-435b-b7df-7ad9990e17e0"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePointer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -153,6 +204,8 @@ namespace Project.Systems.ControlsSystem
             // UIController
             m_UIController = asset.FindActionMap("UIController", throwIfNotFound: true);
             m_UIController_Characteristics = m_UIController.FindAction("Characteristics", throwIfNotFound: true);
+            m_UIController_Inventory = m_UIController.FindAction("Inventory", throwIfNotFound: true);
+            m_UIController_MousePointer = m_UIController.FindAction("MousePointer", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -285,11 +338,15 @@ namespace Project.Systems.ControlsSystem
         private readonly InputActionMap m_UIController;
         private List<IUIControllerActions> m_UIControllerActionsCallbackInterfaces = new List<IUIControllerActions>();
         private readonly InputAction m_UIController_Characteristics;
+        private readonly InputAction m_UIController_Inventory;
+        private readonly InputAction m_UIController_MousePointer;
         public struct UIControllerActions
         {
             private @ControlsSystem m_Wrapper;
             public UIControllerActions(@ControlsSystem wrapper) { m_Wrapper = wrapper; }
             public InputAction @Characteristics => m_Wrapper.m_UIController_Characteristics;
+            public InputAction @Inventory => m_Wrapper.m_UIController_Inventory;
+            public InputAction @MousePointer => m_Wrapper.m_UIController_MousePointer;
             public InputActionMap Get() { return m_Wrapper.m_UIController; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -302,6 +359,12 @@ namespace Project.Systems.ControlsSystem
                 @Characteristics.started += instance.OnCharacteristics;
                 @Characteristics.performed += instance.OnCharacteristics;
                 @Characteristics.canceled += instance.OnCharacteristics;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
+                @MousePointer.started += instance.OnMousePointer;
+                @MousePointer.performed += instance.OnMousePointer;
+                @MousePointer.canceled += instance.OnMousePointer;
             }
 
             private void UnregisterCallbacks(IUIControllerActions instance)
@@ -309,6 +372,12 @@ namespace Project.Systems.ControlsSystem
                 @Characteristics.started -= instance.OnCharacteristics;
                 @Characteristics.performed -= instance.OnCharacteristics;
                 @Characteristics.canceled -= instance.OnCharacteristics;
+                @Inventory.started -= instance.OnInventory;
+                @Inventory.performed -= instance.OnInventory;
+                @Inventory.canceled -= instance.OnInventory;
+                @MousePointer.started -= instance.OnMousePointer;
+                @MousePointer.performed -= instance.OnMousePointer;
+                @MousePointer.canceled -= instance.OnMousePointer;
             }
 
             public void RemoveCallbacks(IUIControllerActions instance)
@@ -336,6 +405,8 @@ namespace Project.Systems.ControlsSystem
         public interface IUIControllerActions
         {
             void OnCharacteristics(InputAction.CallbackContext context);
+            void OnInventory(InputAction.CallbackContext context);
+            void OnMousePointer(InputAction.CallbackContext context);
         }
     }
 }
