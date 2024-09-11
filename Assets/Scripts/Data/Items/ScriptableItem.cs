@@ -14,6 +14,9 @@ namespace Project.Systems.ItemSystem
         [SerializeField] private ItemsID _itemID;
         public ItemsID ItemID { get { return _itemID;} }
         public Sprite Icon { get { return _icon; } }
+        public int RequaredSTR {  get { return _requaredSTR; } }
+        public int RequaredINT {  get { return _requaredINT; } }
+        public int RequaredAGL { get { return _requaredAGL; } }
 
         public virtual void Spawn(Vector3 position)
         {

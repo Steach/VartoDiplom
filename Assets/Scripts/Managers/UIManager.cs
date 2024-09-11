@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 
     public GameManager GameManager { get { return _gameManager; } }
     public ControlsSystem InputActions { get { return _inputActions; } }
+    public GameObject InventoryContainer { get { return _inventoryContainer; } }
 
     private void OnEnable()
     {
