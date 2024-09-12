@@ -12,13 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Light_Helmet_Female
   m_EditorClassIdentifier: 
-  _itemType: 0
+  _itemID: 7
+  _itemType: 1
+  _armorType: 0
+  _genderType: 1
   _prefab: {fileID: 5022657052725837192, guid: c1a9e250888370344ab747e7bd256695, type: 3}
   _icon: {fileID: 21300000, guid: cb50161600081f341989087ab46af585, type: 3}
   _requaredSTR: 4
   _requaredINT: 4
   _requaredAGL: 6
-  _itemID: 7
-  _armorType: 0
-  _genderType: 1
+  _damage: 0
+  _attakeDistance: 0
   _armor: 3

@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
         EventBus.Subscribe<LevelUpEvent>(PlayerLevelUp);
 
         _characteristicsContainer.SetActive(false);
+        _inventoryContainer.SetActive(false);
     }
 
     private void OnDisable()

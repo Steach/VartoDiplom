@@ -1,44 +1,11 @@
+using Project.Managers.Player;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VisualChange : MonoBehaviour
 {
-    [Header("Armor_01_A")]
-    [SerializeField] private GameObject Body_C;
-    [SerializeField] private GameObject Boot_C;
-    [SerializeField] private GameObject Cape_C;
-    [SerializeField] private GameObject Gauntlets_C;
-    [SerializeField] private GameObject Helmet_C;
-    [SerializeField] private GameObject Legs_C;
-    [SerializeField] private bool Body_C_Enable;
-    [SerializeField] private bool Boot_C_Enable;
-    [SerializeField] private bool Cape_C_Enable;
-    [SerializeField] private bool Gauntlets_C_Enable;
-    [SerializeField] private bool Helmet_C_Enable;
-    [SerializeField] private bool Legs_C_Enable;
-    [Space]
-    [Header("Armor_05_C")]
-    [SerializeField] private GameObject Body_A;
-    [SerializeField] private GameObject Boot_A;
-    [SerializeField] private GameObject Cape_A;
-    [SerializeField] private GameObject Gauntlets_A;
-    [SerializeField] private GameObject Helmet_A;
-    [SerializeField] private GameObject Legs_A;
-    [SerializeField] private bool Body_A_Enable;
-    [SerializeField] private bool Boot_A_Enable;
-    [SerializeField] private bool Cape_A_Enable;
-    [SerializeField] private bool Gauntlets_A_Enable;
-    [SerializeField] private bool Helmet_A_Enable;
-    [SerializeField] private bool Legs_A_Enable;
-    [Space]
-    [Header("Cloth")]
-    [SerializeField] private GameObject Body_Cloth;
-    [SerializeField] private GameObject Boot_Cloth;
-    [SerializeField] private GameObject Gauntlets_Cloth;
-    [SerializeField] private GameObject Legs_Cloth;
-    [SerializeField] private bool Body_Cloth_Enable;
-    [SerializeField] private bool Boot_Cloth_Enable;
-    [SerializeField] private bool Gauntlets_Cloth_Enable;
-    [SerializeField] private bool Legs_Cloth_Enable;
+    [SerializeField] private PlayerManager _playerManager;
+
     [Space]
     [Header("Naked")]
     [SerializeField] private GameObject Body_Naked;
@@ -49,6 +16,52 @@ public class VisualChange : MonoBehaviour
     [SerializeField] private bool Boot_Naked_Enable;
     [SerializeField] private bool Gauntlets_Naked_Enable;
     [SerializeField] private bool Legs_Naked_Enable;
+
+    [Space]
+    [Header("Helmet")]
+    [SerializeField] private GameObject Heavy_Helmet;
+    [SerializeField] private bool Heavy_Helmet_Enable;
+    [SerializeField] private GameObject Light_Helmet;
+    [SerializeField] private bool Light_Helmet_Enable;
+    [Space]
+    [Header("Body")]
+    [SerializeField] private GameObject Heavy_Body;
+    [SerializeField] private bool Heavy_Body_Enable;
+    [SerializeField] private GameObject Light_Body;
+    [SerializeField] private bool Light_Body_Enable;
+    [SerializeField] private GameObject Rags_Body_Cloth;
+    [SerializeField] private bool Rags_Body_Cloth_Enable;
+    [Space]
+    [Header("Legs")]
+    [SerializeField] private GameObject Heavy_Legs;
+    [SerializeField] private bool Heavy_Legs_Enable;
+    [SerializeField] private GameObject Light_Legs;
+    [SerializeField] private bool Light_Legs_Enable;
+    [SerializeField] private GameObject Rags_Legs_Cloth;
+    [SerializeField] private bool Rags_Legs_Cloth_Enable;
+    [Space]
+    [Header("Guantlets")]
+    [SerializeField] private GameObject Heavy_Gauntlets;
+    [SerializeField] private bool Heavy_Gauntlets_Enable;
+    [SerializeField] private GameObject Light_Gauntlets;
+    [SerializeField] private bool Light_Gauntlets_Enable;
+    [SerializeField] private GameObject Rags_Gauntlets_Cloth;
+    [SerializeField] private bool Rags_Gauntlets_Cloth_Enable;
+    [Space]
+    [Header("Boots")]
+    [SerializeField] private GameObject Heavy_Boot;
+    [SerializeField] private bool Heavy_Boot_Enable;
+    [SerializeField] private GameObject Light_Boot;
+    [SerializeField] private bool Light_Boot_Enable;
+    [SerializeField] private GameObject Rags_Boot_Cloth;
+    [SerializeField] private bool Rags_Boot_Cloth_Enable;
+    [Space]
+    [Header("Cape")]
+    [SerializeField] private GameObject Heavy_Cape;
+    [SerializeField] private bool Heavy_Cape_Enable;
+    [SerializeField] private GameObject Light_Cape;
+    [SerializeField] private bool Light_Cape_Enable;
+
     [Space]
     [Header("Head")]
     [SerializeField] private GameObject Head_1;
@@ -68,39 +81,84 @@ public class VisualChange : MonoBehaviour
     [SerializeField] private bool Beard_1_Enable;
     [SerializeField] private bool Beard_2_Enable;
 
-    private void Update()
+    [Space]
+    [Header("Available Armors for this Character")]
+    [SerializeField] private Dictionary<ItemsID, GameObject> _items = new Dictionary<ItemsID, GameObject>();
+    private void Awake()
     {
-        Body_C.SetActive(Body_C_Enable);
-        Boot_C.SetActive(Boot_C_Enable);
-        Cape_C.SetActive(Cape_C_Enable);
-        Gauntlets_C.SetActive (Gauntlets_C_Enable);
-        Helmet_C.SetActive(Helmet_C_Enable);
-        Legs_C.SetActive(Legs_C_Enable);
+        AddItemsToEnableItems();
+    }
 
-        Body_A.SetActive(Body_A_Enable);
-        Boot_A.SetActive(Boot_A_Enable);
-        Cape_A.SetActive(Cape_A_Enable);
-        Gauntlets_A.SetActive(Gauntlets_A_Enable);
-        Helmet_A.SetActive(Helmet_A_Enable);
-        Legs_A.SetActive(Legs_A_Enable);
+    private void OnEnable()
+    {
+        EventBus.Subscribe<UpdateVisualEvent>(CheckEquipedArmor);
+    }
 
-        Body_Cloth.SetActive(Body_Cloth_Enable);
-        Boot_Cloth.SetActive(Boot_Cloth_Enable);
-        Gauntlets_Cloth.SetActive(Gauntlets_Cloth_Enable);
-        Legs_Cloth.SetActive(Gauntlets_Cloth_Enable);
+    private void Start()
+    {
+        CheckEquipedArmor(new UpdateVisualEvent(true));
+    }
 
-        Body_Naked.SetActive(Body_Naked_Enable);
-        Boot_Naked.SetActive(Boot_Naked_Enable);
-        Gauntlets_Naked.SetActive(Gauntlets_Naked_Enable);
-        Legs_Naked.SetActive(Legs_Naked_Enable);
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<UpdateVisualEvent>(CheckEquipedArmor);
+    }
 
-        Head_1.SetActive(Head_1_Enable);
-        Head_2.SetActive(Head_2_Enable);
+    private void CheckEquipedArmor(UpdateVisualEvent updateVisualEvent)
+    {
+        foreach (var item in _items.Values) 
+        {
+            item.SetActive(false);
+        }
 
-        Hair_1.SetActive(Hair_1_Enable);
-        Hair_2.SetActive(Hair_2_Enable);
+        foreach (var equip in _playerManager.PlayerInventory.EquipedArmor)
+        {
+            if (_items.TryGetValue((ItemsID)equip.Value, out GameObject equipItem))
+            {
+                equipItem.SetActive(true);
+            }
 
-        Beard_1.SetActive(Beard_1_Enable);
-        Beard_2.SetActive(Beard_2_Enable);
+            if (equip.Key == ArmorType.Body && equip.Value != 0)
+                Body_Naked.SetActive(false);
+            else if (equip.Key == ArmorType.Body && equip.Value == 0)
+                Body_Naked.SetActive(true);
+
+            if (equip.Key == ArmorType.Legs && equip.Value != 0)
+                Legs_Naked.SetActive(false);
+            else if (equip.Key == ArmorType.Legs && equip.Value == 0)
+                Legs_Naked.SetActive(true);
+
+            if (equip.Key == ArmorType.Boot && equip.Value != 0)
+                Boot_Naked.SetActive(false);
+            else if (equip.Key == ArmorType.Boot && equip.Value == 0)
+                Boot_Naked.SetActive(true);
+
+            if (equip.Key == ArmorType.Gauntlets && equip.Value != 0)
+                Gauntlets_Naked.SetActive(false);
+            else if (equip.Key == ArmorType.Gauntlets && equip.Value == 0)
+                Gauntlets_Naked.SetActive(true);
+        }
+    }
+
+    private void AddItemsToEnableItems()
+    {
+        _items.Add(ItemsID.HeavyBodyMale, Heavy_Body);
+        _items.Add(ItemsID.HeavyHelmetMale, Heavy_Helmet);
+        _items.Add(ItemsID.HeavyBootsMale, Heavy_Boot);
+        _items.Add(ItemsID.HeavyCapeMale, Heavy_Cape);
+        _items.Add(ItemsID.HeavyGauntletsMale, Heavy_Gauntlets);
+        _items.Add(ItemsID.HeavyLegsMale, Heavy_Legs);
+
+        _items.Add(ItemsID.LightBodyMale, Light_Body);
+        _items.Add(ItemsID.LightBootsMale, Light_Boot);
+        _items.Add(ItemsID.LightCapeMale, Light_Cape);
+        _items.Add(ItemsID.LightGauntletsMale, Light_Gauntlets);
+        _items.Add(ItemsID.LightHelmetMale, Light_Helmet);
+        _items.Add(ItemsID.LightLegsMale, Light_Legs);
+
+        _items.Add(ItemsID.RagsBodyMale, Rags_Body_Cloth);
+        _items.Add(ItemsID.RagsBootsMale, Rags_Boot_Cloth);
+        _items.Add(ItemsID.RagsGauntletsMale, Rags_Gauntlets_Cloth);
+        _items.Add(ItemsID.RagsLegsMale, Rags_Legs_Cloth);
     }
 }

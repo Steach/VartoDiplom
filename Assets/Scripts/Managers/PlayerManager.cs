@@ -54,6 +54,7 @@ namespace Project.Managers.Player
             _playerLevelingSystem.Init();
             _playerController.Init(_playerFSM, _camera, _playerTransform);
             _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
+            _playerInventory.Init(_gameManager.ItemDataBase);
         }
 
         private void OnEnable()

@@ -10,26 +10,28 @@ namespace Project.Controllers.UI
 {
     public class InventoryContainerController : MonoBehaviour
     {
+        [Header("Managers")]
         [SerializeField] private UIManager _uiManager;
+        [Space]
+        [Header("Data base")]
         [SerializeField] private ItemDataBase _itemDataBase;
+        private List<GameObject> _itemSlots = new List<GameObject>();
+
+        [Space]
+        [Header("UI Prefabs")]
         [SerializeField] private GameObject _inventoryEmptySlotContainer;
         [SerializeField] private GameObject _inventoryItemSlotContainer;
-        [SerializeField] private List<GameObject> _itemSlots = new List<GameObject>();
-
         [SerializeField] private GameObject _emptySlotPrefab;
         [SerializeField] private GameObject _itemSlotPrefab;
-
         [SerializeField] private GameObject _itemLinesPrefab;
         [SerializeField] private GameObject _emptyLinesPrefab;
-
+        [SerializeField] private GameObject _itemInformationPopup;
+        [Space]
+        [Header("Inventory Configuration")]
         [SerializeField] private int _countsOfSlotsInLine;
         [SerializeField] private int _countsOfLines;
 
-        [SerializeField] private GameObject _itemInformationPopup;
-
         private PlayerInventory _playerInventory;
-        private ControlsSystem _inputActions;
-
         public ItemDataBase ItemDataBase { get { return _itemDataBase; } }
 
 
@@ -133,15 +135,31 @@ namespace Project.Controllers.UI
                     if ((int)idItemInBase == itemID)
                     {
                         var itemInforfationPopupText = _itemInformationPopup.GetComponentInChildren<TextMeshProUGUI>();
+                        string textForType = ""; 
 
-                        var itemName = item.name;
-                        var requaremntSRT = item.RequaredSTR;
-                        var requaremntINT = item.RequaredINT;
-                        var requaremntAGL = item.RequaredAGL;
-                        itemInforfationPopupText.text = itemName + "\n" + 
-                            "STR: " + requaremntSRT + "\n" +
-                            "INT: " + requaremntINT + "\n" +
-                            "AGL: " + requaremntAGL;
+                        var baseItemText = "\n" +
+                            "STR: " + item.RequirementSTR + "\n" +
+                            "INT: " + item.RequirementINT + "\n" +
+                            "AGL: " + item.RequirementAGL;
+
+                        if (item.ItemType == ItemType.Armor)
+                        {
+                            //var armorType = item.ItemType.ToString();
+                            textForType =
+                                item.ArmorType.ToString() + "\n" +
+                                "Armor: " + item.Armor + "\n" +
+                                "\n" + "Requirements: " + "\n" + 
+                                item.GenderType.ToString();
+                        }
+                        else if (item.ItemType == ItemType.Weapon)
+                        {
+                            textForType = 
+                                "Damage" + item.Damage + "\n" +
+                                "Max Attake Distance: " + item.AttakeDistance +
+                                "\n" + "Requirements: " + "\n";
+                        }
+
+                        itemInforfationPopupText.text = textForType + baseItemText;
                     }
                 }
             }

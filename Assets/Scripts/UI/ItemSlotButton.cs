@@ -7,6 +7,7 @@ public class ItemSlotButton : MonoBehaviour
 {
     [SerializeField] private Button _itemButton;
     [SerializeField] private GameObject _infoPopup;
+
     private bool _isInitialize = false;
     private int _slotID = 0;
     private bool _isEmpty = true;
@@ -48,6 +49,8 @@ public class ItemSlotButton : MonoBehaviour
         {
             var popupRect = _infoPopup.gameObject.GetComponent<RectTransform>();
             var thisRect = this.gameObject.GetComponent<RectTransform>();
+
+            popupRect.GetComponent<PopupButtonController>().Init(_slotID);
 
             _infoPopup.SetActive(!_infoPopup.activeInHierarchy);
             popupRect.position = thisRect.position;
