@@ -7171,6 +7171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiManager: {fileID: 1904990471}
   _itemDataBase: {fileID: 11400000, guid: 2265ec0fc2d6d8e4fa47c32c97bd6cb1, type: 2}
+  _emptySlotIcon: {fileID: 21300000, guid: ebfbcb0691191c646b8c17a5f6317784, type: 3}
   _inventoryEmptySlotContainer: {fileID: 107040109}
   _inventoryItemSlotContainer: {fileID: 1583213188}
   _emptySlotPrefab: {fileID: 3880765384127625182, guid: 46067b96e3c11b44fb23b7e977b61ff4, type: 3}

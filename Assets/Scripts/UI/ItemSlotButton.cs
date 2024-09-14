@@ -25,17 +25,24 @@ public class ItemSlotButton : MonoBehaviour
     private void OnEnable()
     {
         _itemButton.onClick.AddListener(ButClick);
+        //EventBus.Subscribe<EquipItemEvent>(ReleaseSlot);
     }
 
     private void OnDisable()
     {
         _itemButton?.onClick.RemoveListener(ButClick);
+        //EventBus.Unsubscribe<EquipItemEvent>(ReleaseSlot);
     }
 
     public void SetIsEmpty(bool isEmpty)
     {
         _isEmpty = isEmpty;
     }
+
+    //private void ReleaseSlot(EquipItemEvent equipItemEvent)
+    //{
+    //    _isEmpty = true;
+    //}
 
     private void ButClick()
     {

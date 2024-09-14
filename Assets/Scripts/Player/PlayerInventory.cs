@@ -10,6 +10,8 @@ namespace Project.Systems.ItemSystem
         private ItemDataBase _itemDataBase;
         private Dictionary<int, int> _inventory = new Dictionary<int, int>();
         private Dictionary<ArmorType, int> _equipedArmor = new Dictionary<ArmorType, int>();
+        private int _currentArmor = 0;
+
         public Dictionary<int, int> Inventory { get {  return _inventory; } }
         public Dictionary<ArmorType, int> EquipedArmor { get { return _equipedArmor; } }
 
@@ -63,10 +65,31 @@ namespace Project.Systems.ItemSystem
                     if ((int)dataItemBaseId == currentItemId)
                     {
                         _equipedArmor[item.ArmorType] = currentItemId;
+                        _inventory[equipItemEvent.SlotId] = 0;
                         EventBus.Publish<UpdateVisualEvent>(new UpdateVisualEvent(true));
+                        CalculateCurrentArmor();
                     }
                 }
             }
+        }
+
+        private void CalculateCurrentArmor()
+        {
+            var equipedArmor = 0;
+            foreach (var armor in _equipedArmor)
+            { 
+                foreach (var item in _itemDataBase.Items)
+                {
+                    var itemID = item.ItemID;
+                    if (armor.Value == (int)itemID)
+                    {
+                        equipedArmor += item.Armor;
+                    }
+                }
+            }
+            _currentArmor = equipedArmor;
+
+            Debug.Log($"Current Player armor: {_currentArmor}");
         }
 
         private void DropItem(DropItemEvent dropItemEvent)

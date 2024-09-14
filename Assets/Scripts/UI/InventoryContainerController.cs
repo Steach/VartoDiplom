@@ -2,6 +2,7 @@ using Project.Systems.ControlsSystem;
 using Project.Systems.ItemSystem;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ namespace Project.Controllers.UI
         [Space]
         [Header("Data base")]
         [SerializeField] private ItemDataBase _itemDataBase;
+        [SerializeField] private Sprite _emptySlotIcon;
         private List<GameObject> _itemSlots = new List<GameObject>();
 
         [Space]
@@ -49,12 +51,16 @@ namespace Project.Controllers.UI
         private void OnEnable()
         {
             EventBus.Subscribe<ClickInItemSlotEvent>(AddInfoInPopup);
+            EventBus.Subscribe<EquipItemEvent>(DeleteItemFromInventory);
+            //EventBus.Subscribe<DropItemEvent>();
         }
 
         private void OnDisable()
         {
             _uiManager.InputActions.UIController.MousePointer.performed -= CheckMousePosition;
             EventBus.Unsubscribe<ClickInItemSlotEvent>(AddInfoInPopup);
+            EventBus.Unsubscribe<EquipItemEvent>(DeleteItemFromInventory);
+            //EventBus.Unsubscribe<DropItemEvent>();
         }
 
         private void CheckMousePosition(InputAction.CallbackContext context)
@@ -71,10 +77,10 @@ namespace Project.Controllers.UI
 
         public void CheckInventory()
         {
-            AddItemToInventar();
+            AddItemToInventory();
         }
 
-        private void AddItemToInventar()
+        private void AddItemToInventory()
         {
             var countItem = _playerInventory.Inventory.Count;
 
@@ -126,7 +132,7 @@ namespace Project.Controllers.UI
         {
             var slotId = clickInItemSlotEvent.SlotId;
 
-            if (slotId < _playerInventory.Inventory.Count && _playerInventory.Inventory.TryGetValue(slotId, out int itemID))
+            if (slotId < _playerInventory.Inventory.Count && _playerInventory.Inventory.TryGetValue(slotId, out int itemID) && itemID != 0)
             {
                 foreach (var item in _itemDataBase.Items)
                 {
@@ -163,6 +169,12 @@ namespace Project.Controllers.UI
                     }
                 }
             }
+        }
+
+        private void DeleteItemFromInventory(EquipItemEvent equipItemEvent)
+        {
+            _itemSlots[equipItemEvent.SlotId].GetComponent<Image>().sprite = _emptySlotIcon;
+            _itemSlots[equipItemEvent.SlotId].GetComponent<ItemSlotButton>().SetIsEmpty(true);
         }
     }
 }
