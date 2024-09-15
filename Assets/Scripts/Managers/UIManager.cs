@@ -90,7 +90,7 @@ public class UIManager : MonoBehaviour
         if (_inventoryContainer.gameObject.activeInHierarchy)
         {
             _inputActions.PlayerController.Disable();
-            _inventoryContainerController.CheckInventory();
+            EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
         }
         else if (!_inventoryContainer.gameObject.activeInHierarchy)
         {

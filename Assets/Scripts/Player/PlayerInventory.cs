@@ -20,6 +20,7 @@ namespace Project.Systems.ItemSystem
 
         public void OnEnableEvents()
         {
+            GenerateInventory();
             EventBus.Subscribe<GrabItemEvent>(AddItemToInventory);
             EventBus.Subscribe<EquipItemEvent>(EquipItem);
             EventBus.Subscribe<DropItemEvent>(DropItem);
@@ -44,14 +45,18 @@ namespace Project.Systems.ItemSystem
 
         private void AddItemToInventory(GrabItemEvent grabItemEvent)
         {
-            if (_inventory.Count < _maxInvectoryKey)
+            for (int i = 0; i < _maxInvectoryKey; i++)
             {
-                _inventory.Add(_inventory.Count, grabItemEvent.ItemID);
-
-                foreach (var inv in _inventory)
+                if (_inventory[i] == 0)
                 {
-                    Debug.Log($"{inv.Key}: {inv.Value}");
+                    _inventory[i] = grabItemEvent.ItemID;
+                    break;
                 }
+            }
+
+            foreach (var inv in _inventory)
+            {
+                Debug.Log($"{inv.Key}: {inv.Value}");
             }
         }
 
@@ -64,8 +69,19 @@ namespace Project.Systems.ItemSystem
                     var dataItemBaseId = item.ItemID;
                     if ((int)dataItemBaseId == currentItemId)
                     {
-                        _equipedArmor[item.ArmorType] = currentItemId;
-                        _inventory[equipItemEvent.SlotId] = 0;
+                        if (_equipedArmor[item.ArmorType] != 0)
+                        {
+                            var oldEqupItem = _equipedArmor[item.ArmorType];
+                            _equipedArmor[item.ArmorType] = currentItemId;
+                            _inventory[equipItemEvent.SlotId] = oldEqupItem;
+                        }
+                        else
+                        {
+                            _equipedArmor[item.ArmorType] = currentItemId;
+                            _inventory[equipItemEvent.SlotId] = 0;
+                        }
+
+                        EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
                         EventBus.Publish<UpdateVisualEvent>(new UpdateVisualEvent(true));
                         CalculateCurrentArmor();
                     }
@@ -94,5 +110,11 @@ namespace Project.Systems.ItemSystem
 
         private void DropItem(DropItemEvent dropItemEvent)
         { }
+
+        private void GenerateInventory()
+        {
+            for (int i = 0; i < _maxInvectoryKey; i++)
+                _inventory[i] = 0;
+        }
     }
 }

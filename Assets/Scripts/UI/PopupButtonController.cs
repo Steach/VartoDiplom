@@ -23,9 +23,16 @@ public class PopupButtonController : MonoBehaviour
         _dropButton.onClick.RemoveAllListeners();
     }
 
-    private void ButtonEquipEvent() =>
+    private void ButtonEquipEvent()
+    {
         EventBus.Publish<EquipItemEvent>(new EquipItemEvent(_currentSlotId));
+        EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
+    }
+        
 
-    private void DropButtonEvent() =>
+    private void DropButtonEvent()
+    {
         EventBus.Publish<DropItemEvent>(new DropItemEvent(_currentSlotId));
+        EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
+    }
 }

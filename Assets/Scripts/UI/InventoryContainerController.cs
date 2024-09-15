@@ -1,8 +1,6 @@
-using Project.Systems.ControlsSystem;
 using Project.Systems.ItemSystem;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -17,6 +15,8 @@ namespace Project.Controllers.UI
         [Header("Data base")]
         [SerializeField] private ItemDataBase _itemDataBase;
         [SerializeField] private Sprite _emptySlotIcon;
+        [SerializeField] private GameObject[] _equipmentSlots;
+        [SerializeField] private Sprite _emptyEquipSlots;
         private List<GameObject> _itemSlots = new List<GameObject>();
 
         [Space]
@@ -32,6 +32,13 @@ namespace Project.Controllers.UI
         [Header("Inventory Configuration")]
         [SerializeField] private int _countsOfSlotsInLine;
         [SerializeField] private int _countsOfLines;
+
+        private const int c_helmetSlotID = 0;
+        private const int c_bodySlotID = 1;
+        private const int c_legsSlotID = 2;
+        private const int c_bootsSlotID = 3;
+        private const int c_gauntletsSlotID = 4;
+        private const int c_capeSlotID = 5;
 
         private PlayerInventory _playerInventory;
         public ItemDataBase ItemDataBase { get { return _itemDataBase; } }
@@ -52,6 +59,7 @@ namespace Project.Controllers.UI
         {
             EventBus.Subscribe<ClickInItemSlotEvent>(AddInfoInPopup);
             EventBus.Subscribe<EquipItemEvent>(DeleteItemFromInventory);
+            EventBus.Subscribe<UpdateInventoryVisual>(AddItemToInventory);
             //EventBus.Subscribe<DropItemEvent>();
         }
 
@@ -60,6 +68,7 @@ namespace Project.Controllers.UI
             _uiManager.InputActions.UIController.MousePointer.performed -= CheckMousePosition;
             EventBus.Unsubscribe<ClickInItemSlotEvent>(AddInfoInPopup);
             EventBus.Unsubscribe<EquipItemEvent>(DeleteItemFromInventory);
+            EventBus.Unsubscribe<UpdateInventoryVisual>(AddItemToInventory);
             //EventBus.Unsubscribe<DropItemEvent>();
         }
 
@@ -75,12 +84,7 @@ namespace Project.Controllers.UI
             }
         }
 
-        public void CheckInventory()
-        {
-            AddItemToInventory();
-        }
-
-        private void AddItemToInventory()
+        private void AddItemToInventory(UpdateInventoryVisual updateInventoryVisual)
         {
             var countItem = _playerInventory.Inventory.Count;
 
@@ -109,6 +113,88 @@ namespace Project.Controllers.UI
                     break;
                 }
             }
+
+            UpdateEquipmetSlots();
+        }
+
+        private void UpdateEquipmetSlots()
+        {
+            foreach (var equip in _playerInventory.EquipedArmor)
+            {
+                ArmorType armorType = equip.Key;
+
+                switch (armorType)
+                {
+                    case ArmorType.Helmet:
+                        
+                        var imageComponent = _equipmentSlots[c_helmetSlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else 
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+
+                    case ArmorType.Body:
+                        
+                        imageComponent = _equipmentSlots[c_bodySlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+
+                    case ArmorType.Boot:
+                        
+                        imageComponent = _equipmentSlots[c_bootsSlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+
+                    case ArmorType.Cape:
+                        
+                        imageComponent = _equipmentSlots[c_capeSlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+
+                    case ArmorType.Legs:
+                        
+                        imageComponent = _equipmentSlots[c_legsSlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+
+                    case ArmorType.Gauntlets:
+                        
+                        imageComponent = _equipmentSlots[c_gauntletsSlotID].GetComponent<Image>();
+                        if (equip.Value == 0)
+                            imageComponent.sprite = _emptyEquipSlots;
+                        else
+                            imageComponent.sprite = SearchItemInDataBase(equip.Value);
+                        break;
+                }
+            }    
+        }
+
+        private Sprite SearchItemInDataBase(int id)
+        {
+            Sprite newSprite = _emptyEquipSlots;
+            foreach (var item in _itemDataBase.Items)
+            {
+                var itemId = item.ItemID;
+                if ((int)itemId == id)
+                {
+                    newSprite = item.Icon;
+                    return newSprite;
+                }
+            }
+            return newSprite;
         }
 
         private void GenerateInventorySlots()

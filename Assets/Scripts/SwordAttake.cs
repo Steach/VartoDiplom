@@ -34,7 +34,7 @@ public class SwordAttake : MonoBehaviour
             _isDamaged = true;
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0);
 
         _isDamaged = false;
     }

@@ -39,11 +39,6 @@ public class ItemSlotButton : MonoBehaviour
         _isEmpty = isEmpty;
     }
 
-    //private void ReleaseSlot(EquipItemEvent equipItemEvent)
-    //{
-    //    _isEmpty = true;
-    //}
-
     private void ButClick()
     {
         if (_infoPopup == null)
