@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Cape_Havy_Female
   m_EditorClassIdentifier: 
+  _itemID: 5
   _itemType: 1
+  _armorType: 3
+  _genderType: 1
+  _weaponType: 5
   _prefab: {fileID: 7182624238594940511, guid: c56ada17f76c83f49a0d404307f89d90, type: 3}
   _icon: {fileID: 21300000, guid: a497d74b25dbea448b1e816e3e934f15, type: 3}
   _requaredSTR: 0
   _requaredINT: 0
   _requaredAGL: 0
-  _itemID: 5
-  _armorType: 3
-  _genderType: 1
+  _damage: 0
+  _attakeDistance: 0
   _armor: 0

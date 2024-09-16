@@ -16,6 +16,7 @@ MonoBehaviour:
   _itemType: 1
   _armorType: 0
   _genderType: 1
+  _weaponType: 5
   _prefab: {fileID: 5022657052725837192, guid: c1a9e250888370344ab747e7bd256695, type: 3}
   _icon: {fileID: 21300000, guid: cb50161600081f341989087ab46af585, type: 3}
   _requaredSTR: 4

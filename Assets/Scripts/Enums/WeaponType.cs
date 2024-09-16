@@ -3,6 +3,8 @@ public enum WeaponType
     OneHandSword,
     TwoHandSword,
     Bow,
-    Staff
+    Staff,
+    Shield,
+    NotWeapon
 }
 

@@ -7,7 +7,7 @@ namespace Project.Managers.Spawner
 {
     public class SpawnManager : MonoBehaviour
     {
-        [SerializeField] private ScriptableItem[] _objectsToSpawn;
+        [SerializeField] private ItemDataBase _data;
 
         private void OnEnable()
         {
@@ -21,7 +21,7 @@ namespace Project.Managers.Spawner
 
         private void SpawnScriptable(EnemyDieEvent enemyDieEvent)
         {
-            _objectsToSpawn[Random.Range(16, _objectsToSpawn.Length - 1)].Spawn(enemyDieEvent.Position);
+            _data.Items[Random.Range(16, _data.Items.Length)].Spawn(enemyDieEvent.Position);
         }
     }
 }

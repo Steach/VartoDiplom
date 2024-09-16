@@ -1,5 +1,6 @@
 public enum GenderType
 {
     Male,
-    Female
+    Female,
+    NotGender
 }

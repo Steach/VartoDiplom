@@ -39,6 +39,8 @@ namespace Project.Controllers.UI
         private const int c_bootsSlotID = 3;
         private const int c_gauntletsSlotID = 4;
         private const int c_capeSlotID = 5;
+        private const int c_rightHandWeapon = 6;
+        private const int c_leftHandEquip = 7;
 
         private PlayerInventory _playerInventory;
         public ItemDataBase ItemDataBase { get { return _itemDataBase; } }
@@ -52,7 +54,7 @@ namespace Project.Controllers.UI
         private void Start()
         {
             _playerInventory = _uiManager.GameManager.PlayerManager.PlayerInventory;
-            _uiManager.InputActions.UIController.MousePointer.performed += CheckMousePosition;
+            //_uiManager.InputActions.UIController.MousePointer.performed += CheckMousePosition;
         }
 
         private void OnEnable()
@@ -65,24 +67,23 @@ namespace Project.Controllers.UI
 
         private void OnDisable()
         {
-            _uiManager.InputActions.UIController.MousePointer.performed -= CheckMousePosition;
+            //_uiManager.InputActions.UIController.MousePointer.performed -= CheckMousePosition;
             EventBus.Unsubscribe<ClickInItemSlotEvent>(AddInfoInPopup);
             EventBus.Unsubscribe<EquipItemEvent>(DeleteItemFromInventory);
             EventBus.Unsubscribe<UpdateInventoryVisual>(AddItemToInventory);
             //EventBus.Unsubscribe<DropItemEvent>();
         }
 
-        private void CheckMousePosition(InputAction.CallbackContext context)
-        {
-            var mousePosition = context.ReadValue<Vector2>();
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            RaycastHit hit;
-            if(Physics.Raycast(ray, out hit))
-            {
-                GameObject clickedObject = hit.collider.gameObject;
-                Debug.Log($"{clickedObject.name}");
-            }
-        }
+        //private void CheckMousePosition(InputAction.CallbackContext context)
+        //{
+        //    var mousePosition = context.ReadValue<Vector2>();
+        //    Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        //    RaycastHit hit;
+        //    if(Physics.Raycast(ray, out hit))
+        //    {
+        //        GameObject clickedObject = hit.collider.gameObject;
+        //    }
+        //}
 
         private void AddItemToInventory(UpdateInventoryVisual updateInventoryVisual)
         {
@@ -227,14 +228,14 @@ namespace Project.Controllers.UI
                     if ((int)idItemInBase == itemID)
                     {
                         var itemInforfationPopupText = _itemInformationPopup.GetComponentInChildren<TextMeshProUGUI>();
-                        string textForType = ""; 
+                        string textForType = "";
 
                         var baseItemText = "\n" +
                             "STR: " + item.RequirementSTR + "\n" +
                             "INT: " + item.RequirementINT + "\n" +
                             "AGL: " + item.RequirementAGL;
 
-                        if (item.ItemType == ItemType.Armor)
+                        if (item.ItemType == ItemType.Armor || (item.ItemType == ItemType.Weapon && item.WeaponType == WeaponType.Shield))
                         {
                             //var armorType = item.ItemType.ToString();
                             textForType =
@@ -246,7 +247,7 @@ namespace Project.Controllers.UI
                         else if (item.ItemType == ItemType.Weapon)
                         {
                             textForType = 
-                                "Damage" + item.Damage + "\n" +
+                                "Damage: " + item.Damage + "\n" +
                                 "Max Attake Distance: " + item.AttakeDistance +
                                 "\n" + "Requirements: " + "\n";
                         }

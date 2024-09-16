@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Gauntlets_Havy_Female
   m_EditorClassIdentifier: 
+  _itemID: 6
   _itemType: 1
+  _armorType: 4
+  _genderType: 1
+  _weaponType: 5
   _prefab: {fileID: 1264739340011507633, guid: b1225e6c0defe9b429f977855d40ec1a, type: 3}
   _icon: {fileID: 21300000, guid: 1fb52798fc638994a98000351a2c8fd8, type: 3}
   _requaredSTR: 6
   _requaredINT: 3
   _requaredAGL: 4
-  _itemID: 6
-  _armorType: 4
-  _genderType: 1
+  _damage: 0
+  _attakeDistance: 0
   _armor: 5

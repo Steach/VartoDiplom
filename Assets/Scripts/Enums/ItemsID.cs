@@ -31,5 +31,10 @@ public enum ItemsID
     RagsBodyMale = 0029,
     RagsLegsMale = 0030,
     RagsBootsMale = 0031,
-    RagsGauntletsMale = 0032
+    RagsGauntletsMale = 0032,
+    OneHandSword = 0033,
+    TwoHandSword = 0034,
+    Bow = 0035,
+    Staff = 0036,
+    Shiled = 0037
 }

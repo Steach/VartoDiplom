@@ -9,13 +9,15 @@ namespace Project.Systems.ItemSystem
     public class ItemDataBase : ScriptableObject
     {
         //[SerializeField] public ItemsData[] _items;
-        [SerializeField] public ScriptableItem[] Items;
+        [SerializeField] private ScriptableItem[] _items;
 
-        [System.Serializable]
-        public struct ItemsData
-        {
-            public ItemsID ItemsID;
-            public ScriptableItem Item;
-        }
+        public ScriptableItem[] Items { get { return _items; } }
+
+        //[System.Serializable]
+        //public struct ItemsData
+        //{
+        //    public ItemsID ItemsID;
+        //    public ScriptableItem Item;
+        //}
     }
 }

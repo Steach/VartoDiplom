@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa33d858a081d434dab0d799bf2abe05, type: 3}
+  m_Name: TwoHandSword
+  m_EditorClassIdentifier: 
+  _itemID: 34
+  _itemType: 0
+  _armorType: 6
+  _genderType: 2
+  _weaponType: 1
+  _prefab: {fileID: 7589513351560287618, guid: b607a0f7cabe1ad4b868586544285de8, type: 3}
+  _icon: {fileID: 21300000, guid: 9c0898ec9ab53fb4eb22cb2d2fe53bfb, type: 3}
+  _requaredSTR: 6
+  _requaredINT: 3
+  _requaredAGL: 4
+  _damage: 70
+  _attakeDistance: 3
+  _armor: 0

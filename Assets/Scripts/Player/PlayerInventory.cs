@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 namespace Project.Systems.ItemSystem
 {
@@ -10,6 +11,7 @@ namespace Project.Systems.ItemSystem
         private ItemDataBase _itemDataBase;
         private Dictionary<int, int> _inventory = new Dictionary<int, int>();
         private Dictionary<ArmorType, int> _equipedArmor = new Dictionary<ArmorType, int>();
+        private Dictionary<WeaponType, int> _equipedWeapon = new Dictionary<WeaponType, int>();
         private int _currentArmor = 0;
 
         public Dictionary<int, int> Inventory { get {  return _inventory; } }
@@ -59,6 +61,8 @@ namespace Project.Systems.ItemSystem
                 Debug.Log($"{inv.Key}: {inv.Value}");
             }
         }
+
+        //TODO: ADD TO WEAPON TO EQUIP ITEM
 
         private void EquipItem(EquipItemEvent equipItemEvent)
         {

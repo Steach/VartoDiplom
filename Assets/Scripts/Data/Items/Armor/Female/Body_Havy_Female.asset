@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Body_Havy_Female
   m_EditorClassIdentifier: 
+  _itemID: 2
   _itemType: 1
+  _armorType: 1
+  _genderType: 1
+  _weaponType: 5
   _prefab: {fileID: 5295512615506739279, guid: b7624b0c965dd5d47b0a828ad37b45cd, type: 3}
   _icon: {fileID: 21300000, guid: 0dfbcfbcd2b9c2a43a53ff9e180f29ea, type: 3}
   _requaredSTR: 6
   _requaredINT: 3
   _requaredAGL: 4
-  _itemID: 2
-  _armorType: 1
-  _genderType: 1
+  _damage: 0
+  _attakeDistance: 0
   _armor: 12

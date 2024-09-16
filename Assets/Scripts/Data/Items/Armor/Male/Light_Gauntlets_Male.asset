@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Light_Gauntlets_Male
   m_EditorClassIdentifier: 
+  _itemID: 28
   _itemType: 1
+  _armorType: 4
+  _genderType: 0
+  _weaponType: 5
   _prefab: {fileID: 7369303009414995789, guid: 9a2e80b0b124a7e4eb385ada60e70c0f, type: 3}
   _icon: {fileID: 21300000, guid: 18a110226f237724c8bb3ccffe44aa6a, type: 3}
   _requaredSTR: 4
   _requaredINT: 4
   _requaredAGL: 6
-  _itemID: 28
-  _armorType: 4
-  _genderType: 0
+  _damage: 0
+  _attakeDistance: 0
   _armor: 3

@@ -5,5 +5,6 @@ public enum ArmorType
     Boot,
     Cape,
     Gauntlets,
-    Legs
+    Legs,
+    NotArmor
 }

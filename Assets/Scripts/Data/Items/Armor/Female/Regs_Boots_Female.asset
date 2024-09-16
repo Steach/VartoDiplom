@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Regs_Boots_Female
   m_EditorClassIdentifier: 
+  _itemID: 15
   _itemType: 1
+  _armorType: 2
+  _genderType: 1
+  _weaponType: 5
   _prefab: {fileID: 2897275991987334301, guid: 0508fdc640bd04744a4cfbe55a151dd3, type: 3}
   _icon: {fileID: 21300000, guid: 5aac7abd778e5174ca13c5401a2e74d0, type: 3}
   _requaredSTR: 3
   _requaredINT: 3
   _requaredAGL: 3
-  _itemID: 15
-  _armorType: 2
-  _genderType: 1
+  _damage: 0
+  _attakeDistance: 0
   _armor: 1

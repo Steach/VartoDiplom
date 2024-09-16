@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb98e6862c92104fbb5dd865f2f1e7c, type: 3}
   m_Name: Light_Cape_Male
   m_EditorClassIdentifier: 
+  _itemID: 27
   _itemType: 1
+  _armorType: 3
+  _genderType: 0
+  _weaponType: 5
   _prefab: {fileID: 8735790808158670916, guid: 3017fe4ba4c5c294e9500ccfe71fe3a3, type: 3}
   _icon: {fileID: 21300000, guid: 8df772d7e4b962c4785d7246de213ac6, type: 3}
   _requaredSTR: 0
   _requaredINT: 0
   _requaredAGL: 0
-  _itemID: 27
-  _armorType: 3
-  _genderType: 0
+  _damage: 0
+  _attakeDistance: 0
   _armor: 0

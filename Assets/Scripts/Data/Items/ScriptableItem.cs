@@ -12,6 +12,7 @@ namespace Project.Systems.ItemSystem
         [SerializeField] protected ItemType _itemType;
         [SerializeField] private ArmorType _armorType;
         [SerializeField] private GenderType _genderType;
+        [SerializeField] private WeaponType _weaponType;
         [Space]
         [Header("Item Visual")]
         [SerializeField] protected GameObject _prefab;
@@ -30,6 +31,7 @@ namespace Project.Systems.ItemSystem
         public ItemType ItemType { get { return _itemType; } }
         public ArmorType ArmorType { get { return _armorType; } }
         public GenderType GenderType { get { return _genderType; } }
+        public WeaponType WeaponType { get { return _weaponType; } }
         public int Damage { get { return _damage; } }
         public float AttakeDistance {  get { return _attakeDistance; } }
         public int Armor { get { return _armor; } }
@@ -45,7 +47,10 @@ namespace Project.Systems.ItemSystem
             SpawnerItem.tag = _itemType.ToString();
             var spawnedItemRB = SpawnerItem.AddComponent<Rigidbody>();
             spawnedItemRB.isKinematic = true;
-            SpawnerItem.AddComponent<CapsuleCollider>();
+
+            if(_itemType == ItemType.Armor)
+                SpawnerItem.AddComponent<CapsuleCollider>();
+
             var ItemChars = SpawnerItem.AddComponent<ItemCharacteristics>();
             ItemChars.Init(_itemID, _itemType);
         }
