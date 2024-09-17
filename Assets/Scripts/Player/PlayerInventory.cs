@@ -89,69 +89,135 @@ namespace Project.Systems.ItemSystem
                         }
                         else if (item.ItemType == ItemType.Weapon)
                         {
-                            if (item.WeaponType != WeaponType.Shield)
+                            if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] != 0)
                             {
-                                if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] == 0)
+                                if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
                                 {
-                                    var oldEquipedItem = _equipedWeapon[_rightHandIndex];
+                                    var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
+                                    var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
                                     _equipedWeapon[_rightHandIndex] = currentItemId;
-                                    _inventory[equipItemEvent.SlotId] = oldEquipedItem;
+                                    _equipedWeapon[_leftHandIndex] = 0;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
                                 }
-                                else if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] != 0 && item.WeaponType != WeaponType.OneHandSword)
+                                else if (item.WeaponType == WeaponType.OneHandSword)
                                 {
-                                    var oldEquipedItemRight = _equipedWeapon[_rightHandIndex];
-                                    var oldEquipedItemLeft  = _equipedWeapon[_leftHandIndex];
+                                    var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
                                     _equipedWeapon[_rightHandIndex] = currentItemId;
                                     _inventory[equipItemEvent.SlotId] = 0;
-                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemRight));
-                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemLeft));
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
                                 }
-                                else
+                                else if (item.WeaponType == WeaponType.Shield)
                                 {
-                                    _equipedWeapon[_rightHandIndex] = currentItemId;
-                                    _inventory[equipItemEvent.SlotId] = 0;
-                                }
-                            }
-                            else if (item.WeaponType == WeaponType.Shield)
-                            {
-                                if (_equipedWeapon[_rightHandIndex] != 0/* && _equipedWeapon[_leftHandIndex] != 0*/)
-                                {
-                                    foreach (var item2 in _itemDataBase.Items)
+                                    foreach ( var item2 in _itemDataBase.Items)
                                     {
-                                        var dataItem2BaseId = item2.ItemID;
-                                        if ((int)dataItem2BaseId == _equipedWeapon[_rightHandIndex])
+                                        var idItemInBase = item2.ItemID;
+                                        if ((int)idItemInBase == _equipedWeapon[_rightHandIndex])
                                         {
-                                            if (item2.WeaponType != WeaponType.OneHandSword)
+                                            if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
                                             {
-                                                var oldRightHandItemId = _equipedWeapon[_rightHandIndex];
-                                                var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
-                                                _equipedWeapon[_leftHandIndex] = currentItemId;
+                                                var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
+                                                var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
                                                 _equipedWeapon[_rightHandIndex] = 0;
+                                                _equipedWeapon[_leftHandIndex] = currentItemId;
                                                 _inventory[equipItemEvent.SlotId] = 0;
-                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightHandItemId));
-                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
                                             }
                                             else if (item2.WeaponType == WeaponType.OneHandSword)
                                             {
-                                                var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+                                                var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
                                                 _equipedWeapon[_leftHandIndex] = currentItemId;
-                                                _inventory[equipItemEvent.SlotId] = 0;
-                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
                                             }
                                         }
                                     }
                                 }
-                                else if (_equipedWeapon[_rightHandIndex] == 0)
+                            }
+                            else if (_equipedWeapon[_rightHandIndex] == 0 && _equipedWeapon[_leftHandIndex] != 0)
+                            {
+                                if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
                                 {
-                                    var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+                                    var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
+                                    _equipedWeapon[_leftHandIndex] = 0;
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
+                                }
+                                else if (item.WeaponType == WeaponType.OneHandSword)
+                                {
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                }
+                                else if (item.WeaponType == WeaponType.Shield)
+                                {
+                                    var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
                                     _equipedWeapon[_leftHandIndex] = currentItemId;
                                     _inventory[equipItemEvent.SlotId] = 0;
-                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
+                                }
+                            }
+                            else if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] == 0)
+                            {
+                                if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
+                                {
+                                    var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
+                                }
+                                else if (item.WeaponType == WeaponType.OneHandSword)
+                                {
+                                    var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
+                                }
+                                else if (item.WeaponType == WeaponType.Shield)
+                                {
+                                    foreach (var item2 in _itemDataBase.Items)
+                                    {
+                                        var idItemInBase = item2.ItemID;
+                                        if ((int)idItemInBase == _equipedWeapon[_rightHandIndex])
+                                        {
+                                            if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
+                                            {
+                                                var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
+                                                _equipedWeapon[_rightHandIndex] = 0;
+                                                _equipedWeapon[_leftHandIndex] = currentItemId;
+                                                _inventory[equipItemEvent.SlotId] = 0;
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
+                                            }
+                                            else if (item2.WeaponType == WeaponType.OneHandSword)
+                                            {
+                                                _equipedWeapon[_leftHandIndex] = currentItemId;
+                                                _inventory[equipItemEvent.SlotId] = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if (_equipedWeapon[_rightHandIndex] == 0 && _equipedWeapon[_leftHandIndex] == 0)
+                            {
+                                if (item.WeaponType == WeaponType.TwoHandSword || item.WeaponType == WeaponType.Bow || item.WeaponType == WeaponType.Staff)
+                                {
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                }
+                                else if (item.WeaponType == WeaponType.OneHandSword)
+                                {
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                }
+                                else if (item.WeaponType == WeaponType.Shield)
+                                {
+                                    _equipedWeapon[_leftHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
                                 }
                             }
                         }
 
-                        EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
                         EventBus.Publish<UpdateVisualEvent>(new UpdateVisualEvent(true));
                         CalculateCurrentArmor();
                     }
@@ -193,3 +259,74 @@ namespace Project.Systems.ItemSystem
         }
     }
 }
+
+
+
+//if (item.WeaponType != WeaponType.Shield)
+//{
+//    if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] == 0)
+//    {
+//        var oldEquipedItem = _equipedWeapon[_rightHandIndex];
+//        _equipedWeapon[_rightHandIndex] = currentItemId;
+//        _inventory[equipItemEvent.SlotId] = oldEquipedItem;
+//    }
+//    else if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] != 0 && item.WeaponType != WeaponType.OneHandSword)
+//    {
+//        Debug.Log("SHIELD + THS");
+//        var oldEquipedItemRight = _equipedWeapon[_rightHandIndex];
+//        var oldEquipedItemLeft = _equipedWeapon[_leftHandIndex];
+//        _equipedWeapon[_rightHandIndex] = currentItemId;
+//        _inventory[equipItemEvent.SlotId] = 0;
+//        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemRight));
+//        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemLeft));
+//    }
+//    else if (_equipedWeapon[_rightHandIndex] == 0 && _equipedWeapon[_leftHandIndex] != 0 && item.WeaponType != WeaponType.OneHandSword)
+//    {
+//        var oldEquipedItemLeft = _equipedWeapon[_leftHandIndex];
+//        _equipedWeapon[_rightHandIndex] = currentItemId;
+//        _inventory[equipItemEvent.SlotId] = 0;
+//        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemLeft));
+//    }
+//    else
+//    {
+//        _equipedWeapon[_rightHandIndex] = currentItemId;
+//        _inventory[equipItemEvent.SlotId] = 0;
+//    }
+//}
+//else if (item.WeaponType == WeaponType.Shield)
+//{
+//    if (_equipedWeapon[_rightHandIndex] != 0)
+//    {
+//        foreach (var item2 in _itemDataBase.Items)
+//        {
+//            var dataItem2BaseId = item2.ItemID;
+//            if ((int)dataItem2BaseId == _equipedWeapon[_rightHandIndex])
+//            {
+//                if (item2.WeaponType != WeaponType.OneHandSword)
+//                {
+//                    var oldRightHandItemId = _equipedWeapon[_rightHandIndex];
+//                    var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+//                    _equipedWeapon[_leftHandIndex] = currentItemId;
+//                    _equipedWeapon[_rightHandIndex] = 0;
+//                    _inventory[equipItemEvent.SlotId] = 0;
+//                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightHandItemId));
+//                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+//                }
+//                else if (item2.WeaponType == WeaponType.OneHandSword)
+//                {
+//                    var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+//                    _equipedWeapon[_leftHandIndex] = currentItemId;
+//                    _inventory[equipItemEvent.SlotId] = 0;
+//                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+//                }
+//            }
+//        }
+//    }
+//    else if (_equipedWeapon[_rightHandIndex] == 0)
+//    {
+//        var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+//        _equipedWeapon[_leftHandIndex] = currentItemId;
+//        _inventory[equipItemEvent.SlotId] = 0;
+//        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+//    }
+//}

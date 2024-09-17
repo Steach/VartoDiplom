@@ -47,6 +47,8 @@ namespace Project.Controllers.UI
         private const int c_leftHandEquip = 7;
 
         private PlayerInventory _playerInventory;
+        private GameObject _currentRightWeapon;
+        private GameObject _currentLeftWeapon;
         public ItemDataBase ItemDataBase { get { return _itemDataBase; } }
 
 
@@ -58,7 +60,6 @@ namespace Project.Controllers.UI
         private void Start()
         {
             _playerInventory = _uiManager.GameManager.PlayerManager.PlayerInventory;
-            //_uiManager.InputActions.UIController.MousePointer.performed += CheckMousePosition;
         }
 
         private void OnEnable()
@@ -66,28 +67,18 @@ namespace Project.Controllers.UI
             EventBus.Subscribe<ClickInItemSlotEvent>(AddInfoInPopup);
             EventBus.Subscribe<EquipItemEvent>(DeleteItemFromInventory);
             EventBus.Subscribe<UpdateInventoryVisual>(AddItemToInventory);
+            EventBus.Subscribe<EquipItemEvent>(EquipedWeapon);
             //EventBus.Subscribe<DropItemEvent>();
         }
 
         private void OnDisable()
         {
-            //_uiManager.InputActions.UIController.MousePointer.performed -= CheckMousePosition;
             EventBus.Unsubscribe<ClickInItemSlotEvent>(AddInfoInPopup);
             EventBus.Unsubscribe<EquipItemEvent>(DeleteItemFromInventory);
             EventBus.Unsubscribe<UpdateInventoryVisual>(AddItemToInventory);
+            EventBus.Unsubscribe<EquipItemEvent>(EquipedWeapon);
             //EventBus.Unsubscribe<DropItemEvent>();
         }
-
-        //private void CheckMousePosition(InputAction.CallbackContext context)
-        //{
-        //    var mousePosition = context.ReadValue<Vector2>();
-        //    Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        //    RaycastHit hit;
-        //    if(Physics.Raycast(ray, out hit))
-        //    {
-        //        GameObject clickedObject = hit.collider.gameObject;
-        //    }
-        //}
 
         private void AddItemToInventory(UpdateInventoryVisual updateInventoryVisual)
         {
@@ -120,7 +111,6 @@ namespace Project.Controllers.UI
             }
 
             UpdateEquipmetSlots();
-            EquipedWeapon();
         }
 
         private void UpdateEquipmetSlots()
@@ -188,7 +178,7 @@ namespace Project.Controllers.UI
             }    
         }
 
-        private void EquipedWeapon()
+        private void EquipedWeapon(EquipItemEvent equipItemEvent)
         {
             for (int i = 0; i < _playerInventory.EquipedWeapon.Count; i++)
             {
@@ -199,7 +189,31 @@ namespace Project.Controllers.UI
                     {
                         var newLocalPosition = _handsWeaponPlaces[i].transform.position;
                         var newLocalRotation = _handsWeaponPlaces[i].transform.rotation;
-                        item.SpawnInHand(newLocalPosition, newLocalRotation, _handsWeaponPlaces[i].transform);
+                        
+                        var spawnedInfo = item.SpawnInHand(newLocalPosition, newLocalRotation, _handsWeaponPlaces[i].transform);                        
+
+                        if (spawnedInfo.WeaponType == WeaponType.TwoHandSword || spawnedInfo.WeaponType == WeaponType.Bow || spawnedInfo.WeaponType == WeaponType.Staff)
+                        {
+                            Destroy(_currentRightWeapon);
+                            Destroy(_currentLeftWeapon);
+                            _currentRightWeapon = spawnedInfo.SpawnedWeapon;
+                            _currentLeftWeapon = null;
+                        }
+                        else if (spawnedInfo.WeaponType == WeaponType.Shield)
+                        {
+                            if (_currentRightWeapon.name != "Hammer")
+                            {
+                                Destroy(_currentRightWeapon);
+                                _currentRightWeapon = null;
+                            }
+                            Destroy(_currentLeftWeapon);
+                            _currentLeftWeapon = spawnedInfo.SpawnedWeapon;
+                        }
+                        else if (spawnedInfo.WeaponType == WeaponType.OneHandSword)
+                        {
+                            Destroy(_currentRightWeapon);
+                            _currentRightWeapon = spawnedInfo.SpawnedWeapon;
+                        }
                     }
                 }
             }

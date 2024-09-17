@@ -14,13 +14,13 @@ public class PopupButtonController : MonoBehaviour
     private void OnEnable()
     {
         _equipButton.onClick.AddListener(ButtonEquipEvent);
-        _dropButton.onClick.AddListener(DropButtonEvent);
+        //_dropButton.onClick.AddListener(DropButtonEvent);
     }
 
     private void OnDisable()
     {
         _equipButton.onClick.RemoveAllListeners();
-        _dropButton.onClick.RemoveAllListeners();
+        //_dropButton.onClick.RemoveAllListeners();
     }
 
     private void ButtonEquipEvent()

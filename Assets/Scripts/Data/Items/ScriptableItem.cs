@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Project.Systems.ItemSystem
 {
@@ -27,6 +26,9 @@ namespace Project.Systems.ItemSystem
         [SerializeField] protected int _damage;
         [SerializeField] protected float _attakeDistance;
         [SerializeField] protected int _armor;
+
+        private SpawnedInfo _spawnedInfo;
+
         public ItemsID ItemID { get { return _itemID;} }
         public ItemType ItemType { get { return _itemType; } }
         public ArmorType ArmorType { get { return _armorType; } }
@@ -55,12 +57,22 @@ namespace Project.Systems.ItemSystem
             ItemChars.Init(_itemID, _itemType);
         }
 
-        public virtual void SpawnInHand(Vector3 position, Quaternion rotation, Transform parent)
+        public virtual SpawnedInfo SpawnInHand(Vector3 position, Quaternion rotation, Transform parent)
         {
-            var SpawnedItem = Instantiate(_prefab, position, rotation, parent);
+            _spawnedInfo.SpawnedWeapon = Instantiate(_prefab, position, rotation, parent);
+            _spawnedInfo.WeaponType = _weaponType;
 
-            var ItemChars = SpawnedItem.AddComponent<ItemCharacteristics>();
+            var ItemChars = _spawnedInfo.SpawnedWeapon.AddComponent<ItemCharacteristics>();
             ItemChars.Init(_itemID, _itemType);
+
+            return _spawnedInfo;
+        }
+
+        [System.Serializable]
+        public struct SpawnedInfo
+        {
+            public GameObject SpawnedWeapon;
+            public WeaponType WeaponType;
         }
     }
 }

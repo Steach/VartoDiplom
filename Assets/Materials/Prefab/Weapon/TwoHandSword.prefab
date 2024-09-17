@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5681192302929545907}
   - component: {fileID: 8042607781446132894}
+  - component: {fileID: -5715372373077050427}
   m_Layer: 6
   m_Name: TwoHandSword
   m_TagString: Weapon
@@ -56,6 +57,19 @@ CapsuleCollider:
   m_Height: 1.191647
   m_Direction: 1
   m_Center: {x: -0.0023530722, y: -0.75702643, z: 0}
+--- !u!114 &-5715372373077050427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7589513351560287618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5080b69064f400b4397bb8e141abb055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 100
 --- !u!1001 &1917914262903548463
 PrefabInstance:
   m_ObjectHideFlags: 0
