@@ -33,6 +33,10 @@ namespace Project.Controllers.UI
         [SerializeField] private int _countsOfSlotsInLine;
         [SerializeField] private int _countsOfLines;
 
+        [Space]
+        [Header("Hands Weapon Place")]
+        [SerializeField] private GameObject[] _handsWeaponPlaces;
+
         private const int c_helmetSlotID = 0;
         private const int c_bodySlotID = 1;
         private const int c_legsSlotID = 2;
@@ -116,6 +120,7 @@ namespace Project.Controllers.UI
             }
 
             UpdateEquipmetSlots();
+            EquipedWeapon();
         }
 
         private void UpdateEquipmetSlots()
@@ -181,6 +186,23 @@ namespace Project.Controllers.UI
                         break;
                 }
             }    
+        }
+
+        private void EquipedWeapon()
+        {
+            for (int i = 0; i < _playerInventory.EquipedWeapon.Count; i++)
+            {
+                foreach (var item in _itemDataBase.Items)
+                {
+                    var itemIdInBase = item.ItemID;
+                    if ((int)itemIdInBase == _playerInventory.EquipedWeapon[i])
+                    {
+                        var newLocalPosition = _handsWeaponPlaces[i].transform.position;
+                        var newLocalRotation = _handsWeaponPlaces[i].transform.rotation;
+                        item.SpawnInHand(newLocalPosition, newLocalRotation, _handsWeaponPlaces[i].transform);
+                    }
+                }
+            }
         }
 
         private Sprite SearchItemInDataBase(int id)

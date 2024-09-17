@@ -8,10 +8,13 @@ namespace Project.Managers.Spawner
     public class SpawnManager : MonoBehaviour
     {
         [SerializeField] private ItemDataBase _data;
+        [SerializeField] private ScriptableItem _sword;
+        [SerializeField] private GameObject _place;
 
         private void OnEnable()
         {
             EventBus.Subscribe<EnemyDieEvent>(SpawnScriptable);
+            _sword.Spawn(_place.transform.position);
         }
 
         private void OnDisable()

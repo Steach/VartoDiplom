@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Android;
 
 namespace Project.Systems.ItemSystem
 {
@@ -11,11 +10,14 @@ namespace Project.Systems.ItemSystem
         private ItemDataBase _itemDataBase;
         private Dictionary<int, int> _inventory = new Dictionary<int, int>();
         private Dictionary<ArmorType, int> _equipedArmor = new Dictionary<ArmorType, int>();
-        private Dictionary<WeaponType, int> _equipedWeapon = new Dictionary<WeaponType, int>();
+        private Dictionary<int, int> _equipedWeapon = new Dictionary<int, int>();
         private int _currentArmor = 0;
+        private int _rightHandIndex = 0;
+        private int _leftHandIndex = 1;
 
         public Dictionary<int, int> Inventory { get {  return _inventory; } }
         public Dictionary<ArmorType, int> EquipedArmor { get { return _equipedArmor; } }
+        public Dictionary<int, int> EquipedWeapon { get { return _equipedWeapon; } }
 
         public void Init(ItemDataBase itemDataBase) =>
             _itemDataBase = itemDataBase;
@@ -32,6 +34,8 @@ namespace Project.Systems.ItemSystem
             _equipedArmor.Add(ArmorType.Cape, 0);
             _equipedArmor.Add(ArmorType.Gauntlets, 0);
             _equipedArmor.Add(ArmorType.Legs, 0);
+            _equipedWeapon.Add(_rightHandIndex, 0);
+            _equipedWeapon.Add(_leftHandIndex, 0);
         }
 
         public void RunOnUpdate()
@@ -55,14 +59,7 @@ namespace Project.Systems.ItemSystem
                     break;
                 }
             }
-
-            foreach (var inv in _inventory)
-            {
-                Debug.Log($"{inv.Key}: {inv.Value}");
-            }
         }
-
-        //TODO: ADD TO WEAPON TO EQUIP ITEM
 
         private void EquipItem(EquipItemEvent equipItemEvent)
         {
@@ -71,18 +68,87 @@ namespace Project.Systems.ItemSystem
                 foreach (var item in _itemDataBase.Items)
                 {
                     var dataItemBaseId = item.ItemID;
+
                     if ((int)dataItemBaseId == currentItemId)
                     {
-                        if (_equipedArmor[item.ArmorType] != 0)
+                        if (item.ItemType == ItemType.Armor)
                         {
-                            var oldEqupItem = _equipedArmor[item.ArmorType];
-                            _equipedArmor[item.ArmorType] = currentItemId;
-                            _inventory[equipItemEvent.SlotId] = oldEqupItem;
+                            if (_equipedArmor[item.ArmorType] != 0)
+                            {
+                                var oldEqupItem = _equipedArmor[item.ArmorType];
+                                _equipedArmor[item.ArmorType] = currentItemId;
+                                _inventory[equipItemEvent.SlotId] = 0;
+                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEqupItem));
+                            }
+                            else
+                            {
+                                _equipedArmor[item.ArmorType] = currentItemId;
+                                _inventory[equipItemEvent.SlotId] = 0;
+                                _inventory[equipItemEvent.SlotId] = 0;
+                            }
                         }
-                        else
+                        else if (item.ItemType == ItemType.Weapon)
                         {
-                            _equipedArmor[item.ArmorType] = currentItemId;
-                            _inventory[equipItemEvent.SlotId] = 0;
+                            if (item.WeaponType != WeaponType.Shield)
+                            {
+                                if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] == 0)
+                                {
+                                    var oldEquipedItem = _equipedWeapon[_rightHandIndex];
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = oldEquipedItem;
+                                }
+                                else if (_equipedWeapon[_rightHandIndex] != 0 && _equipedWeapon[_leftHandIndex] != 0 && item.WeaponType != WeaponType.OneHandSword)
+                                {
+                                    var oldEquipedItemRight = _equipedWeapon[_rightHandIndex];
+                                    var oldEquipedItemLeft  = _equipedWeapon[_leftHandIndex];
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemRight));
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldEquipedItemLeft));
+                                }
+                                else
+                                {
+                                    _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                }
+                            }
+                            else if (item.WeaponType == WeaponType.Shield)
+                            {
+                                if (_equipedWeapon[_rightHandIndex] != 0/* && _equipedWeapon[_leftHandIndex] != 0*/)
+                                {
+                                    foreach (var item2 in _itemDataBase.Items)
+                                    {
+                                        var dataItem2BaseId = item2.ItemID;
+                                        if ((int)dataItem2BaseId == _equipedWeapon[_rightHandIndex])
+                                        {
+                                            if (item2.WeaponType != WeaponType.OneHandSword)
+                                            {
+                                                var oldRightHandItemId = _equipedWeapon[_rightHandIndex];
+                                                var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+                                                _equipedWeapon[_leftHandIndex] = currentItemId;
+                                                _equipedWeapon[_rightHandIndex] = 0;
+                                                _inventory[equipItemEvent.SlotId] = 0;
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightHandItemId));
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                            }
+                                            else if (item2.WeaponType == WeaponType.OneHandSword)
+                                            {
+                                                var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+                                                _equipedWeapon[_leftHandIndex] = currentItemId;
+                                                _inventory[equipItemEvent.SlotId] = 0;
+                                                EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (_equipedWeapon[_rightHandIndex] == 0)
+                                {
+                                    var oldLeftHandItemId = _equipedWeapon[_leftHandIndex];
+                                    _equipedWeapon[_leftHandIndex] = currentItemId;
+                                    _inventory[equipItemEvent.SlotId] = 0;
+                                    EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftHandItemId));
+                                }
+                            }
                         }
 
                         EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
@@ -90,6 +156,11 @@ namespace Project.Systems.ItemSystem
                         CalculateCurrentArmor();
                     }
                 }
+            }
+
+            foreach (var equipWeapon in _equipedWeapon)
+            {
+                Debug.Log($"{equipWeapon}");
             }
         }
 
@@ -109,7 +180,7 @@ namespace Project.Systems.ItemSystem
             }
             _currentArmor = equipedArmor;
 
-            Debug.Log($"Current Player armor: {_currentArmor}");
+            //Debug.Log($"Current Player armor: {_currentArmor}");
         }
 
         private void DropItem(DropItemEvent dropItemEvent)

@@ -54,5 +54,13 @@ namespace Project.Systems.ItemSystem
             var ItemChars = SpawnerItem.AddComponent<ItemCharacteristics>();
             ItemChars.Init(_itemID, _itemType);
         }
+
+        public virtual void SpawnInHand(Vector3 position, Quaternion rotation, Transform parent)
+        {
+            var SpawnedItem = Instantiate(_prefab, position, rotation, parent);
+
+            var ItemChars = SpawnedItem.AddComponent<ItemCharacteristics>();
+            ItemChars.Init(_itemID, _itemType);
+        }
     }
 }
