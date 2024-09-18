@@ -47,7 +47,7 @@ namespace Project.Controllers.UI
         private const int c_leftHandEquip = 7;
 
         private PlayerInventory _playerInventory;
-        private GameObject _currentRightWeapon;
+        [SerializeField] private GameObject _currentRightWeapon;
         private GameObject _currentLeftWeapon;
         public ItemDataBase ItemDataBase { get { return _itemDataBase; } }
 
@@ -175,7 +175,41 @@ namespace Project.Controllers.UI
                             imageComponent.sprite = SearchItemInDataBase(equip.Value);
                         break;
                 }
-            }    
+            }
+
+            for (int i = 0; i < _playerInventory.EquipedWeapon.Count; i++)
+            {
+                foreach (var item in _itemDataBase.Items)
+                {
+                    var itemIdInBase = item.ItemID;
+                    if ((int)itemIdInBase == _playerInventory.EquipedWeapon[i])
+                    {
+                        if (i == 0)
+                        {
+                            var imageComponent = _equipmentSlots[c_rightHandWeapon].GetComponent<Image>();
+                            imageComponent.sprite = item.Icon;
+                        }
+                        else if (i == 1)
+                        {
+                            var imageComponent = _equipmentSlots[c_leftHandEquip].GetComponent<Image>();
+                            imageComponent.sprite = item.Icon;
+                        }
+                    }
+                    else if (_playerInventory.EquipedWeapon[i] == 0)
+                    {
+                        if (i == 0)
+                        {
+                            var imageComponent = _equipmentSlots[c_rightHandWeapon].GetComponent<Image>();
+                            imageComponent.sprite = _emptyEquipSlots;
+                        }
+                        else if (i == 1)
+                        {
+                            var imageComponent = _equipmentSlots[c_leftHandEquip].GetComponent<Image>();
+                            imageComponent.sprite = _emptyEquipSlots;
+                        }
+                    }
+                }
+            }
         }
 
         private void EquipedWeapon(EquipItemEvent equipItemEvent)
@@ -194,14 +228,17 @@ namespace Project.Controllers.UI
 
                         if (spawnedInfo.WeaponType == WeaponType.TwoHandSword || spawnedInfo.WeaponType == WeaponType.Bow || spawnedInfo.WeaponType == WeaponType.Staff)
                         {
+                            if (_currentLeftWeapon != null)
+                            {
+                                Destroy(_currentLeftWeapon);
+                                _currentLeftWeapon = null;
+                            }
                             Destroy(_currentRightWeapon);
-                            Destroy(_currentLeftWeapon);
                             _currentRightWeapon = spawnedInfo.SpawnedWeapon;
-                            _currentLeftWeapon = null;
                         }
                         else if (spawnedInfo.WeaponType == WeaponType.Shield)
                         {
-                            if (_currentRightWeapon.name != "Hammer")
+                            if (_currentRightWeapon != null && _currentRightWeapon.name != "Hammer(Clone)") //придумати інший спосіб перевірки зброї
                             {
                                 Destroy(_currentRightWeapon);
                                 _currentRightWeapon = null;
