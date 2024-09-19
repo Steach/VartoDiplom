@@ -14,6 +14,8 @@ namespace Project.Data
         public static readonly string PlayerMovingTrigger = "MovingTrigger";
 
         //Animator Integer
+        public static readonly string RightWeaponType = "RightWeaponType";
+        public static readonly string LeftWeaponType = "LeftWeaponType";
 
         //Animator Bool
         public static readonly string PlayerHasTarget = "IsTarget";

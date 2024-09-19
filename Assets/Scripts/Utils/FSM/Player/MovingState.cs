@@ -35,6 +35,8 @@ namespace Project.Systems.StateMachine
             Character.Animator.SetTrigger(GameData.PlayerMovingTrigger);
             Character.Animator.SetBool(GameData.PlayerSpeedIsRun, Character.PlayerData.IsRunning);
             Character.Animator.SetBool(GameData.PlayerSpeedIsWalk, !Character.PlayerData.IsRunning);
+            Character.Animator.SetInteger(GameData.RightWeaponType, Character.PlayerManager.PlayerInventory.EquipedWeapon[0]);
+            Character.Animator.SetInteger(GameData.LeftWeaponType, Character.PlayerManager.PlayerInventory.EquipedWeapon[1]);
         }
     }
 }

@@ -224,9 +224,9 @@ namespace Project.Controllers.UI
                         var newLocalPosition = _handsWeaponPlaces[i].transform.position;
                         var newLocalRotation = _handsWeaponPlaces[i].transform.rotation;
                         
-                        var spawnedInfo = item.SpawnInHand(newLocalPosition, newLocalRotation, _handsWeaponPlaces[i].transform);                        
+                        var spawnedInfo = item.SpawnInHand(newLocalPosition, newLocalRotation, _handsWeaponPlaces[i].transform);
 
-                        if (spawnedInfo.WeaponType == WeaponType.TwoHandSword || spawnedInfo.WeaponType == WeaponType.Bow || spawnedInfo.WeaponType == WeaponType.Staff)
+                        if (spawnedInfo.WeaponType == WeaponType.TwoHandSword || spawnedInfo.WeaponType == WeaponType.Staff)
                         {
                             if (_currentLeftWeapon != null)
                             {
@@ -235,6 +235,25 @@ namespace Project.Controllers.UI
                             }
                             Destroy(_currentRightWeapon);
                             _currentRightWeapon = spawnedInfo.SpawnedWeapon;
+                        }
+                        else if (spawnedInfo.WeaponType == WeaponType.Bow)
+                        {
+                            if (_currentRightWeapon != null)
+                            {
+                                Destroy(_currentRightWeapon);
+                                _currentRightWeapon = null;
+                            }
+
+                            if (_currentLeftWeapon != null)
+                            {
+                                Destroy(_currentLeftWeapon);
+                                _currentLeftWeapon = null;
+                            }
+
+                            _currentLeftWeapon = spawnedInfo.SpawnedWeapon;
+                            _currentLeftWeapon.transform.SetParent(_handsWeaponPlaces[i + 1].transform);
+                            _currentLeftWeapon.transform.localPosition = Vector3.zero;
+                            _currentLeftWeapon.transform.localRotation = Quaternion.identity;
                         }
                         else if (spawnedInfo.WeaponType == WeaponType.Shield)
                         {

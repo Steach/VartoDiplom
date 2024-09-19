@@ -8350,6 +8350,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3122275382503526155, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
   m_PrefabInstance: {fileID: 1305979254}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1456735415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2503184343237483389, guid: 23f907c94ad92894495c02b43a563c6f, type: 3}
+  m_PrefabInstance: {fileID: 1305979254}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1459742814
 GameObject:
   m_ObjectHideFlags: 0
@@ -9460,6 +9465,7 @@ MonoBehaviour:
   _handsWeaponPlaces:
   - {fileID: 674602777}
   - {fileID: 1455147998}
+  - {fileID: 1456735415}
   _currentRightWeapon: {fileID: 0}
 --- !u!4 &1711989910
 Transform:
