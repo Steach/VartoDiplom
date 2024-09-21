@@ -52,7 +52,7 @@ namespace Project.Managers.Player
             _playerFSM = new FSMPlayer();
             _playerInventory = new PlayerInventory();
             _playerLevelingSystem.Init();
-            _playerController.Init(_playerFSM, _camera, _playerTransform);
+            _playerController.Init(_playerFSM, _camera, _playerTransform, this);
             _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
             _playerInventory.Init(_gameManager.ItemDataBase);
         }

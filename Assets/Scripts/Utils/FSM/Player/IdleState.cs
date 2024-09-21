@@ -16,7 +16,7 @@ namespace Project.Systems.StateMachine
 
             Character.Agent.isStopped = true;
             Character.Agent.speed = 0;
-            Character.Animator.SetTrigger(GameData.PlayerIdleSword);
+            Character.Animator.SetTrigger(GameData.PlayerIdle);
 
             Character.SetTarget(null);
         }
@@ -28,14 +28,7 @@ namespace Project.Systems.StateMachine
             if (Character.Agent.hasPath)
                 FSM.ChangeState(Character.MovingState);
             else if (!Character.Agent.hasPath && Character.Agent.velocity.sqrMagnitude == 0)
-                Character.Animator.SetTrigger(GameData.PlayerIdleSword);
-
-            //if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.CurrentWalkSpeed)
-            //    FSM.ChangeState(Character.StateWalk);
-            //else if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.speed == Character.CurrentRunSpeed)
-            //    FSM.ChangeState(Character.StateRun);
-            //else if (Character.Agent.velocity.sqrMagnitude == 0 && Character.Agent.speed == 0)
-            //    Character.Animator.SetTrigger(GameData.PlayerIdleSword);
+                Character.Animator.SetTrigger(GameData.PlayerIdle);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Project.Data
     {
         //Animarot Trigger
         public static readonly string PlayerWalkFrontPlaceSword = "OneHand_Up_Walk_F_InPlace";
-        public static readonly string PlayerIdleSword = "OneHand_Up_Idle";
+        public static readonly string PlayerIdle = "PlayerIdle";
         public static readonly string PlayerAttakeB1P = "OneHand_Up_Attack_B_1_InPlace";
         public static readonly string PlayerRunFrontPlaceSword = "OneHand_Up_Run_F_InPlace";
         public static readonly string PlayerRunTargetAndAttake = "RunToTargetAndAttakeState";

@@ -51,6 +51,7 @@ namespace Project.Systems.StateMachine
                     !Character.Animator.IsInTransition(0) && 
                     Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
+                Debug.Log("BOW SHOOT");
                 Character.Agent.ResetPath();
                 Character.Animator.SetBool(GameData.PlayerHasTarget, false);
                 Character.FSM.ChangeState(Character.StateIdle);

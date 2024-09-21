@@ -22,6 +22,7 @@ namespace Project.Systems.ItemSystem
         public Dictionary<int, int> Inventory { get {  return _inventory; } }
         public Dictionary<ArmorType, int> EquipedArmor { get { return _equipedArmor; } }
         public Dictionary<int, int> EquipedWeapon { get { return _equipedWeapon; } }
+        public ItemDataBase ItemDataBase {  get { return _itemDataBase; } }
 
         public void Init(ItemDataBase itemDataBase) =>
             _itemDataBase = itemDataBase;

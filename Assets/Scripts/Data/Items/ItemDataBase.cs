@@ -24,5 +24,18 @@ namespace Project.Systems.ItemSystem
             }
             return weaponType;
         }
+
+        public bool CheckWeaponType(int id)
+        {
+            foreach (var item in _items)
+            {
+                var itemID = item.ItemID;
+
+                if ((int)itemID == id)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

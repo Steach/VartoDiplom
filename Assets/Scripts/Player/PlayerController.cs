@@ -2,11 +2,13 @@ using Project.Systems.ControlsSystem;
 using Project.Systems.StateMachine;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using Project.Managers.Player;
 
 namespace Project.Controllers.Player
 {
     public class PlayerController
     {
+        private PlayerManager _playerManager;
         private FSMPlayer _characterFSM;
         private ControlsSystem _controlsSystem;
         private Camera _camera;
@@ -17,12 +19,13 @@ namespace Project.Controllers.Player
 
         public ControlsSystem ControlSystem { get { return _controlsSystem; } }
 
-        public void Init(FSMPlayer fsmPlayer, Camera camera, Transform targetTransform)
+        public void Init(FSMPlayer fsmPlayer, Camera camera, Transform targetTransform, PlayerManager playerManager)
         {
             _controlsSystem = new ControlsSystem();
             _characterFSM = fsmPlayer;
             _camera = camera;
             _targetTransform = targetTransform;
+            _playerManager = playerManager;
         }
 
         public void OnEnableEvents()
@@ -79,6 +82,7 @@ namespace Project.Controllers.Player
         }
 
         private void StartFight(InputAction.CallbackContext context) => _isFightingInPlace = true;
+
         private void StopFight(InputAction.CallbackContext context) => _isFightingInPlace = false;
 
         private void StartRun(InputAction.CallbackContext context) => _characterFSM.PlayerIsRunning(true); //IsRunning = true;
@@ -99,6 +103,7 @@ namespace Project.Controllers.Player
             else if (_isFightingInPlace && (!_characterFSM.PlayerData.IsRunning || _characterFSM.PlayerData.IsRunning))
             {
                 _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
+                Test();
             }
 
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)
@@ -121,6 +126,29 @@ namespace Project.Controllers.Player
                     _characterFSM.Agent.SetDestination(hit.point);
                 }
             }
+        }
+
+        private void Test()
+        {
+            var ItemDB = _playerManager.PlayerInventory.ItemDataBase;
+            var EquipedWeapon = _playerManager.PlayerInventory.EquipedWeapon;
+
+            if (ItemDB.GetWeaponType(EquipedWeapon[1]) == WeaponType.Bow)
+            {
+                Debug.Log("BOW SHOOT");
+                Debug.Log(GetCurrentClipName());
+            }
+            else if (ItemDB.GetWeaponType(EquipedWeapon[0]) == WeaponType.Staff)
+            {
+                Debug.Log("STAFF SHOOT");
+                Debug.Log(GetCurrentClipName());
+            }
+        }
+
+        private string GetCurrentClipName()
+        {
+            var AnimInfo = _characterFSM.Animator.GetCurrentAnimatorClipInfo(0);
+            return AnimInfo[0].clip.name;
         }
     }
 }
