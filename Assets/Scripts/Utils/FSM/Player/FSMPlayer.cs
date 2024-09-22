@@ -60,16 +60,22 @@ namespace Project.Systems.StateMachine
 
         public void OnEnableEvents()
         {
-            
+            EventBus.Subscribe<UpdateInventoryVisual>(SetPlayerWeaponToAnimator);
         }
         
         public void OnDisableEvents()
         {
-            
+            EventBus.Unsubscribe<UpdateInventoryVisual>(SetPlayerWeaponToAnimator);
         }
 
         public void SetTarget(GameObject newTarget) => _playerData.Target = newTarget;
 
         public void PlayerIsRunning(bool IsRunning) => _playerData.IsRunning = IsRunning;
+
+        private void SetPlayerWeaponToAnimator(UpdateInventoryVisual updateInventoryVisual)
+        {
+            _animator.SetInteger(GameData.RightWeaponType, _playerManager.PlayerInventory.EquipedWeapon[GameData.RightHandIndex]);
+            _animator.SetInteger(GameData.LeftWeaponType, _playerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex]);
+        }
     }
 }

@@ -2,7 +2,6 @@ using Project.Systems.ItemSystem;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Project.Controllers.UI
@@ -268,6 +267,11 @@ namespace Project.Controllers.UI
                         else if (spawnedInfo.WeaponType == WeaponType.OneHandSword)
                         {
                             Destroy(_currentRightWeapon);
+                            if (_currentLeftWeapon != null && _currentLeftWeapon.name == "Bow(Clone)")
+                            {
+                                Destroy(_currentLeftWeapon);
+                                _currentLeftWeapon = null;
+                            }
                             _currentRightWeapon = spawnedInfo.SpawnedWeapon;
                         }
                     }

@@ -5,8 +5,6 @@ namespace Project.Systems.StateMachine
 {
     public class RunToEnemyAndAttakeState : State
     {
-
-        private float _distance = 1;
         public RunToEnemyAndAttakeState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
@@ -30,8 +28,9 @@ namespace Project.Systems.StateMachine
 
         private void StartRunToTarget()
         {
-            if (Character.Agent.remainingDistance < _distance)
+            if (Character.Agent.remainingDistance < CheckPlayerWeaponDistance())
             {
+                Debug.Log(CheckPlayerWeaponDistance());
                 Character.Agent.speed = 0;
                 Character.Agent.velocity = Vector3.zero;
                 Character.Agent.isStopped = true;
@@ -43,7 +42,7 @@ namespace Project.Systems.StateMachine
             }
                
 
-            Character.Animator.SetBool(GameData.PlayerDistanceForAttake, Character.Agent.remainingDistance < _distance);
+            Character.Animator.SetBool(GameData.PlayerDistanceForAttake, Character.Agent.remainingDistance < CheckPlayerWeaponDistance());
             Character.Animator.SetBool(GameData.PlayerHasTarget, Character.PlayerData.Target != null);
             Character.Animator.SetTrigger(GameData.PlayerRunTargetAndAttake);
 
@@ -51,11 +50,28 @@ namespace Project.Systems.StateMachine
                     !Character.Animator.IsInTransition(0) && 
                     Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                Debug.Log("BOW SHOOT");
                 Character.Agent.ResetPath();
                 Character.Animator.SetBool(GameData.PlayerHasTarget, false);
                 Character.FSM.ChangeState(Character.StateIdle);
             }
+        }
+
+        private float CheckPlayerWeaponDistance()
+        {
+            if (Character.PlayerManager.PlayerInventory.EquipedWeapon != null && Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex] != (int)ItemsID.Bow)
+            {
+                var dist = Character.PlayerManager.PlayerInventory.ItemDataBase.GetWeaponAttakeDistance(Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.RightHandIndex]);
+                return dist;
+            }
+
+            else if (Character.PlayerManager.PlayerInventory.EquipedWeapon != null && Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex] == (int)ItemsID.Bow)
+            {
+                var dist = Character.PlayerManager.PlayerInventory.ItemDataBase.GetWeaponAttakeDistance(Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex]);
+                return dist;
+            }
+                
+            else
+                return 1;
         }
     }
 }

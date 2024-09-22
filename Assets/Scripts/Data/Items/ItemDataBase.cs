@@ -1,6 +1,3 @@
-using Project.Data;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Systems.ItemSystem
@@ -36,6 +33,21 @@ namespace Project.Systems.ItemSystem
             }
 
             return false;
+        }
+
+        public float GetWeaponAttakeDistance(int id)
+        {
+            var dist = 0f;
+
+            foreach (var item in _items)
+            {
+                var itemID = item.ItemID;
+
+                if ((int)itemID == id)
+                    dist = item.AttakeDistance;
+            }
+
+            return dist;
         }
     }
 }

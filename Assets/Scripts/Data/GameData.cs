@@ -51,6 +51,9 @@ namespace Project.Data
         public static readonly string EnemyTag = "Enemy";
         public static readonly string PlayerTag = "Player";
 
+        public const int RightHandIndex = 0;
+        public const int LeftHandIndex = 1;
+
         [System.Serializable]
         public struct PlayerData
         {

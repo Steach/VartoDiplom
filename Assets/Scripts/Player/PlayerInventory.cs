@@ -1,3 +1,4 @@
+using Project.Data;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,12 +13,8 @@ namespace Project.Systems.ItemSystem
         private Dictionary<ArmorType, int> _equipedArmor = new Dictionary<ArmorType, int>();
         private Dictionary<int, int> _equipedWeapon = new Dictionary<int, int>();
         private int _currentArmor = 0;
-        private int _rightHandIndex = 0;
-        private int _leftHandIndex = 1;
-        private bool TwoHandSword = false;
-        private bool OneHandSword = false;
-        private bool Bow = false;
-        private bool Staff = false;
+        private int _rightHandIndex = GameData.RightHandIndex;
+        private int _leftHandIndex = GameData.LeftHandIndex;
 
         public Dictionary<int, int> Inventory { get {  return _inventory; } }
         public Dictionary<ArmorType, int> EquipedArmor { get { return _equipedArmor; } }
@@ -121,6 +118,14 @@ namespace Project.Systems.ItemSystem
                                     var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
                                     _equipedWeapon[_rightHandIndex] = currentItemId;
                                     _inventory[equipItemEvent.SlotId] = 0;
+
+                                    if (_equipedWeapon[_leftHandIndex] == (int)ItemsID.Bow)
+                                    {
+                                        var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
+                                        _equipedWeapon[_leftHandIndex] = 0;
+                                        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
+                                    }
+
                                     EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
                                 }
                                 else if (item.WeaponType == WeaponType.Shield)
@@ -170,6 +175,12 @@ namespace Project.Systems.ItemSystem
                                 else if (item.WeaponType == WeaponType.OneHandSword)
                                 {
                                     _equipedWeapon[_rightHandIndex] = currentItemId;
+                                    if (_equipedWeapon[_leftHandIndex] == (int)ItemsID.Bow)
+                                    {
+                                        var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
+                                        _equipedWeapon[_leftHandIndex] = 0;
+                                        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
+                                    }
                                     _inventory[equipItemEvent.SlotId] = 0;
                                 }
                                 else if (item.WeaponType == WeaponType.Shield)
@@ -202,6 +213,14 @@ namespace Project.Systems.ItemSystem
                                     var oldRightEquipedItem = _equipedWeapon[_rightHandIndex];
                                     _equipedWeapon[_rightHandIndex] = currentItemId;
                                     _inventory[equipItemEvent.SlotId] = 0;
+
+                                    if (_equipedWeapon[_leftHandIndex] == (int)ItemsID.Bow)
+                                    {
+                                        var oldLeftEquipedItem = _equipedWeapon[_leftHandIndex];
+                                        _equipedWeapon[_leftHandIndex] = 0;
+                                        EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldLeftEquipedItem));
+                                    }
+
                                     EventBus.Publish<GrabItemEvent>(new GrabItemEvent(oldRightEquipedItem));
                                 }
                                 else if (item.WeaponType == WeaponType.Shield)
@@ -285,8 +304,6 @@ namespace Project.Systems.ItemSystem
                 }
             }
             _currentArmor = equipedArmor;
-
-            //Debug.Log($"Current Player armor: {_currentArmor}");
         }
 
         private void DropItem(DropItemEvent dropItemEvent)
