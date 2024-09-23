@@ -23,5 +23,5 @@ MonoBehaviour:
   _requaredINT: 3
   _requaredAGL: 4
   _damage: 70
-  _attakeDistance: 3
+  _attakeDistance: 1
   _armor: 0
