@@ -5,6 +5,9 @@ namespace Project.Systems.StateMachine
 {
     public class RunToEnemyAndAttakeState : State
     {
+
+        private float _timer = 0.5f;
+        private float _maxTimer = 1.3f;
         public RunToEnemyAndAttakeState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
@@ -30,10 +33,19 @@ namespace Project.Systems.StateMachine
         {
             if (Character.Agent.remainingDistance < CheckPlayerWeaponDistance())
             {
-                Debug.Log(CheckPlayerWeaponDistance());
                 Character.Agent.speed = 0;
                 Character.Agent.velocity = Vector3.zero;
                 Character.Agent.isStopped = true;
+                if (_timer >= _maxTimer)
+                {
+                    CallParticle();
+                    _timer = 0;
+                }
+                else if (_timer < _maxTimer)
+                {
+                    _timer += Time.deltaTime;
+                }
+                
             }
             else
             {
@@ -72,6 +84,17 @@ namespace Project.Systems.StateMachine
                 
             else
                 return 1;
+        }
+
+        private void CallParticle()
+        {
+            var idRightHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.RightHandIndex];
+            var idLeftHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex];
+            if (idRightHand == (int)ItemsID.TwoHandSword || idRightHand == (int)ItemsID.OneHandSword)
+            {
+                var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idRightHand);
+                EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(damage));
+            }
         }
     }
 }

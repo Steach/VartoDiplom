@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class EnemySimple : MonoBehaviour
 {
     private int _maxHp = 100;
-    private int _currentHp;
+    [SerializeField] private int _currentHp;
     [SerializeField] private int _exp;
     [SerializeField] private GameObject _parent;
     [SerializeField] private Slider _hpSlider;

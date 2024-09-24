@@ -49,5 +49,19 @@ namespace Project.Systems.ItemSystem
 
             return dist;
         }
+
+        public int GetDamage(int id)
+        {
+            var damage = 0;
+            foreach (var item in _items)
+            {
+                var itemID = item.ItemID;
+
+                if((int)itemID == id)
+                    damage = item.Damage;
+            }
+
+            return damage;
+        }
     }
 }

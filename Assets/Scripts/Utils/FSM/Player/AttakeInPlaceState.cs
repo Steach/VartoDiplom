@@ -5,6 +5,7 @@ namespace Project.Systems.StateMachine
 {
     public class AttakeInPlaceState : State
     {
+        private float _timer = 1;
         public AttakeInPlaceState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
@@ -15,6 +16,15 @@ namespace Project.Systems.StateMachine
 
             Character.Agent.isStopped = true;
             Character.Animator.SetTrigger(GameData.PlayerAttakeB1P);
+            if (_timer == 1)
+            {
+                CallParticle();
+                _timer = 0;
+            }
+            else if (_timer < 1) 
+            {
+                _timer += Time.deltaTime;
+            }
         }
 
         public override void LogicUpdate()
@@ -30,6 +40,18 @@ namespace Project.Systems.StateMachine
         public override void Exit(object data = null) 
         {
             base.Exit();
+            _timer = 1;
+        }
+
+        private void CallParticle()
+        {
+            var idRightHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.RightHandIndex];
+            var idLeftHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex];
+            if (idRightHand == (int)ItemsID.TwoHandSword || idRightHand == (int)ItemsID.OneHandSword)
+            {
+                var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idRightHand);
+                EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(damage));
+            }
         }
     }
 }

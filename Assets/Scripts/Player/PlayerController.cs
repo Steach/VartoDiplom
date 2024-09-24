@@ -103,7 +103,7 @@ namespace Project.Controllers.Player
             else if (_isFightingInPlace && (!_characterFSM.PlayerData.IsRunning || _characterFSM.PlayerData.IsRunning))
             {
                 _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
-                Test();
+                //Test();
             }
 
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)
@@ -142,6 +142,11 @@ namespace Project.Controllers.Player
             {
                 Debug.Log("STAFF SHOOT");
                 Debug.Log(GetCurrentClipName());
+            }
+            else if (ItemDB.GetWeaponType(EquipedWeapon[0]) == WeaponType.TwoHandSword)
+            {
+                Debug.Log("Test Particle");
+                EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(ItemDB.GetDamage(EquipedWeapon[0])));
             }
         }
 
