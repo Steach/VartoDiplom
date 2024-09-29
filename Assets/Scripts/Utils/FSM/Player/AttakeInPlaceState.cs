@@ -52,6 +52,11 @@ namespace Project.Systems.StateMachine
                 var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idRightHand);
                 EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(damage));
             }
+            else if (idLeftHand == (int)ItemsID.Bow || idRightHand == (int)ItemsID.Staff)
+            {
+                var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idLeftHand);
+                EventBus.Publish(new RangeAttakeEvent(damage, Input.mousePosition));
+            }
         }
     }
 }
