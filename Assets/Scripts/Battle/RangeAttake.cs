@@ -19,7 +19,9 @@ namespace Project.Systems.Battle
         {
             var shootPosition = new Vector3(_shootPointTransform.position.x + _offset.x, _shootPointTransform.position.y + _offset.y, _shootPointTransform.position.z + _offset.z);
 
-            var rangeAttkeParticle = ObjectPool.Instance.GetObjects(_attakeParticle.gameObject, shootPosition, _shootPointTransform.rotation);
+            var rangeAttkeParticle = ObjectPool.Instance.GetObjects(_attakeParticle.gameObject, shootPosition, Quaternion.identity); /*_shootPointTransform.rotation);*/
+            Debug.Log($"Player roration: {_shootPointTransform.rotation}");
+            Debug.Log($"ParticleRotation: {rangeAttkeParticle.transform.rotation}");
             var behavior = rangeAttkeParticle.GetComponent<RangeAttakeGameObjectBehaviour>();
             Ray ray = Camera.main.ScreenPointToRay(rangeAttakeEvent.MouseHitPotision);
             RaycastHit hit;

@@ -25,7 +25,7 @@ namespace Project.Managers.Spawner
 
         private void SpawnScriptable(EnemyDieEvent enemyDieEvent)
         {
-            _data.Items[Random.Range(16, _data.Items.Length)].Spawn(enemyDieEvent.Position);
+            _data.Items[Random.Range(16, _data.Items.Length)].Spawn(enemyDieEvent.Position, this.transform);
         }
     }
 }

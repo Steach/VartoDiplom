@@ -51,7 +51,8 @@ namespace Project.Systems.EquipmentSystem
                     EventBus.Publish<GrabItemEvent>(new GrabItemEvent(intId));
                 }
 
-                otherGO.SetActive(false);
+                //otherGO.SetActive(false);
+                Destroy(otherGO);
             }
         }
     }

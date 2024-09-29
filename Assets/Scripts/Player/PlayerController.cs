@@ -3,6 +3,7 @@ using Project.Systems.StateMachine;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using Project.Managers.Player;
+using Project.Data;
 
 namespace Project.Controllers.Player
 {
@@ -60,24 +61,32 @@ namespace Project.Controllers.Player
 
         private void TurnToMouse()
         {
+            var ItemDB = _playerManager.PlayerInventory.ItemDataBase;
+            var EquipedWeapon = _playerManager.PlayerInventory.EquipedWeapon;
+
             if (!_isFightingInPlace && !IsRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0)
+                Turn();
+            else if (_isFightingInPlace && !IsRunning && _characterFSM.Agent.velocity.sqrMagnitude <= 0 && ItemDB.GetWeaponType(EquipedWeapon[GameData.LeftHandIndex]) == WeaponType.Bow)
+                Turn();
+        }
+
+        private void Turn()
+        {
+            var mousePosition = Input.mousePosition;
+            Ray ray = _camera.ScreenPointToRay(mousePosition);
+            Plane playerPlane = new Plane(Vector3.up, _targetTransform.position);
+            float hitDist = 0.0f;
+
+            if (playerPlane.Raycast(ray, out hitDist))
             {
-                var mousePosition = Input.mousePosition;
-                Ray ray = _camera.ScreenPointToRay(mousePosition);
-                Plane playerPlane = new Plane(Vector3.up, _targetTransform.position);
-                float hitDist = 0.0f;
+                Vector3 targetPoint = ray.GetPoint(hitDist);
+                Vector3 direction = targetPoint - _targetTransform.position;
 
-                if (playerPlane.Raycast(ray, out hitDist))
-                {
-                    Vector3 targetPoint = ray.GetPoint(hitDist);
-                    Vector3 direction = targetPoint - _targetTransform.position;
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                targetRotation.x = 0;
+                targetRotation.z = 0;
 
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    targetRotation.x = 0;
-                    targetRotation.z = 0;
-
-                    _targetTransform.rotation = Quaternion.Slerp(_targetTransform.rotation, targetRotation, Time.deltaTime + 10f);
-                }
+                _targetTransform.rotation = Quaternion.Slerp(_targetTransform.rotation, targetRotation, Time.deltaTime + 10f);
             }
         }
 
@@ -116,16 +125,7 @@ namespace Project.Controllers.Player
         private void FollowPlayer()
         {
             if (_isFollowPlayer && !_isFightingInPlace)
-            {
-                Vector2 mousePostion = _controlsSystem.PlayerController.Position.ReadValue<Vector2>();
-                Ray ray = _camera.ScreenPointToRay(mousePostion);
-                RaycastHit hit;
-                
-                if (Physics.Raycast(ray, out hit))
-                {
-                    _characterFSM.Agent.SetDestination(hit.point);
-                }
-            }
+                TurningPlayer();
         }
 
         private void Test()
@@ -133,20 +133,32 @@ namespace Project.Controllers.Player
             var ItemDB = _playerManager.PlayerInventory.ItemDataBase;
             var EquipedWeapon = _playerManager.PlayerInventory.EquipedWeapon;
 
-            if (ItemDB.GetWeaponType(EquipedWeapon[1]) == WeaponType.Bow)
+            if (ItemDB.GetWeaponType(EquipedWeapon[GameData.LeftHandIndex]) == WeaponType.Bow)
             {
                 Debug.Log("BOW SHOOT");
                 Debug.Log(GetCurrentClipName());
             }
-            else if (ItemDB.GetWeaponType(EquipedWeapon[0]) == WeaponType.Staff)
+            else if (ItemDB.GetWeaponType(EquipedWeapon[GameData.RightHandIndex]) == WeaponType.Staff)
             {
                 Debug.Log("STAFF SHOOT");
                 Debug.Log(GetCurrentClipName());
             }
-            else if (ItemDB.GetWeaponType(EquipedWeapon[0]) == WeaponType.TwoHandSword)
+            else if (ItemDB.GetWeaponType(EquipedWeapon[GameData.RightHandIndex]) == WeaponType.TwoHandSword)
             {
                 Debug.Log("Test Particle");
                 EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(ItemDB.GetDamage(EquipedWeapon[0])));
+            }
+        }
+
+        private void TurningPlayer()
+        {
+            Vector2 mousePostion = _controlsSystem.PlayerController.Position.ReadValue<Vector2>();
+            Ray ray = _camera.ScreenPointToRay(mousePostion);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                _characterFSM.Agent.SetDestination(hit.point);
             }
         }
 

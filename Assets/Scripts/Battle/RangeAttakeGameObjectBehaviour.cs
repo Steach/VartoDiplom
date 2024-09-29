@@ -19,6 +19,17 @@ namespace Project.Systems.Battle
 
         private bool _isHit = false;
 
+        public void Init(int damage, Vector3 mousePosition)
+        {
+            var collisionModule = GetComponent<ParticleSystem>().collision;
+            collisionModule.enabled = true;
+            collisionModule.SetPlane(0, null);
+            _damage = damage;
+            _isHit = false;
+            var newMousePosition = new Vector3(mousePosition.x, transform.position.y, mousePosition.z);
+            _direction = (newMousePosition - transform.position).normalized;
+        }
+
         private void OnEnable()
         {
             _trailRenderer = gameObject.GetComponent<TrailRenderer>();
@@ -30,6 +41,8 @@ namespace Project.Systems.Battle
             if (_particleSystem != null) _particleSystem.Clear();
 
             _particleSystem.Play();
+
+            StartCoroutine(DisableObjectAndReturnToPool());
         }
 
 
@@ -64,17 +77,7 @@ namespace Project.Systems.Battle
             
         }
 
-        public void Init(int damage, Vector3 mousePosition)
-        {
-            var collisionModule = GetComponent<ParticleSystem>().collision;
-            collisionModule.enabled = true;
-            collisionModule.SetPlane(0, null);
-            _damage = damage;
-            StartCoroutine(DisableObjectAndReturnToPool());
-            _isHit = false;
-            var newMousePosition = new Vector3(mousePosition.x, transform.position.y, mousePosition.z);
-            _direction = (newMousePosition - transform.position).normalized;
-        }
+        
 
         private void OnParticleCollision(GameObject other)
         {

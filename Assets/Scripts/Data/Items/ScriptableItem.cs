@@ -1,3 +1,4 @@
+using Project.Systems.Pooller;
 using UnityEngine;
 
 namespace Project.Systems.ItemSystem
@@ -42,10 +43,16 @@ namespace Project.Systems.ItemSystem
         public int RequirementINT {  get { return _requaredINT; } }
         public int RequirementAGL { get { return _requaredAGL; } }
 
-        public virtual void Spawn(Vector3 position)
+        public virtual void Spawn(Vector3 position, Transform parent = null)
         {
-            var positionToSpawn = new Vector3(position.x, 0, position.z);
-            var SpawnerItem = Instantiate(_prefab, position, Quaternion.identity);
+            GameObject SpawnerItem = null;
+            if (parent == null)
+                SpawnerItem = Instantiate(_prefab, position, Quaternion.identity);
+            else
+                SpawnerItem = Instantiate(_prefab, position, Quaternion.identity, parent);
+
+                //ObjectPool.Instance.GetObjects(_prefab, position, Quaternion.identity);
+
             SpawnerItem.tag = _itemType.ToString();
             var spawnedItemRB = SpawnerItem.AddComponent<Rigidbody>();
             spawnedItemRB.isKinematic = true;
