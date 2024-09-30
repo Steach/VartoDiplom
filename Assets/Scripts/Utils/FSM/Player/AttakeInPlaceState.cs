@@ -31,7 +31,7 @@ namespace Project.Systems.StateMachine
         {
             base.LogicUpdate();
 
-            if (!Character.Animator.IsInTransition(0) && Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            if (!Character.Animator.IsInTransition(0) && Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !Character.PlayerManager.PlayerController.IsFightInPlace)
             {
                 Character.FSM.ChangeState(Character.StateIdle);
             }    

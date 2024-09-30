@@ -1,5 +1,6 @@
 using Project.Data;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class EnemySimple : MonoBehaviour
@@ -9,6 +10,12 @@ public class EnemySimple : MonoBehaviour
     [SerializeField] private int _exp;
     [SerializeField] private GameObject _parent;
     [SerializeField] private Slider _hpSlider;
+    [SerializeField] private Transform[] _points;
+    [SerializeField] private NavMeshAgent _agent;
+
+    private Transform _centerPosition;
+    private float _patrolRadius = 5f;
+    private bool _isDead = false;
 
     public int HP 
     {
@@ -25,8 +32,19 @@ public class EnemySimple : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void EnemyOnEnable()
     {
+        _isDead = false;
+    }
+
+    public void EnemyOnDisable()
+    {
+        _isDead = true;
+    }
+
+    public void EnemyStart()
+    {
+        _centerPosition = gameObject.transform;
         _currentHp = _maxHp;
 
         if (_hpSlider != null)
@@ -34,20 +52,41 @@ public class EnemySimple : MonoBehaviour
             _hpSlider.maxValue = _maxHp;
             _hpSlider.value = _currentHp;
         }
-        
+
+        MoveToRandomePosition();
+
         EventBus.Publish(new HpChangedEvent(_currentHp, _maxHp));
     }
 
-    private void Update()
+    public void EnemyUpdate()
     {
-        if (_currentHp <= 0)
+        if (_currentHp <= 0 && !_isDead)
+        {
             EnemyDie();
+        }
+
+        if (!_isDead && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
+            MoveToRandomePosition();
     }
 
     private void EnemyDie()
     {
-        EventBus.Publish(new EnemyDieEvent(_exp, transform.position));
-        _parent.SetActive(false);
+        var spawnDropPosition = new Vector3(transform.position.x, 1, transform.position.z);
+        EventBus.Publish(new EnemyDieEvent(_exp, spawnDropPosition));
+        _agent.isStopped = true;
+        gameObject.SetActive(false);
+        _isDead = true;
+    }
+
+    private void MoveToRandomePosition()
+    {
+        var randomDirection = Random.insideUnitSphere * _patrolRadius;
+        randomDirection += _centerPosition.position;
+
+        NavMeshHit hit;
+
+        if (NavMesh.SamplePosition(randomDirection, out hit, _patrolRadius, NavMesh.AllAreas))
+            _agent.SetDestination(hit.position);
     }
 
     public void GetDamage() 

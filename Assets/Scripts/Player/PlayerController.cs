@@ -17,6 +17,7 @@ namespace Project.Controllers.Player
         private bool _isFollowPlayer = false;
         private bool _isFightingInPlace = false;
         public bool IsRunning { get; private set; }
+        public bool IsFightInPlace { get { return _isFightingInPlace; } }
 
         public ControlsSystem ControlSystem { get { return _controlsSystem; } }
 
