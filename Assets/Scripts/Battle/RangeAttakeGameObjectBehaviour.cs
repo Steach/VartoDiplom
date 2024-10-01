@@ -61,8 +61,8 @@ namespace Project.Systems.Battle
                     {
                         _isHit = true;
                         var enemy = _target.GetComponentInChildren<EnemySimple>();
-                        enemy.HP = _damage;
-                        enemy.GetDamage();
+                        //enemy.HP = _damage;
+                        enemy.GetDamage(_damage);
                     }
                 }
             }
@@ -86,8 +86,8 @@ namespace Project.Systems.Battle
                 if (other.CompareTag("Enemy"))
                 {
                     var enemy = other.GetComponentInChildren<EnemySimple>();
-                    enemy.HP = _damage;
-                    enemy.GetDamage();
+                    //enemy.HP = _damage;
+                    enemy.GetDamage(_damage);
                 }
             }
 

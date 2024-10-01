@@ -31,8 +31,8 @@ namespace Project.Systems.Battle
             if (other.CompareTag("Enemy"))
             {
                 var enemy = other.GetComponentInChildren<EnemySimple>();
-                enemy.HP = _damage;
-                enemy.GetDamage();
+                //enemy.HP = _damage;
+                enemy.GetDamage(_damage);
             }
         }
     }

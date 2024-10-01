@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
     public class FSMPlayer
     {
@@ -21,11 +21,11 @@ namespace Project.Systems.StateMachine
         public Transform PlayerTransform { get { return _playerTransform; } }
         public PlayerManager PlayerManager { get { return _playerManager; } }
 
-        public StateMachine FSM;
-        public IdleState StateIdle;
-        public AttakeInPlaceState StateAttackInPlace;
-        public RunToEnemyAndAttakeState StateRunToEnemyAndAttake;
-        public MovingState MovingState;
+        public StateMachine FSM { get; private set; }
+        public IdleState StateIdle { get; private set; }
+        public AttakeInPlaceState StateAttackInPlace { get; private set; }
+        public RunToEnemyAndAttakeState StateRunToEnemyAndAttake { get; private set; }
+        public MovingState MovingState { get; private set; }
 
         public void Init(NavMeshAgent agent, Animator animator, GameData.PlayerData playerData, TextMeshProUGUI textMesh, Transform playerTransform, PlayerManager playerManager)
         {
@@ -50,12 +50,12 @@ namespace Project.Systems.StateMachine
 
         public void RunOnUpdate()
         {
-            FSM.CurrentState.LogicUpdate();
+            FSM.CurrentPlayerState.LogicUpdate();
         }
 
         public void RunOnFixedUpdate()
         {
-            FSM.CurrentState.PhysicsUpdate();
+            FSM.CurrentPlayerState.PhysicsUpdate();
         }
 
         public void OnEnableEvents()

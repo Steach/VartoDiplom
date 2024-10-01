@@ -1,9 +1,9 @@
 using Project.Data;
 using UnityEngine;
 
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
-    public class MovingState : State
+    public class MovingState : PlayerStates
     {
         public MovingState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM) {}
 

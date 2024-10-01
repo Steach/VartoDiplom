@@ -3744,6 +3744,11 @@ MonoBehaviour:
   - {fileID: 2018360781}
   - {fileID: 2078910059}
   - {fileID: 1628559209}
+  _idleController: {fileID: 9100000, guid: f893d78148eef4541b5a78c4b4571608, type: 2}
+  _attakeController: {fileID: 9100000, guid: eadcf975f5f7d7b48bf1217a9192369d, type: 2}
+  _movingController: {fileID: 9100000, guid: 468e00031e6a05e498b55f8809463ffb, type: 2}
+  _deathController: {fileID: 9100000, guid: e09f360c42ea3ce409736bb4616687b0, type: 2}
+  _takeDamageController: {fileID: 9100000, guid: faca9af196b9d804abb5f63b24bd0196, type: 2}
 --- !u!1 &697167517
 GameObject:
   m_ObjectHideFlags: 0
@@ -9204,6 +9209,30 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.data[0]
+      value: 
+      objectReference: {fileID: 9100000, guid: 468e00031e6a05e498b55f8809463ffb, type: 2}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.data[1]
+      value: 
+      objectReference: {fileID: 9100000, guid: f893d78148eef4541b5a78c4b4571608, type: 2}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.data[2]
+      value: 
+      objectReference: {fileID: 9100000, guid: e09f360c42ea3ce409736bb4616687b0, type: 2}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.data[3]
+      value: 
+      objectReference: {fileID: 9100000, guid: faca9af196b9d804abb5f63b24bd0196, type: 2}
+    - target: {fileID: 2793812720153342976, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
+      propertyPath: _controllers.Array.data[4]
+      value: 
+      objectReference: {fileID: 9100000, guid: eadcf975f5f7d7b48bf1217a9192369d, type: 2}
     - target: {fileID: 6677845738305243647, guid: 4a6693adb5ca52c4aad6b6d65feff62b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24.15

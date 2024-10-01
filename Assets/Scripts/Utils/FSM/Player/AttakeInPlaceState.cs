@@ -1,9 +1,9 @@
 using Project.Data;
 using UnityEngine;
 
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
-    public class AttakeInPlaceState : State
+    public class AttakeInPlaceState : PlayerStates
     {
         private float _timer = 1;
         public AttakeInPlaceState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)

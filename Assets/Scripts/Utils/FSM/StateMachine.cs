@@ -1,26 +1,43 @@
 using TMPro;
+using Project.Systems.StateMachine.Player;
+using Project.Systems.StateMachine.Enemy;
 
 namespace Project.Systems.StateMachine
 {
     public class StateMachine
     {
-        public State CurrentState { get; private set; }
+        public PlayerStates CurrentPlayerState { get; private set; }
+        public EnemyStates CurrentEnemyState { get; private set; }
         public TextMeshProUGUI Debug { get; private set; }
 
-        public void Init(State startingState, TextMeshProUGUI debug, object data = null)
+        public void Init(PlayerStates startingState, TextMeshProUGUI debug, object data = null)
         {
-            CurrentState = startingState;
+            CurrentPlayerState = startingState;
             Debug = debug;
             startingState.Enter(data);
-            Debug.text = CurrentState.ToString();
+            Debug.text = CurrentPlayerState.ToString();
         }
 
-        public void ChangeState(State newState, object data = null) 
+        public void Init(EnemyStates startingState, object data = null)
         {
-            CurrentState.Exit(data);
+            CurrentEnemyState = startingState;
+            startingState.Enter(data);
+        }
 
-            CurrentState = newState;
-            Debug.text = CurrentState.ToString();
+        public void ChangeState(PlayerStates newState, object data = null) 
+        {
+            CurrentPlayerState.Exit(data);
+
+            CurrentPlayerState = newState;
+            Debug.text = CurrentPlayerState.ToString();
+            newState.Enter(data);
+        }
+
+        public void ChangeState(EnemyStates newState, object data = null)
+        {
+            CurrentEnemyState.Exit(data);
+
+            CurrentEnemyState = newState;
             newState.Enter(data);
         }
     }

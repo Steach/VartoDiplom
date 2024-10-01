@@ -2,9 +2,9 @@ using Project.Data;
 using UnityEngine;
 using static Project.Data.GameData;
 
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
-    public class IdleState : State
+    public class IdleState : PlayerStates
     {
         public IdleState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {

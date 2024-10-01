@@ -1,5 +1,5 @@
 using Project.Systems.ControlsSystem;
-using Project.Systems.StateMachine;
+using Project.Systems.StateMachine.Player;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using Project.Managers.Player;

@@ -1,9 +1,9 @@
 using Project.Data;
 using UnityEngine;
 
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
-    public class RunToEnemyAndAttakeState : State
+    public class RunToEnemyAndAttakeState : PlayerStates
     {
 
         private float _timer = 0.5f;

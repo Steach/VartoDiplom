@@ -2,7 +2,7 @@ using Project.Controllers.Player;
 using Project.Data;
 using Project.Systems.ItemSystem;
 using Project.Systems.LevelingSystem;
-using Project.Systems.StateMachine;
+using Project.Systems.StateMachine.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;

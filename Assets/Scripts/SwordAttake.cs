@@ -29,7 +29,7 @@ public class SwordAttake : MonoBehaviour
         {
             Debug.Log($"Enemy HP: {enemy.HP}. Damage: {_damage}");
             enemy.HP = _damage;
-            enemy.GetDamage();
+            //enemy.GetDamage();
             Debug.Log($"Enemy HP: {enemy.HP}. Damage: {_damage}");
             _isDamaged = true;
         }

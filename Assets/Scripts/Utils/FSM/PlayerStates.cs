@@ -1,11 +1,11 @@
-namespace Project.Systems.StateMachine
+namespace Project.Systems.StateMachine.Player
 {
-    public abstract class State
+    public abstract class PlayerStates
     {
         protected FSMPlayer Character;
         protected StateMachine FSM;
 
-        protected State(FSMPlayer characters, StateMachine FSM)
+        protected PlayerStates(FSMPlayer characters, StateMachine FSM)
         { 
             this.Character = characters;
             this.FSM = FSM;
