@@ -1,5 +1,6 @@
 using Project.Managers.Enemy;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Project.Systems.StateMachine.Enemy
 {
@@ -13,11 +14,13 @@ namespace Project.Systems.StateMachine.Enemy
         public TakeDamageState TakeDamageState { get; private set; }
         public EnemyManager EnemyManager { get; private set; }
         public Animator EnemyAnimator { get; private set; }
+        public NavMeshAgent Agent { get; private set; }
 
-        public void Init(EnemyManager enemyManager, Animator enemyAnimator)
+        public void Init(EnemyManager enemyManager, Animator enemyAnimator, NavMeshAgent agent)
         {
             EnemyManager = enemyManager;
             EnemyAnimator = enemyAnimator;
+            Agent = agent;
 
             FSM = new StateMachine();
             IdleState = new IdleState(this, FSM);

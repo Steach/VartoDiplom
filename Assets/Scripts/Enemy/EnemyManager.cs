@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Managers.Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
-        [SerializeField] private EnemySimple[] _enemies;
+        [SerializeField] private List<EnemySimple> _enemies = new List<EnemySimple>();
         [SerializeField] private RuntimeAnimatorController _idleController;
         [SerializeField] private RuntimeAnimatorController _attakeController;
         [SerializeField] private RuntimeAnimatorController _movingController;
@@ -38,7 +39,10 @@ namespace Project.Managers.Enemy
         private void Update()
         {
             foreach (var enemy in _enemies)
-                enemy.EnemyUpdate();
+            {
+                if(enemy.gameObject.activeInHierarchy)
+                    enemy.EnemyUpdate();
+            }
         }
 
         private void OnDisable()

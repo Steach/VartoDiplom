@@ -1,6 +1,7 @@
 using Project.Data;
 using Project.Managers.Enemy;
 using Project.Systems.StateMachine.Enemy;
+using System.Collections;
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +17,7 @@ public class EnemySimple : MonoBehaviour
     [SerializeField] private Transform[] _points;
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _enemyAnimator;
+    [SerializeField] private float AgentVelocity;
 
 
     private FSMEnemy _FSMEnemy;
@@ -23,12 +25,20 @@ public class EnemySimple : MonoBehaviour
     private float _patrolRadius = 5f;
     private bool _isDead = false;
     private EnemyManager _enemyManager;
+    private Collider _enemyCollider;
+    private float _patrolTimerMax = 5;
+    private float _patrolTimer = 0;
+    private float _stuckTimer = 0;
+    private float _stuckTimerMax = 0.05f;
 
     public void Init(EnemyManager enemyManager)
     {
         _FSMEnemy = new FSMEnemy();
         _enemyManager = enemyManager;
-        _FSMEnemy.Init(enemyManager, _enemyAnimator);
+        _FSMEnemy.Init(enemyManager, _enemyAnimator, _agent);
+
+        if (TryGetComponent<Collider>(out Collider collider))
+            _enemyCollider = collider;
     }
 
     public int HP 
@@ -80,8 +90,10 @@ public class EnemySimple : MonoBehaviour
             EnemyDie();
         }
 
-        //if (!_isDead && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance)
-        //    MoveToRandomePosition();
+        if (!_isDead && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance && Timer() == 0)
+            MoveToRandomePosition(); 
+
+        AgentVelocity = _agent.velocity.sqrMagnitude;
     }
 
     public void EnemyOnFixesUpdate()
@@ -94,12 +106,18 @@ public class EnemySimple : MonoBehaviour
         var spawnDropPosition = new Vector3(transform.position.x, 1, transform.position.z);
         EventBus.Publish(new EnemyDieEvent(_exp, spawnDropPosition));
         _agent.isStopped = true;
-        gameObject.SetActive(false);
         _isDead = true;
+        _FSMEnemy.FSM.ChangeState(_FSMEnemy.DeathState);
+
+        if(_enemyCollider != null)
+            _enemyCollider.enabled = false;
+
+        StartCoroutine(Die());
     }
 
     private void MoveToRandomePosition()
     {
+        var oldDestination = _centerPosition.position;
         var randomDirection = Random.insideUnitSphere * _patrolRadius;
         randomDirection += _centerPosition.position;
 
@@ -107,6 +125,20 @@ public class EnemySimple : MonoBehaviour
 
         if (NavMesh.SamplePosition(randomDirection, out hit, _patrolRadius, NavMesh.AllAreas))
             _agent.SetDestination(hit.position);
+
+        if (_agent.velocity.sqrMagnitude < 3)
+        {
+            _stuckTimer += Time.deltaTime;
+            Debug.Log(_stuckTimer);
+        }
+
+        if (_stuckTimer >= _stuckTimerMax)
+        {
+            _agent.ResetPath();
+            _agent.SetDestination(oldDestination);
+        }
+
+        oldDestination = hit.position;
     }
 
     public void GetDamage(int damage) 
@@ -127,5 +159,21 @@ public class EnemySimple : MonoBehaviour
         {
             WhenHpChanged();
         }
+    }
+
+    private float Timer()
+    {
+        if (_patrolTimer < _patrolTimerMax)
+            _patrolTimer += Time.deltaTime;
+        else if (_patrolTimer >= _patrolTimerMax)
+            _patrolTimer = 0;
+
+        return _patrolTimer;
+    }
+
+    IEnumerator Die()
+    {
+        yield return new WaitForSeconds(5);
+        gameObject.SetActive(false);
     }
 }

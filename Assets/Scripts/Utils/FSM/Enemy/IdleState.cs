@@ -12,6 +12,16 @@ namespace Project.Systems.StateMachine.Enemy
 
             Character.EnemyAnimator.runtimeAnimatorController = Character.EnemyManager.IdleController;
         }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+            if (Character.Agent.velocity.sqrMagnitude > 0 && Character.Agent.hasPath)
+            {
+                Character.FSM.ChangeState(Character.MovingState);
+            }
+        }
     }
 }
 
