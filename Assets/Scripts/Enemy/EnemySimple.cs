@@ -17,7 +17,8 @@ public class EnemySimple : MonoBehaviour
     [SerializeField] private Transform[] _points;
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _enemyAnimator;
-    [SerializeField] private float AgentVelocity;
+    [SerializeField] private float _detectRadius;
+    [SerializeField] private GameObject _target;
 
 
     private FSMEnemy _FSMEnemy;
@@ -28,14 +29,16 @@ public class EnemySimple : MonoBehaviour
     private Collider _enemyCollider;
     private float _patrolTimerMax = 5;
     private float _patrolTimer = 0;
-    private float _stuckTimer = 0;
-    private float _stuckTimerMax = 0.05f;
+    //private float _stuckTimer = 0;
+    //private float _stuckTimerMax = 1f;
+
+    public GameObject Target { get { return _target; } }
 
     public void Init(EnemyManager enemyManager)
     {
         _FSMEnemy = new FSMEnemy();
         _enemyManager = enemyManager;
-        _FSMEnemy.Init(enemyManager, _enemyAnimator, _agent);
+        _FSMEnemy.Init(enemyManager, _enemyAnimator, _agent, this);
 
         if (TryGetComponent<Collider>(out Collider collider))
             _enemyCollider = collider;
@@ -77,13 +80,12 @@ public class EnemySimple : MonoBehaviour
             _hpSlider.value = _currentHp;
         }
 
-        //MoveToRandomePosition();
-
         EventBus.Publish(new HpChangedEvent(_currentHp, _maxHp));
     }
 
     public void EnemyUpdate()
     {
+        Detect();
         _FSMEnemy.RunOnUpdate();
         if (_currentHp <= 0 && !_isDead)
         {
@@ -91,14 +93,19 @@ public class EnemySimple : MonoBehaviour
         }
 
         if (!_isDead && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance && Timer() == 0)
-            MoveToRandomePosition(); 
-
-        AgentVelocity = _agent.velocity.sqrMagnitude;
+            MoveToRandomePosition();
     }
 
     public void EnemyOnFixesUpdate()
     {
         _FSMEnemy.RunOnFixedUpdate();
+    }
+
+    public void GetDamage(int damage)
+    {
+        _currentHp -= damage;
+        _hpSlider.value = _currentHp;
+        _FSMEnemy.FSM.ChangeState(_FSMEnemy.TakeDamageState);
     }
 
     private void EnemyDie()
@@ -117,35 +124,48 @@ public class EnemySimple : MonoBehaviour
 
     private void MoveToRandomePosition()
     {
-        var oldDestination = _centerPosition.position;
-        var randomDirection = Random.insideUnitSphere * _patrolRadius;
-        randomDirection += _centerPosition.position;
-
-        NavMeshHit hit;
-
-        if (NavMesh.SamplePosition(randomDirection, out hit, _patrolRadius, NavMesh.AllAreas))
-            _agent.SetDestination(hit.position);
-
-        if (_agent.velocity.sqrMagnitude < 3)
+        if (_target == null)
         {
-            _stuckTimer += Time.deltaTime;
-            Debug.Log(_stuckTimer);
-        }
+            //var oldDestination = _centerPosition.position;
+            var randomDirection = Random.insideUnitSphere * _patrolRadius;
+            randomDirection += _centerPosition.position;
 
-        if (_stuckTimer >= _stuckTimerMax)
-        {
-            _agent.ResetPath();
-            _agent.SetDestination(oldDestination);
-        }
+            NavMeshHit hit;
 
-        oldDestination = hit.position;
+            if (NavMesh.SamplePosition(randomDirection, out hit, _patrolRadius, NavMesh.AllAreas))
+                _agent.SetDestination(hit.position);
+
+            //if (_agent.velocity.sqrMagnitude < 3)
+            //{
+            //    _stuckTimer += Time.deltaTime;
+            //    Debug.Log(_stuckTimer);
+            //}
+            //
+            //if (_stuckTimer >= _stuckTimerMax)
+            //{
+            //    _agent.ResetPath();
+            //    _agent.SetDestination(oldDestination);
+            //}
+            //
+            //oldDestination = hit.position;
+        }
     }
 
-    public void GetDamage(int damage) 
+    private void Detect()
     {
-        _currentHp -= damage;
-        _hpSlider.value = _currentHp;
-        _FSMEnemy.FSM.ChangeState(_FSMEnemy.TakeDamageState);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _detectRadius);
+
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.gameObject.CompareTag("Player"))
+                _target = hitCollider.gameObject;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _detectRadius);
     }
 
     private void WhenHpChanged()

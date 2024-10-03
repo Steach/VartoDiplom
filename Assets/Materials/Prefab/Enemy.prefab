@@ -568,6 +568,7 @@ MonoBehaviour:
   _points: []
   _agent: {fileID: 3017064151580299143}
   _enemyAnimator: {fileID: 8504535455816319303}
+  _detectRadius: 3
 --- !u!195 &3017064151580299143
 NavMeshAgent:
   m_ObjectHideFlags: 0

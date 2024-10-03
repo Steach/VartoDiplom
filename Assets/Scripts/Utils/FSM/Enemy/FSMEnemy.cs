@@ -15,12 +15,14 @@ namespace Project.Systems.StateMachine.Enemy
         public EnemyManager EnemyManager { get; private set; }
         public Animator EnemyAnimator { get; private set; }
         public NavMeshAgent Agent { get; private set; }
+        public EnemySimple EnemySimple { get; private set; }
 
-        public void Init(EnemyManager enemyManager, Animator enemyAnimator, NavMeshAgent agent)
+        public void Init(EnemyManager enemyManager, Animator enemyAnimator, NavMeshAgent agent, EnemySimple enemySimple)
         {
             EnemyManager = enemyManager;
             EnemyAnimator = enemyAnimator;
             Agent = agent;
+            EnemySimple = enemySimple;
 
             FSM = new StateMachine();
             IdleState = new IdleState(this, FSM);

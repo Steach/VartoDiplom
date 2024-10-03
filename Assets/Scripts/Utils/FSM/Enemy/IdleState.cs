@@ -21,6 +21,11 @@ namespace Project.Systems.StateMachine.Enemy
             {
                 Character.FSM.ChangeState(Character.MovingState);
             }
+
+            if (Character.EnemySimple.Target != null)
+            {
+                Character.FSM.ChangeState(Character.AttackState);
+            }
         }
     }
 }
