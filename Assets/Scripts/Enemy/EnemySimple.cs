@@ -22,7 +22,7 @@ public class EnemySimple : MonoBehaviour
 
 
     private FSMEnemy _FSMEnemy;
-    private Transform _centerPosition;
+    private Vector3 _centerPosition;
     private float _patrolRadius = 5f;
     private bool _isDead = false;
     private EnemyManager _enemyManager;
@@ -71,7 +71,7 @@ public class EnemySimple : MonoBehaviour
 
     public void EnemyStart()
     {
-        _centerPosition = gameObject.transform;
+        _centerPosition = gameObject.transform.position;
         _currentHp = _maxHp;
 
         if (_hpSlider != null)
@@ -94,6 +94,8 @@ public class EnemySimple : MonoBehaviour
 
         if (!_isDead && !_agent.pathPending && _agent.remainingDistance <= _agent.stoppingDistance && Timer() == 0)
             MoveToRandomePosition();
+
+        ResetPathIfToLongDistanceFromStartPosition();
     }
 
     public void EnemyOnFixesUpdate()
@@ -126,28 +128,28 @@ public class EnemySimple : MonoBehaviour
     {
         if (_target == null)
         {
-            //var oldDestination = _centerPosition.position;
             var randomDirection = Random.insideUnitSphere * _patrolRadius;
-            randomDirection += _centerPosition.position;
+            randomDirection += _centerPosition;
 
             NavMeshHit hit;
 
             if (NavMesh.SamplePosition(randomDirection, out hit, _patrolRadius, NavMesh.AllAreas))
                 _agent.SetDestination(hit.position);
+        }
+    }
 
-            //if (_agent.velocity.sqrMagnitude < 3)
-            //{
-            //    _stuckTimer += Time.deltaTime;
-            //    Debug.Log(_stuckTimer);
-            //}
-            //
-            //if (_stuckTimer >= _stuckTimerMax)
-            //{
-            //    _agent.ResetPath();
-            //    _agent.SetDestination(oldDestination);
-            //}
-            //
-            //oldDestination = hit.position;
+    private void ResetPathIfToLongDistanceFromStartPosition()
+    {
+        if (_target != null)
+        {
+            Debug.Log(transform.position);
+            Debug.Log(_centerPosition);
+            if (Vector3.Distance(transform.position, _centerPosition) > 10)
+            {
+                _target = null;
+                _agent.ResetPath();
+            }
+
         }
     }
 
