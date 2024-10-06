@@ -1,4 +1,5 @@
 using Project.Data;
+using Project.Managers.Player;
 using UnityEngine;
 
 namespace Project.Systems.StateMachine.Player
@@ -6,6 +7,7 @@ namespace Project.Systems.StateMachine.Player
     public class AttakeInPlaceState : PlayerStates
     {
         private float _timer = 1;
+
         public AttakeInPlaceState(FSMPlayer characters, StateMachine FSM) : base(characters, FSM)
         {
         }
@@ -14,14 +16,15 @@ namespace Project.Systems.StateMachine.Player
         {
             base.Enter();
 
-            Character.Agent.isStopped = true;
-            Character.Animator.SetTrigger(GameData.PlayerAttakeB1P);
-            if (_timer == 1)
+
+            if (_timer == 1 && CheckStamina())
             {
                 CallParticle();
+                Character.Agent.isStopped = true;
+                Character.Animator.SetTrigger(GameData.PlayerAttakeB1P);
                 _timer = 0;
             }
-            else if (_timer < 1) 
+            else if (_timer < 1)
             {
                 _timer += Time.deltaTime;
             }
@@ -31,10 +34,12 @@ namespace Project.Systems.StateMachine.Player
         {
             base.LogicUpdate();
 
+            CheckStamina();
+
             if (!Character.Animator.IsInTransition(0) && Character.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !Character.PlayerManager.PlayerController.IsFightInPlace)
             {
                 Character.FSM.ChangeState(Character.StateIdle);
-            }    
+            }
         }
 
         public override void Exit(object data = null) 
@@ -50,13 +55,37 @@ namespace Project.Systems.StateMachine.Player
             if (idRightHand == (int)ItemsID.TwoHandSword || idRightHand == (int)ItemsID.OneHandSword)
             {
                 var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idRightHand);
-                EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(damage));
+                var stamina = Character.PlayerManager.PlayerInventory.ItemDataBase.GetUsedStamina(idRightHand);
+                EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(damage, stamina));
             }
             else if (idLeftHand == (int)ItemsID.Bow || idRightHand == (int)ItemsID.Staff)
             {
                 var damage = Character.PlayerManager.PlayerInventory.ItemDataBase.GetDamage(idLeftHand);
-                EventBus.Publish(new RangeAttakeEvent(damage, Input.mousePosition));
+                var stamina = Character.PlayerManager.PlayerInventory.ItemDataBase.GetUsedStamina(idLeftHand);
+                EventBus.Publish(new RangeAttakeEvent(damage, Input.mousePosition, stamina));
             }
+        }
+
+        private bool CheckStamina()
+        {
+            var idRightHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.RightHandIndex];
+            var idLeftHand = Character.PlayerManager.PlayerInventory.EquipedWeapon[GameData.LeftHandIndex];
+            var currentStamina = Character.PlayerManager.PlayerIndicators.CurrentST;
+            var usedStamina = 0;
+
+            if (idRightHand == (int)ItemsID.TwoHandSword || idRightHand == (int)ItemsID.OneHandSword)
+                usedStamina = Character.PlayerManager.PlayerInventory.ItemDataBase.GetUsedStamina(idRightHand);
+            else if (idLeftHand == (int)ItemsID.Bow || idRightHand == (int)ItemsID.Staff)
+                usedStamina = Character.PlayerManager.PlayerInventory.ItemDataBase.GetUsedStamina(idLeftHand);
+
+
+            if (currentStamina < usedStamina)
+            {
+                Character.FSM.ChangeState(Character.StateIdle);
+                return false;
+            }
+            else
+                return true;
         }
     }
 }

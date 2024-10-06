@@ -63,5 +63,20 @@ namespace Project.Systems.ItemSystem
 
             return damage;
         }
+
+        public int GetUsedStamina(int id)
+        {
+            var stamina = 0;
+
+            foreach (var item in _items)
+            {
+                var itemID = item.ItemID;
+
+                if((int)itemID == id)
+                    stamina = item.Stamina;
+            }
+
+            return stamina;
+        }
     }
 }

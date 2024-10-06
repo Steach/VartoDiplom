@@ -27,6 +27,7 @@ namespace Project.Systems.ItemSystem
         [SerializeField] protected int _damage;
         [SerializeField] protected float _attakeDistance;
         [SerializeField] protected int _armor;
+        [SerializeField] protected int _staminaUsed;
 
         private SpawnedInfo _spawnedInfo;
 
@@ -36,6 +37,7 @@ namespace Project.Systems.ItemSystem
         public GenderType GenderType { get { return _genderType; } }
         public WeaponType WeaponType { get { return _weaponType; } }
         public int Damage { get { return _damage; } }
+        public int Stamina { get { return _staminaUsed; } }
         public float AttakeDistance {  get { return _attakeDistance; } }
         public int Armor { get { return _armor; } }
         public Sprite Icon { get { return _icon; } }

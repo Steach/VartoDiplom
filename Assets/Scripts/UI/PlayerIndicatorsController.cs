@@ -49,10 +49,14 @@ public class PlayerIndicatorsController : MonoBehaviour
     }
 
     private void ChangeMPIndicator(ChangeMPIndicatorEvent changeMPIndicatorEvent)
-    { }
+    {
+        SetNormalizedIndicator(changeMPIndicatorEvent.CurrentMP, changeMPIndicatorEvent.MaxMP, _playerMPIndicator);
+    }
 
     private void ChangeSTIndicator(ChangeStaminaImdicatorEvent changeStaminaImdicatorEvent)
-    { }
+    {
+        SetNormalizedIndicator(changeStaminaImdicatorEvent.CurrentST, changeStaminaImdicatorEvent.MaxST, _playerSTIndicator);
+    }
 
     private void ChangeLevelIndicator(LevelUpEvent levelUpEvent)
     {

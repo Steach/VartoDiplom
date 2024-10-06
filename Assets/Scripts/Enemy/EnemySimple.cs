@@ -2,7 +2,6 @@ using Project.Data;
 using Project.Managers.Enemy;
 using Project.Systems.StateMachine.Enemy;
 using System.Collections;
-using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;

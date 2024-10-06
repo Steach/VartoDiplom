@@ -67,6 +67,7 @@ namespace Project.Managers.Player
             _playerController.OnEnableEvents();
             _playerFSM.OnEnableEvents();
             _playerInventory.OnEnableEvents();
+            _playerIndicators.RunOnEnable();
             EventBus.Subscribe<AddStatsEvent>(SetCharacteristicsFromStats);
         }
 
@@ -94,6 +95,7 @@ namespace Project.Managers.Player
             _playerController.OnDisableEvents();
             _playerFSM.OnDisableEvents();
             _playerInventory.OnDisableEvents();
+            _playerIndicators.RunOnDisable();
             EventBus.Unsubscribe<AddStatsEvent>(SetCharacteristicsFromStats);
         }
 

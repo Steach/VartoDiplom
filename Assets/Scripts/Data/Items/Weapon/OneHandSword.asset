@@ -25,3 +25,4 @@ MonoBehaviour:
   _damage: 50
   _attakeDistance: 1
   _armor: 0
+  _staminaUsed: 10
