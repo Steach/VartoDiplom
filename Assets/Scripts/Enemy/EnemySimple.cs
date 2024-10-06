@@ -19,6 +19,7 @@ public class EnemySimple : MonoBehaviour
     [SerializeField] private Animator _enemyAnimator;
     [SerializeField] private float _detectRadius;
     [SerializeField] private GameObject _target;
+    [SerializeField] private Collider _swordCollider;
 
 
     private FSMEnemy _FSMEnemy;
@@ -29,8 +30,6 @@ public class EnemySimple : MonoBehaviour
     private Collider _enemyCollider;
     private float _patrolTimerMax = 5;
     private float _patrolTimer = 0;
-    //private float _stuckTimer = 0;
-    //private float _stuckTimerMax = 1f;
 
     public GameObject Target { get { return _target; } }
 
@@ -117,6 +116,7 @@ public class EnemySimple : MonoBehaviour
         _agent.isStopped = true;
         _isDead = true;
         _FSMEnemy.FSM.ChangeState(_FSMEnemy.DeathState);
+        _swordCollider.enabled = false;
 
         if(_enemyCollider != null)
             _enemyCollider.enabled = false;
@@ -142,8 +142,6 @@ public class EnemySimple : MonoBehaviour
     {
         if (_target != null)
         {
-            Debug.Log(transform.position);
-            Debug.Log(_centerPosition);
             if (Vector3.Distance(transform.position, _centerPosition) > 10)
             {
                 _target = null;

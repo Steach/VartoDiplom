@@ -20,11 +20,18 @@ public class UIManager : MonoBehaviour
     [Header("Containers")]
     [SerializeField] private CharacteristicContainerController _characterContainerController;
     [SerializeField] private InventoryContainerController _inventoryContainerController;
+    [SerializeField] private PlayerIndicatorsController _playerIndicatorsController;
     [SerializeField] private GameObject _characteristicsContainer;
     [SerializeField] private GameObject _inventoryContainer;
+    [SerializeField] private GameObject _playerIndicatorsContainer;
+
+    [SerializeField] private GameObject[] _containers;
+
+    private const int playerIndicatorContainerIndex = 0;
+    private const int characteristicsContainerIndex = 1;
+    private const int inventoryContainerIndex = 2;
 
     private ControlsSystem _inputActions;
-    private int _score = 0;
 
     public GameManager GameManager { get { return _gameManager; } }
     public ControlsSystem InputActions { get { return _inputActions; } }
@@ -37,9 +44,6 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Characteristics.performed += EnableDisableCharacteristicsContainer;
         _inputActions.UIController.Inventory.performed += EnableDisableInventoryContainer;
 
-        EventBus.Subscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Subscribe<LevelUpEvent>(PlayerLevelUp);
-
         _characteristicsContainer.SetActive(false);
         _inventoryContainer.SetActive(false);
     }
@@ -49,50 +53,46 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Disable();
         _inputActions.UIController.Characteristics.performed -= EnableDisableCharacteristicsContainer;
         _inputActions.UIController.Inventory.performed -= EnableDisableInventoryContainer;
-
-        EventBus.Unsubscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Unsubscribe<LevelUpEvent>(PlayerLevelUp);
-    }
-
-    private void IncreasScore(IncreasingScoreEvent increasingScoreEvent)
-    {
-        _score += increasingScoreEvent.Score;
-        _scoreText.text = _score.ToString();
-    }
-
-    private void PlayerLevelUp(LevelUpEvent levelUpEvent)
-    {
-        _playerLevelDebug.text = levelUpEvent.NewLevel.ToString();
-
-        float _currentNormalizedExp = (float)levelUpEvent.CurrentExp / (float)levelUpEvent.NextLevelExp;
-        _playerNewExp.fillAmount = _currentNormalizedExp;
     }
 
     private void EnableDisableCharacteristicsContainer(InputAction.CallbackContext context)
     {
-        _characteristicsContainer.gameObject.SetActive(!_characteristicsContainer.gameObject.activeInHierarchy);
-        if (_characteristicsContainer.activeInHierarchy)
+        if (!_characteristicsContainer.activeInHierarchy)
         {
             _inputActions.PlayerController.Disable();
             _characterContainerController.CheckStats();
+            EnableActualyInterface(characteristicsContainerIndex);
         }
-        else if (!_characteristicsContainer.activeInHierarchy)
+        else if (_characteristicsContainer.activeInHierarchy)
         {
             _inputActions.PlayerController.Enable();
+            EnableActualyInterface(playerIndicatorContainerIndex);
         }
     }
 
     private void EnableDisableInventoryContainer(InputAction.CallbackContext context)
     {
-        _inventoryContainer.gameObject.SetActive(!_inventoryContainer.gameObject.activeInHierarchy);
-        if (_inventoryContainer.gameObject.activeInHierarchy)
+        if (!_inventoryContainer.gameObject.activeInHierarchy)
         {
+            EnableActualyInterface(inventoryContainerIndex);
             _inputActions.PlayerController.Disable();
             EventBus.Publish<UpdateInventoryVisual>(new UpdateInventoryVisual(true));
         }
-        else if (!_inventoryContainer.gameObject.activeInHierarchy)
+        else if (_inventoryContainer.gameObject.activeInHierarchy)
         {
             _inputActions.PlayerController.Enable();
+            EnableActualyInterface(playerIndicatorContainerIndex);
+        }
+    }
+
+    private void EnableActualyInterface(int index)
+    {
+        for (int i = 0; i < _containers.Length; i++)
+        {
+            if(i == index)
+                _containers[i].gameObject.SetActive(true);
+            else
+                _containers[i].gameObject.SetActive(false);
         }
     }
 }

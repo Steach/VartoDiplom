@@ -39,6 +39,9 @@ namespace Project.Data
         public const int LevelTenExperience = 100000;
 
         //StartedStats
+        public const float StartedPlayerHP = 100;
+        public const float StartedPlayerMP = 100;
+        public const float StartedPlayerST= 100;
         public const int StartedStr = 3;
         public const int StartedInt = 3;
         public const int StartedAgl = 3;

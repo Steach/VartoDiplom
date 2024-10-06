@@ -35,6 +35,7 @@ namespace Project.Managers.Player
         private PlayerController _playerController;
         private FSMPlayer _playerFSM;
         private PlayerInventory _playerInventory;
+        private PlayerIndicators _playerIndicators;
 
         
 
@@ -44,6 +45,7 @@ namespace Project.Managers.Player
         public PlayerLevelingSystem PlayerLevelingSystem { get { return _playerLevelingSystem; } }
         public PlayerController PlayerController { get { return _playerController; } }
         public PlayerInventory PlayerInventory { get { return _playerInventory; } }
+        public PlayerIndicators PlayerIndicators {  get { return _playerIndicators; } }
 
         private void Awake()
         {
@@ -51,10 +53,12 @@ namespace Project.Managers.Player
             _playerLevelingSystem = new PlayerLevelingSystem();
             _playerFSM = new FSMPlayer();
             _playerInventory = new PlayerInventory();
+            _playerIndicators = new PlayerIndicators();
             _playerLevelingSystem.Init();
             _playerController.Init(_playerFSM, _camera, _playerTransform, this);
             _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
             _playerInventory.Init(_gameManager.ItemDataBase);
+            _playerIndicators.Init(GameData.StartedPlayerHP, GameData.StartedPlayerMP, GameData.StartedPlayerST);
         }
 
         private void OnEnable()
@@ -76,6 +80,7 @@ namespace Project.Managers.Player
             _playerLevelingSystem.RunInUpdate();
             _playerController.RunOnUpdate();
             _playerFSM.RunOnUpdate();
+            _playerIndicators.RunOnUpdate();
         }
 
         private void FixedUpdate()

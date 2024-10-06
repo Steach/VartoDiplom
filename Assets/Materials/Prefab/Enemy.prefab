@@ -570,6 +570,7 @@ MonoBehaviour:
   _enemyAnimator: {fileID: 8504535455816319303}
   _detectRadius: 3
   _target: {fileID: 0}
+  _swordCollider: {fileID: 7112483183841594567}
 --- !u!195 &3017064151580299143
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -691,6 +692,11 @@ PrefabInstance:
 --- !u!4 &2370583510719683389 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3288468337185982548, guid: fcc7e72ef9922724c9dbe91fe1141293, type: 3}
+  m_PrefabInstance: {fileID: 956167898367218537}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &7112483183841594567 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 8066052926442708910, guid: fcc7e72ef9922724c9dbe91fe1141293, type: 3}
   m_PrefabInstance: {fileID: 956167898367218537}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &8504535455816319303 stripped
