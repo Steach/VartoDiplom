@@ -1,4 +1,3 @@
-using Project.Controllers.Player;
 using Project.Controllers.UI;
 using Project.Managers;
 using Project.Systems.ControlsSystem;
@@ -10,14 +9,20 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
-
+    [Space]
+    [Header("Debug")]
     [SerializeField] private TextMeshProUGUI _scoreText;
-    [SerializeField] private Slider _playerExp;
+    [Space]
+    [Header("PlayerGUI")]
     [SerializeField] private TextMeshProUGUI _playerLevelDebug;
+    [SerializeField] private Image _playerNewExp;
+    [Space]
+    [Header("Containers")]
     [SerializeField] private CharacteristicContainerController _characterContainerController;
     [SerializeField] private InventoryContainerController _inventoryContainerController;
     [SerializeField] private GameObject _characteristicsContainer;
     [SerializeField] private GameObject _inventoryContainer;
+
     private ControlsSystem _inputActions;
     private int _score = 0;
 
@@ -33,7 +38,6 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Inventory.performed += EnableDisableInventoryContainer;
 
         EventBus.Subscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Subscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
         EventBus.Subscribe<LevelUpEvent>(PlayerLevelUp);
 
         _characteristicsContainer.SetActive(false);
@@ -47,7 +51,6 @@ public class UIManager : MonoBehaviour
         _inputActions.UIController.Inventory.performed -= EnableDisableInventoryContainer;
 
         EventBus.Unsubscribe<IncreasingScoreEvent>(IncreasScore);
-        EventBus.Unsubscribe<ChangePlayerExperienceEvent>(ChangePlayerExpSlider);
         EventBus.Unsubscribe<LevelUpEvent>(PlayerLevelUp);
     }
 
@@ -57,17 +60,12 @@ public class UIManager : MonoBehaviour
         _scoreText.text = _score.ToString();
     }
 
-    private void ChangePlayerExpSlider(ChangePlayerExperienceEvent changePlayerExperienceEvent)
-    {
-        _playerExp.maxValue = changePlayerExperienceEvent.MaxLevelExp;
-        _playerExp.value = changePlayerExperienceEvent.CurrentExp;
-    }
-
     private void PlayerLevelUp(LevelUpEvent levelUpEvent)
     {
-        _playerExp.maxValue = levelUpEvent.NextLevelExp;
-        _playerExp.value = levelUpEvent.CurrentExp;
         _playerLevelDebug.text = levelUpEvent.NewLevel.ToString();
+
+        float _currentNormalizedExp = (float)levelUpEvent.CurrentExp / (float)levelUpEvent.NextLevelExp;
+        _playerNewExp.fillAmount = _currentNormalizedExp;
     }
 
     private void EnableDisableCharacteristicsContainer(InputAction.CallbackContext context)

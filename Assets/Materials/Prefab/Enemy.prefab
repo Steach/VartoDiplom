@@ -489,7 +489,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6692443120231676455}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.42, y: 0, z: 10.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -562,13 +562,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHp: 0
-  _exp: 150
+  _exp: 20
   _parent: {fileID: 6692443120231676455}
   _hpSlider: {fileID: 4400627267811098022}
   _points: []
   _agent: {fileID: 3017064151580299143}
   _enemyAnimator: {fileID: 8504535455816319303}
   _detectRadius: 3
+  _target: {fileID: 0}
 --- !u!195 &3017064151580299143
 NavMeshAgent:
   m_ObjectHideFlags: 0
