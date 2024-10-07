@@ -285,8 +285,6 @@ namespace Project.Systems.ItemSystem
         {
             WeaponType weaponTypeRH = _itemDataBase.GetWeaponType(_equipedWeapon[_rightHandIndex]);
             WeaponType weaponTypeLH = _itemDataBase.GetWeaponType(_equipedWeapon[_leftHandIndex]);
-            Debug.Log((int)weaponTypeRH);
-            Debug.Log((int)weaponTypeLH);
         }
 
         private void CalculateCurrentArmor()

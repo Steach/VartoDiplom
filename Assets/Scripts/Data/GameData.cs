@@ -45,6 +45,7 @@ namespace Project.Data
         public const int StartedStr = 3;
         public const int StartedInt = 3;
         public const int StartedAgl = 3;
+        public const float BaseIndicatorsRecovery = 0.03f;
 
         //Tags
         public static readonly string WeaponTag = "Weapon";

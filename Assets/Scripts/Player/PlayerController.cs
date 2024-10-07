@@ -113,7 +113,6 @@ namespace Project.Controllers.Player
             else if (_isFightingInPlace && (!_characterFSM.PlayerData.IsRunning || _characterFSM.PlayerData.IsRunning))
             {
                 _characterFSM.FSM.ChangeState(_characterFSM.StateAttackInPlace);
-                //Test();
             }
 
             if (Physics.Raycast(ray, out hit) && hit.collider.CompareTag("Enemy") && !_isFightingInPlace)
@@ -128,28 +127,6 @@ namespace Project.Controllers.Player
             if (_isFollowPlayer && !_isFightingInPlace)
                 TurningPlayer();
         }
-
-        //private void Test()
-        //{
-        //    var ItemDB = _playerManager.PlayerInventory.ItemDataBase;
-        //    var EquipedWeapon = _playerManager.PlayerInventory.EquipedWeapon;
-        //
-        //    if (ItemDB.GetWeaponType(EquipedWeapon[GameData.LeftHandIndex]) == WeaponType.Bow)
-        //    {
-        //        Debug.Log("BOW SHOOT");
-        //        Debug.Log(GetCurrentClipName());
-        //    }
-        //    else if (ItemDB.GetWeaponType(EquipedWeapon[GameData.RightHandIndex]) == WeaponType.Staff)
-        //    {
-        //        Debug.Log("STAFF SHOOT");
-        //        Debug.Log(GetCurrentClipName());
-        //    }
-        //    else if (ItemDB.GetWeaponType(EquipedWeapon[GameData.RightHandIndex]) == WeaponType.TwoHandSword)
-        //    {
-        //        Debug.Log("Test Particle");
-        //        EventBus.Publish<MeleeAttakeEvent>(new MeleeAttakeEvent(ItemDB.GetDamage(EquipedWeapon[0])));
-        //    }
-        //}
 
         private void TurningPlayer()
         {

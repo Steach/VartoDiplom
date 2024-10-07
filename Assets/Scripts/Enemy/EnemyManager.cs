@@ -5,7 +5,12 @@ namespace Project.Managers.Enemy
 {
     public class EnemyManager : MonoBehaviour
     {
+        [Header("Enemies")]
+        [SerializeField] private GameObject _enemyPrefab;
         [SerializeField] private List<EnemySimple> _enemies = new List<EnemySimple>();
+        [SerializeField] private List<Transform> _spawnSpots = new List<Transform>();
+        [Space]
+        [Header("Animation Controllers")]
         [SerializeField] private RuntimeAnimatorController _idleController;
         [SerializeField] private RuntimeAnimatorController _attakeController;
         [SerializeField] private RuntimeAnimatorController _movingController;
@@ -20,6 +25,7 @@ namespace Project.Managers.Enemy
 
         private void Awake()
         {
+            SpawnEnemies();
             foreach (var enemy in _enemies)
                 enemy.Init(this);
         }
@@ -49,6 +55,16 @@ namespace Project.Managers.Enemy
         {
             foreach (var enemy in _enemies)
                 enemy.EnemyOnDisable();
+        }
+
+        private void SpawnEnemies()
+        {
+            foreach (var spot in _spawnSpots)
+            {
+                var newEnemy = Instantiate(_enemyPrefab, spot.position, Quaternion.identity, this.transform);
+                if (newEnemy.TryGetComponent<EnemySimple>(out EnemySimple enemySimpleComponent))
+                    _enemies.Add(enemySimpleComponent);
+            }
         }
     }
 }

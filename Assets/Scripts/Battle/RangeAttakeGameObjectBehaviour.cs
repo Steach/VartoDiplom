@@ -56,12 +56,10 @@ namespace Project.Systems.Battle
                 if (Physics.Raycast(_transform.position, _transform.forward, out _hit, 2 + (_velocity * 0.02f)))
                 {
                     Collider _target = _hit.collider;
-                    Debug.Log(_target.gameObject.tag);
                     if (_target.CompareTag("Enemy"))
                     {
                         _isHit = true;
                         var enemy = _target.GetComponentInChildren<EnemySimple>();
-                        //enemy.HP = _damage;
                         enemy.GetDamage(_damage);
                     }
                 }

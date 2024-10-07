@@ -23,7 +23,7 @@ public class EnemySimple : MonoBehaviour
 
     private FSMEnemy _FSMEnemy;
     private Vector3 _centerPosition;
-    private float _patrolRadius = 5f;
+    private float _patrolRadius = 10f;
     private bool _isDead = false;
     private EnemyManager _enemyManager;
     private Collider _enemyCollider;

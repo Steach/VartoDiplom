@@ -58,7 +58,7 @@ namespace Project.Managers.Player
             _playerController.Init(_playerFSM, _camera, _playerTransform, this);
             _playerFSM.Init(_agent, _animator, _playerData, _debug, _playerTransform, this);
             _playerInventory.Init(_gameManager.ItemDataBase);
-            _playerIndicators.Init(GameData.StartedPlayerHP, GameData.StartedPlayerMP, GameData.StartedPlayerST);
+            _playerIndicators.Init(this);
         }
 
         private void OnEnable()

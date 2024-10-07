@@ -20,7 +20,6 @@ namespace Project.Systems.StateMachine.Enemy
             base.LogicUpdate();
             if (!Character.EnemyAnimator.IsInTransition(0) && Character.EnemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
-                Debug.Log("Change State");
                 Character.FSM.ChangeState(Character.IdleState);
             }
 
