@@ -26,8 +26,8 @@ namespace Project.Systems.Battle
             collisionModule.SetPlane(0, null);
             _damage = damage;
             _isHit = false;
-            var newMousePosition = new Vector3(mousePosition.x, transform.position.y, mousePosition.z);
-            _direction = (newMousePosition - transform.position).normalized;
+            //var newMousePosition = new Vector3(mousePosition.x, transform.position.y, mousePosition.z);
+            _direction = (mousePosition - transform.position).normalized;
         }
 
         private void OnEnable()
@@ -53,7 +53,7 @@ namespace Project.Systems.Battle
                 transform.Translate(_direction * _velocity * Time.deltaTime);
 
                 RaycastHit _hit;
-                if (Physics.Raycast(_transform.position, _transform.forward, out _hit, 2 + (_velocity * 0.02f)))
+                if (Physics.Raycast(_transform.position, _direction/*_transform.forward*/, out _hit, 2 + (_velocity * 0.02f)))
                 {
                     Collider _target = _hit.collider;
                     if (_target.CompareTag("Enemy"))
@@ -74,8 +74,6 @@ namespace Project.Systems.Battle
         {
             
         }
-
-        
 
         private void OnParticleCollision(GameObject other)
         {

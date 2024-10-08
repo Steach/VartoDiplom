@@ -65,6 +65,14 @@ public class PlayerIndicators
 
     public void RunOnUpdate()
     {
+        //Debug.Log($"HP Rec: {_hpRecoveryPerSecond}");
+        //Debug.Log($"MP Rec: {_mpRecoveryPerSecond}");
+        //Debug.Log($"SP Rec: {_stRecoveryPerSecond}");
+        //RecoveryIndicators();
+    }
+
+    public void RunOnFixedUpdate()
+    {
         RecoveryIndicators();
     }
 

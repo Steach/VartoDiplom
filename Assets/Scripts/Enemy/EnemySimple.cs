@@ -110,7 +110,7 @@ public class EnemySimple : MonoBehaviour
 
     private void EnemyDie()
     {
-        var spawnDropPosition = new Vector3(transform.position.x, 1, transform.position.z);
+        var spawnDropPosition = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
         EventBus.Publish(new EnemyDieEvent(_exp, spawnDropPosition));
         _agent.isStopped = true;
         _isDead = true;

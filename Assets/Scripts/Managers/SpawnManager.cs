@@ -1,6 +1,4 @@
 using Project.Systems.ItemSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.Managers.Spawner
@@ -14,8 +12,6 @@ namespace Project.Managers.Spawner
         private void OnEnable()
         {
             EventBus.Subscribe<EnemyDieEvent>(SpawnScriptable);
-            for (int i = 0; i < _sword.Length; i++)
-                _sword[i].Spawn(_place[i].transform.position);
         }
 
         private void OnDisable()

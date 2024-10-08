@@ -87,6 +87,7 @@ namespace Project.Managers.Player
         private void FixedUpdate()
         {
             _playerFSM.RunOnFixedUpdate();
+            _playerIndicators.RunOnFixedUpdate();
         }
 
         private void OnDisable()
