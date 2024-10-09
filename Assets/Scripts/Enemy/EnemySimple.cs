@@ -192,7 +192,7 @@ public class EnemySimple : MonoBehaviour
 
     IEnumerator Die()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
         gameObject.SetActive(false);
     }
 }
